@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SBC BD Command Dashboard</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a1a; }
+
+  /* ── HEADER ── */
+  .header { background: #1a2744; color: white; padding: 18px 28px; display: flex; justify-content: space-between; align-items: center; }
+  .header-left h1 { font-size: 20px; font-weight: 700; letter-spacing: 0.3px; }
+  .header-left .sub { font-size: 12px; color: #8fa3c8; margin-top: 3px; }
+  .header-stats { display: flex; gap: 28px; }
+  .hstat { text-align: center; }
+  .hstat .val { font-size: 26px; font-weight: 700; line-height: 1; }
+  .hstat .lbl { font-size: 10px; color: #8fa3c8; margin-top: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .hstat .val.green { color: #2ed573; }
+  .hstat .val.blue { color: #4a9eff; }
+  .hstat .val.orange { color: #ffa502; }
+  .hstat .val.red { color: #ff6b6b; }
+
+  /* ── TABS ── */
+  .tabs { background: #0f1a30; display: flex; gap: 0; padding: 0 20px; }
+  .tab { padding: 11px 20px; font-size: 13px; color: #8fa3c8; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.15s; font-weight: 500; }
+  .tab:hover { color: white; }
+  .tab.active { color: white; border-bottom-color: #4a9eff; }
+
+  /* ── BODY ── */
+  .body { padding: 20px 28px; max-width: 1200px; margin: 0 auto; }
+  .section-tab { display: none; }
+  .section-tab.active { display: block; }
+
+  /* ── SECTION HEADERS ── */
+  .sec-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; margin-top: 6px; }
+  .sec-badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; }
+  .badge-blue { background: #4a9eff; color: white; }
+  .badge-green { background: #2ed573; color: #1a1a1a; }
+  .badge-orange { background: #ffa502; color: white; }
+  .badge-red { background: #ff4757; color: white; }
+  .badge-purple { background: #a55eea; color: white; }
+  .badge-gray { background: #aaa; color: white; }
+  .sec-title { font-size: 15px; font-weight: 600; color: #1a2744; }
+  .sec-count { font-size: 12px; color: #888; margin-left: auto; }
+
+  /* ── SUMMARY CARDS (Overview tab) ── */
+  .summary-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 20px; }
+  .sum-card { background: white; border-radius: 10px; padding: 16px 18px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); border-left: 4px solid #ddd; }
+  .sum-card.blue { border-left-color: #4a9eff; }
+  .sum-card.green { border-left-color: #2ed573; }
+  .sum-card.orange { border-left-color: #ffa502; }
+  .sum-card.purple { border-left-color: #a55eea; }
+  .sum-card .sc-val { font-size: 26px; font-weight: 700; color: #1a2744; }
+  .sum-card .sc-lbl { font-size: 11px; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .sum-card .sc-sub { font-size: 12px; color: #555; margin-top: 6px; }
+
+  /* ── BID LOG CARDS ── */
+  .bid-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
+  .bid-card { background: white; border-radius: 10px; padding: 14px 16px; border: 2px solid transparent; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .bid-card.submitted { border-color: #4a9eff; background: #f5f9ff; }
+  .bid-card.upcoming { border-color: #ffa502; background: #fffbf2; }
+  .bid-card.won { border-color: #2ed573; background: #f0faf4; }
+  .bid-card.estimating { border-color: #a55eea; background: #faf5ff; }
+  .bid-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .bid-name { font-size: 14px; font-weight: 600; color: #1a2744; }
+  .bid-value { font-size: 16px; font-weight: 700; color: #1a2744; text-align: right; }
+  .bid-value-sub { font-size: 10px; color: #888; text-align: right; }
+  .bid-meta { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip { font-size: 11px; padding: 2px 8px; border-radius: 10px; background: #f0f2f5; color: #555; font-weight: 500; }
+  .chip.blue { background: #e8f0ff; color: #1a4080; }
+  .chip.orange { background: #fff0cc; color: #7a4f00; }
+  .chip.green { background: #e8faf0; color: #1a6b3a; }
+  .chip.purple { background: #f5eeff; color: #6a1ab5; }
+  .chip.red { background: #ffecec; color: #cc0000; }
+  .bid-note { margin-top: 8px; font-size: 11px; color: #e85d04; font-style: italic; }
+  .bid-broker { margin-top: 6px; font-size: 11px; color: #555; }
+  .bid-broker span { font-weight: 600; }
+
+  /* ── FUNNEL TABLE ── */
+  .funnel-table { width: 100%; border-collapse: separate; border-spacing: 0; background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 20px; }
+  .funnel-table th { background: #1a2744; color: #8fa3c8; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; padding: 10px 14px; text-align: left; font-weight: 600; }
+  .funnel-table td { padding: 10px 14px; font-size: 13px; border-bottom: 1px solid #f0f2f5; }
+  .funnel-table tr:last-child td { border-bottom: none; }
+  .funnel-table tr:hover td { background: #f8f9fb; }
+  .stage-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; }
+  .dot-blue { background: #4a9eff; }
+  .dot-orange { background: #ffa502; }
+  .dot-green { background: #2ed573; }
+  .dot-purple { background: #a55eea; }
+  .dot-gray { background: #aaa; }
+  .val-cell { font-weight: 600; color: #1a2744; }
+  .sub-cell { color: #888; font-size: 11px; }
+
+  /* ── TIM CARDS ── */
+  .tim-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
+  .tim-card { background: white; border-radius: 10px; padding: 14px 16px; border: 2px solid transparent; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .tim-card.t1 { border-left: 4px solid #ff4757; }
+  .tim-card.t2 { border-left: 4px solid #ffa502; }
+  .tim-card.t3 { border-left: 4px solid #2ed573; }
+  .tim-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .tim-tenant { font-size: 14px; font-weight: 600; color: #1a2744; }
+  .tim-sf { font-size: 13px; font-weight: 700; color: #4a9eff; white-space: nowrap; margin-left: 8px; }
+  .tim-broker-line { margin-top: 5px; font-size: 11px; color: #666; }
+  .tim-broker-line strong { color: #1a2744; }
+  .tim-req { margin-top: 7px; font-size: 11px; background: #f0f4ff; border-radius: 6px; padding: 4px 8px; color: #1a3070; font-weight: 500; }
+  .tim-note { margin-top: 6px; font-size: 11px; color: #e85d04; font-style: italic; }
+  .tim-est { font-size: 11px; color: #888; margin-top: 5px; }
+
+  /* ── OUTREACH CARDS ── */
+  .contact-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 10px; }
+  .contact-card { background: white; border-radius: 10px; padding: 14px 16px; border: 2px solid transparent; box-shadow: 0 1px 4px rgba(0,0,0,0.06); cursor: pointer; transition: all 0.15s; position: relative; }
+  .contact-card:hover { border-color: #4a9eff; box-shadow: 0 2px 8px rgba(74,158,255,0.15); }
+  .contact-card.done { background: #f0faf4; border-color: #2ed573; opacity: 0.8; }
+  .contact-card.hot { border-color: #ff4757 !important; background: #fff8f8; }
+  .contact-card.warn { border-color: #ffa502; background: #fffbf2; }
+  .card-top { display: flex; align-items: flex-start; justify-content: space-between; }
+  .contact-name { font-size: 14px; font-weight: 600; color: #1a2744; }
+  .contact-co { font-size: 12px; color: #666; margin-top: 2px; }
+  .check { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #ddd; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-left: 8px; transition: all 0.15s; }
+  .contact-card.done .check { background: #2ed573; border-color: #2ed573; }
+  .check-inner { font-size: 12px; font-weight: 700; color: white; display: none; }
+  .contact-card.done .check-inner { display: block; }
+  .card-chips { margin-top: 8px; display: flex; gap: 6px; flex-wrap: wrap; }
+  .card-req { margin-top: 6px; font-size: 11px; color: #1a6b3a; background: #f0faf4; border-radius: 6px; padding: 4px 8px; font-weight: 500; }
+  .card-note { margin-top: 6px; font-size: 11px; color: #e85d04; font-style: italic; }
+  .card-reply { margin-top: 6px; font-size: 11px; color: #1a4080; background: #e8f0ff; border-radius: 6px; padding: 4px 8px; font-weight: 500; }
+
+  /* ── CORRESPONDENCE LOG ── */
+  .corr-section { margin-top: 10px; border-top: 1px solid #f0f2f5; padding-top: 8px; }
+  .corr-toggle { font-size: 11px; color: #4a9eff; cursor: pointer; display: flex; align-items: center; gap: 6px; user-select: none; font-weight: 500; }
+  .corr-toggle:hover { color: #2277dd; }
+  .corr-count { background: #e8f0ff; color: #1a4080; border-radius: 10px; padding: 1px 7px; font-size: 10px; font-weight: 700; }
+  .corr-count.has-entries { background: #1a2744; color: white; }
+  .corr-panel { margin-top: 10px; }
+  .corr-entry { display: flex; gap: 8px; margin-bottom: 10px; }
+  .corr-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 4px; flex-shrink: 0; }
+  .corr-dot.email { background: #4a9eff; }
+  .corr-dot.call { background: #2ed573; }
+  .corr-dot.linkedin { background: #0077b5; }
+  .corr-dot.meeting { background: #a55eea; }
+  .corr-dot.note { background: #ffa502; }
+  .corr-body { flex: 1; }
+  .corr-meta { font-size: 10px; color: #888; margin-bottom: 2px; }
+  .corr-meta strong { color: #555; }
+  .corr-text-display { font-size: 12px; color: #333; line-height: 1.45; white-space: pre-wrap; }
+  .corr-add { margin-top: 10px; background: #f8f9fb; border-radius: 8px; padding: 10px; }
+  .corr-add-row { display: flex; gap: 6px; margin-bottom: 6px; }
+  .corr-type-sel { font-size: 11px; border: 1px solid #ddd; border-radius: 6px; padding: 4px 6px; background: white; color: #333; cursor: pointer; }
+  .corr-date-input { font-size: 11px; border: 1px solid #ddd; border-radius: 6px; padding: 4px 6px; background: white; color: #333; flex: 1; }
+  .corr-text-input { width: 100%; font-size: 12px; border: 1px solid #ddd; border-radius: 6px; padding: 6px 8px; background: white; color: #333; resize: vertical; min-height: 48px; font-family: inherit; box-sizing: border-box; }
+  .corr-text-input:focus { outline: none; border-color: #4a9eff; }
+  .corr-footer { display: flex; justify-content: flex-end; margin-top: 6px; }
+  .corr-add-btn { font-size: 11px; background: #4a9eff; color: white; border: none; border-radius: 6px; padding: 5px 14px; cursor: pointer; font-weight: 600; }
+  .corr-add-btn:hover { background: #2277dd; }
+  .corr-empty { font-size: 11px; color: #aaa; font-style: italic; padding: 4px 0; }
+
+  /* ── OVERVIEW JB SUMMARY ── */
+  .jb-box { background: white; border-radius: 10px; padding: 18px 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 20px; border-top: 3px solid #4a9eff; }
+  .jb-title { font-size: 13px; font-weight: 700; color: #1a2744; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .jb-row { display: flex; gap: 0; }
+  .jb-col { flex: 1; padding: 10px 16px; border-right: 1px solid #f0f2f5; }
+  .jb-col:last-child { border-right: none; }
+  .jb-col .jb-num { font-size: 22px; font-weight: 700; color: #1a2744; }
+  .jb-col .jb-lbl { font-size: 11px; color: #888; margin-top: 3px; }
+  .jb-col .jb-items { margin-top: 8px; }
+  .jb-item { font-size: 12px; color: #555; padding: 3px 0; border-bottom: 1px solid #f5f5f5; display: flex; justify-content: space-between; }
+  .jb-item:last-child { border-bottom: none; }
+  .jb-item .jv { font-weight: 600; color: #1a2744; }
+
+  .divider { height: 1px; background: #eee; margin: 20px 0; }
+  .footer { text-align: center; padding: 16px; font-size: 11px; color: #aaa; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="header-left">
+    <h1>SBC BD Command Dashboard</h1>
+    <div class="sub">Week of May 4 – May 9, 2026 &nbsp;·&nbsp; Adam Tafralis &nbsp;·&nbsp; TIM-Powered &nbsp;·&nbsp; For: Adam + JB Cahoon</div>
+  </div>
+  <div class="header-stats">
+    <div class="hstat">
+      <div class="val green">$312M</div>
+      <div class="lbl">Total Bids Pipeline</div>
+    </div>
+    <div class="hstat">
+      <div class="val blue">85</div>
+      <div class="lbl">TIM Leads</div>
+    </div>
+    <div class="hstat">
+      <div class="val orange">5</div>
+      <div class="lbl">Active BD ROMs</div>
+    </div>
+    <div class="hstat">
+      <div class="val red">64</div>
+      <div class="lbl">Brokers Contacted (May)</div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="showTab('overview')">📊 Weekly Overview</div>
+  <div class="tab" onclick="showTab('bids')">🏗️ Bid Log</div>
+  <div class="tab" onclick="showTab('tim')">🔥 TIM Leads</div>
+  <div class="tab" onclick="showTab('outreach')">📞 Outreach</div>
+</div>
+
+<!-- BODY -->
+<div class="body">
+
+  <!-- ════════════════ OVERVIEW TAB ════════════════ -->
+  <div id="tab-overview" class="section-tab active">
+
+    <!-- JB SHAREABLE SUMMARY -->
+    <div style="margin-top:16px;">
+      <div class="jb-box">
+        <div class="jb-title">📋 Weekly BD Summary — Share with JB</div>
+
+        <div class="jb-row">
+          <div class="jb-col">
+            <div class="jb-num" style="color:#4a9eff;">$9.9M</div>
+            <div class="jb-lbl">Submissions — Last 30 Days (All PMs + BD)</div>
+            <div class="jb-items" style="margin-top:10px;">
+              <div class="jb-item"><span style="color:#4a9eff; font-weight:600;">Adam (BD)</span><span class="jv" style="color:#4a9eff;">Hayward Airport $9.9M ✅</span></div>
+              <div class="jb-item"><span style="color:#ffa502; font-weight:600;">JB (BD)</span><span class="jv" style="color:#aaa; font-style:italic;">⚠️ Confirm with JB</span></div>
+              <div class="jb-item"><span>C. Beekman</span><span class="jv">11 bids — dates TBD</span></div>
+              <div class="jb-item"><span>C. Hackett</span><span class="jv">6 bids · $40M+ — dates TBD</span></div>
+              <div class="jb-item"><span>M. Morgan</span><span class="jv">4 bids · $132.6M — dates TBD</span></div>
+              <div class="jb-item"><span>D. Girdley</span><span class="jv">4 bids · $41.4M+ — dates TBD</span></div>
+              <div class="jb-item"><span>J. Machi</span><span class="jv">4 bids · $5.6M+ — dates TBD</span></div>
+              <div class="jb-item"><span>A. Kripalani</span><span class="jv">4 bids · $6.9M+ — dates TBD</span></div>
+            </div>
+            <div style="margin-top:8px; padding-top:8px; border-top:1px solid #f0f2f5; font-size:10px; color:#aaa; font-style:italic;">Import PM board dates to filter precisely by 30 days</div>
+          </div>
+          <div class="jb-col">
+            <div class="jb-num">$312M</div>
+            <div class="jb-lbl">Company-Wide Bids Pipeline</div>
+            <div class="jb-items" style="margin-top:10px;">
+              <div class="jb-item"><span>Pending Bids (50)</span><span class="jv">$223,480,544 · avg $4.5M</span></div>
+              <div class="jb-item"><span>Active Bids (19)</span><span class="jv">$68,134,325 · avg $3.6M</span></div>
+              <div class="jb-item"><span>Upcoming Bids (10)</span><span class="jv">$20,541,264 · avg $2.1M</span></div>
+            </div>
+          </div>
+          <div class="jb-col">
+            <div class="jb-num">85</div>
+            <div class="jb-lbl">TIM Active Requirements (4/20/26)</div>
+            <div class="jb-items" style="margin-top:10px;">
+              <div class="jb-item"><span>Total SF in market</span><span class="jv">6.4M – 9.4M SF</span></div>
+              <div class="jb-item"><span>Tier 1 (200k+ SF)</span><span class="jv">12 reqs · $1B+ potential</span></div>
+              <div class="jb-item"><span>Tier 2 (75k–200k SF)</span><span class="jv">30+ reqs</span></div>
+              <div class="jb-item"><span>Key broker focus</span><span class="jv">Tom Taylor, J. Cushman, A. Hueser</span></div>
+            </div>
+          </div>
+          <div class="jb-col">
+            <div class="jb-num">14</div>
+            <div class="jb-lbl">Priority Brokers Engaged This Sprint</div>
+            <div class="jb-items" style="margin-top:10px;">
+              <div class="jb-item"><span>Replied / Warm</span><span class="jv">2 ✅ (MJ Bengiveno, Derek C.)</span></div>
+              <div class="jb-item"><span>Contacted, Awaiting</span><span class="jv">10 pending</span></div>
+              <div class="jb-item"><span>⚠️ Email Bounced</span><span class="jv">Andy Hueser (JLL) — call direct</span></div>
+              <div class="jb-item"><span>🔥 Hot Re-engage</span><span class="jv">Derek Cuschieri — live 70-100k R&D req</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PIPELINE FUNNEL TABLE -->
+    <div class="sec-header">
+      <span class="sec-badge badge-blue">Pipeline</span>
+      <span class="sec-title">Company-Wide Bid Funnel (All PMs)</span>
+      <span class="sec-count">Updated 4/21/2026</span>
+    </div>
+    <table class="funnel-table" style="margin-bottom:20px;">
+      <thead>
+        <tr><th>PM</th><th>Submitted</th><th>Awarded</th><th>Win Rate</th><th>Notable</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Chris Beekman</td><td>35</td><td>18</td><td class="val-cell" style="color:#2ed573;">51%</td><td class="sub-cell">Highest volume + win rate</td></tr>
+        <tr><td>Dusty Furtado</td><td>7</td><td>4</td><td class="val-cell" style="color:#2ed573;">57%</td><td class="sub-cell">Best win % on team</td></tr>
+        <tr><td>John Machi</td><td>15</td><td>6</td><td class="val-cell">43%</td><td class="sub-cell"></td></tr>
+        <tr><td>Charlie Griffin</td><td>13</td><td>4</td><td class="val-cell">31%</td><td class="sub-cell">Renesas $70M flagship</td></tr>
+        <tr><td>Marco Velasco</td><td>14</td><td>5</td><td class="val-cell">38%</td><td class="sub-cell">ASML relationship owner</td></tr>
+        <tr><td>Avi Kripalani</td><td>12</td><td>3</td><td class="val-cell">27%</td><td class="sub-cell">Amazon + data center focus</td></tr>
+        <tr><td>Cameron Peach</td><td>4</td><td>0</td><td class="val-cell" style="color:#888;">0%</td><td class="sub-cell">New PM</td></tr>
+        <tr><td>David Girdley</td><td>10</td><td>&mdash;</td><td class="val-cell" style="color:#888;">TBD</td><td class="sub-cell">Amazon, Fidelity, pre-con heavy pipeline</td></tr>
+        <tr><td>JB Cahoon</td><td>2</td><td>&mdash;</td><td class="val-cell" style="color:#888;">TBD</td><td class="sub-cell">Partner &mdash; Make Matter, VW Belmont submitted; 600 Clipper + MV mixed-use active</td></tr>
+        <tr><td>Marc Morgan</td><td>4</td><td>&mdash;</td><td class="val-cell" style="color:#888;">TBD</td><td class="sub-cell">Luxelocker pipeline + La Rinconada; 2300 Broadway $97M ROM submitted</td></tr>
+        <tr><td>Chip Hackett</td><td>2</td><td>&mdash;</td><td class="val-cell" style="color:#888;">TBD</td><td class="sub-cell">Luxelocker national rollout (AUS, Bozeman, Round Rock, McKinney, Arvada)</td></tr>
+        <tr><td>Larry Lenz</td><td>&mdash;</td><td>&mdash;</td><td class="val-cell" style="color:#888;">&mdash;</td><td class="sub-cell">Sheet updated 5/4 &mdash; no bids logged yet</td></tr>
+        <tr><td>Stephen Archer</td><td>&mdash;</td><td>&mdash;</td><td class="val-cell" style="color:#888;">&mdash;</td><td class="sub-cell">Sheet not updated &mdash; no data available</td></tr>
+      </tbody>
+    </table>
+
+    <!-- WIN RATES -->
+    <div class="sec-header">
+      <span class="sec-badge badge-green">Performance</span>
+      <span class="sec-title">PM Win Rates (2025–2026 Combined)</span>
+    </div>
+    <table class="funnel-table" style="margin-bottom:20px;">
+      <thead>
+        <tr><th>PM</th><th>Submitted</th><th>Awarded</th><th>Win Rate</th><th>Notable</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Chris Beekman</td><td>35</td><td>18</td><td class="val-cell" style="color:#2ed573;">51%</td><td class="sub-cell">Highest volume + win rate</td></tr>
+        <tr><td>Dusty Furtado</td><td>7</td><td>4</td><td class="val-cell" style="color:#2ed573;">57%</td><td class="sub-cell">Best win % on team</td></tr>
+        <tr><td>John Machi</td><td>15</td><td>6</td><td class="val-cell">43%</td><td class="sub-cell"></td></tr>
+        <tr><td>Charlie Griffin</td><td>13</td><td>4</td><td class="val-cell">31%</td><td class="sub-cell">Renesas $70M is his flagship</td></tr>
+        <tr><td>Marco Velasco</td><td>14</td><td>5</td><td class="val-cell">38%</td><td class="sub-cell">ASML relationship owner</td></tr>
+        <tr><td>Avi Kripalani</td><td>12</td><td>3</td><td class="val-cell">27%</td><td class="sub-cell">Amazon + data center focus</td></tr>
+        <tr style="background:#f0f4ff;"><td><strong>Adam Tafralis</strong> <span style="font-size:10px; color:#4a9eff; font-weight:600; background:#e8f0ff; border-radius:8px; padding:1px 7px; margin-left:4px;">BD / Marketing</span></td><td>5</td><td>1</td><td class="val-cell" style="color:#ffa502;">25%</td><td class="sub-cell">BD lead — not a PM. Tracks preliminary ROMs &amp; budgets sent to market.</td></tr>
+        <tr><td>Cameron Peach</td><td>4</td><td>0</td><td class="val-cell" style="color:#888;">0%</td><td class="sub-cell">New PM</td></tr>
+      </tbody>
+    </table>
+
+    <!-- ═══ BROKER & PARTNER WIN RATES ═══ -->
+    <div class="sec-header" style="margin-top:24px;">
+      <span class="sec-badge badge-green">Win Rates</span>
+      <span class="sec-title">Broker &amp; Partner Referral Scorecard</span>
+      <span class="sec-count">Click + Add to log a referral source</span>
+    </div>
+
+    <!-- TOP TIM BROKERS BY $ POTENTIAL -->
+    <div style="background:white; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,0.07); overflow:hidden; margin-bottom:16px;">
+      <div style="background:#1a2744; padding:10px 14px; display:flex; align-items:center; gap:10px;">
+        <span style="font-size:11px; font-weight:700; color:#8fa3c8; text-transform:uppercase; letter-spacing:0.5px;">🔥 Current TIM Brokers — $ Potential in Market Right Now (4/20/2026)</span>
+        <span style="font-size:11px; color:#4a9eff; margin-left:auto;">Source: TIM April 2026</span>
+      </div>
+      <table class="funnel-table" style="margin-bottom:0;">
+        <thead>
+          <tr><th>Broker</th><th>Firm</th><th>Active TIM Requirements</th><th>Est. $ Potential</th><th>SBC Relationship</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Tom Taylor</strong></td><td class="sub-cell">CBRE</td>
+            <td class="sub-cell">AMD 300–700k · LAM 150–200k · Undisclosed 20–200k</td>
+            <td class="val-cell" style="color:#2ed573;">$300M+</td>
+            <td><span class="chip orange">Outreach Sent</span></td>
+          </tr>
+          <tr>
+            <td><strong>Jeff Cushman</strong></td><td class="sub-cell">C&W</td>
+            <td class="sub-cell">Archer Aviation 400–500k SF</td>
+            <td class="val-cell" style="color:#2ed573;">$150M</td>
+            <td><span class="chip orange">Outreach Sent</span></td>
+          </tr>
+          <tr>
+            <td><strong>Andy Hueser</strong></td><td class="sub-cell">JLL</td>
+            <td class="sub-cell">GM 300–400k · Marvell 75k</td>
+            <td class="val-cell" style="color:#2ed573;">$120M</td>
+            <td><span class="chip red">⚠️ Email Bounced</span></td>
+          </tr>
+          <tr>
+            <td><strong>Paul McManus</strong></td><td class="sub-cell">Colliers</td>
+            <td class="sub-cell">Nvidia 200–400k R&D</td>
+            <td class="val-cell" style="color:#2ed573;">$90M</td>
+            <td><span class="chip orange">Outreach Sent</span></td>
+          </tr>
+          <tr>
+            <td><strong>John McMahon</strong></td><td class="sub-cell">Colliers</td>
+            <td class="sub-cell">Stryker 200–300k · ASML 200k · Mediatek 100–120k · Trimble 65–75k</td>
+            <td class="val-cell" style="color:#2ed573;">$85M</td>
+            <td><span class="chip orange">Outreach Sent</span></td>
+          </tr>
+          <tr>
+            <td><strong>Joe Long</strong></td><td class="sub-cell">JLL</td>
+            <td class="sub-cell">xAI · Hitachi · Illumio · Cursoe · Undisclosed</td>
+            <td class="val-cell" style="color:#ffa502;">$75M</td>
+            <td><span class="chip orange">Outreach Sent</span></td>
+          </tr>
+          <tr>
+            <td><strong>Derek Cuschieri</strong></td><td class="sub-cell">Avison Young</td>
+            <td class="sub-cell">70–100k R&D Clean Room · Santa Clara</td>
+            <td class="val-cell" style="color:#ffa502;">$40M</td>
+            <td><span class="chip red">🔥 Re-engage Now</span></td>
+          </tr>
+          <tr>
+            <td><strong>Maryjane Bengiveno</strong></td><td class="sub-cell">JLL</td>
+            <td class="sub-cell">ROM/pricing gut-checks ongoing</td>
+            <td class="val-cell" style="color:#4a9eff;">TBD</td>
+            <td><span class="chip green">✅ Warm — Replied</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- REPEAT CLIENT LOYALTY -->
+    <div style="background:white; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,0.07); overflow:hidden; margin-bottom:16px;">
+      <div style="background:#1a2744; padding:10px 14px;">
+        <span style="font-size:11px; font-weight:700; color:#8fa3c8; text-transform:uppercase; letter-spacing:0.5px;">🔁 Repeat Client Loyalty — Clients with Multiple Active Jobs (WIP + Bids)</span>
+      </div>
+      <table class="funnel-table" style="margin-bottom:0;">
+        <thead>
+          <tr><th>Client</th><th>PM(s)</th><th>Active Jobs</th><th>Total $ Value</th><th>Type</th><th>Relationship Health</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>ASML</strong></td>
+            <td class="sub-cell">Marco Velasco, C. Griffin</td>
+            <td class="val-cell">4 concurrent</td>
+            <td class="val-cell" style="color:#2ed573;">$5.8M WIP + bids</td>
+            <td class="sub-cell">TI · Lab · Infrastructure</td>
+            <td><span class="chip green">⭐⭐⭐ Flagship</span></td>
+          </tr>
+          <tr>
+            <td><strong>Luxelocker / Luxe</strong></td>
+            <td class="sub-cell">Chip Hackett, Marc Morgan</td>
+            <td class="val-cell">6+ locations</td>
+            <td class="val-cell" style="color:#2ed573;">$48M+ pre-con</td>
+            <td class="sub-cell">Storage Facilities</td>
+            <td><span class="chip green">⭐⭐⭐ Series Repeat</span></td>
+          </tr>
+          <tr>
+            <td><strong>Amazon</strong></td>
+            <td class="sub-cell">Girdley, Kripalani</td>
+            <td class="val-cell">5+ bids/WIP</td>
+            <td class="val-cell" style="color:#2ed573;">$11M+</td>
+            <td class="sub-cell">DSC · PSH · EV Charging</td>
+            <td><span class="chip green">⭐⭐⭐ Repeat</span></td>
+          </tr>
+          <tr>
+            <td><strong>Fidelity Investments</strong></td>
+            <td class="sub-cell">Beekman, Girdley</td>
+            <td class="val-cell">4+ jobs</td>
+            <td class="val-cell" style="color:#4a9eff;">$3M+ TI</td>
+            <td class="sub-cell">HVAC · Electrical · TI</td>
+            <td><span class="chip green">⭐⭐ Steady</span></td>
+          </tr>
+          <tr>
+            <td><strong>Techmart</strong></td>
+            <td class="sub-cell">Chris Beekman</td>
+            <td class="val-cell">3+ suite TIs</td>
+            <td class="val-cell" style="color:#4a9eff;">$2M+ TI</td>
+            <td class="sub-cell">Multi-suite TI</td>
+            <td><span class="chip green">⭐⭐ Steady</span></td>
+          </tr>
+          <tr>
+            <td><strong>Menlo School</strong></td>
+            <td class="sub-cell">Dusty Furtado</td>
+            <td class="val-cell">3 jobs</td>
+            <td class="val-cell" style="color:#4a9eff;">$5.4M</td>
+            <td class="sub-cell">HVAC · Reroof</td>
+            <td><span class="chip green">⭐⭐ Growing</span></td>
+          </tr>
+          <tr>
+            <td><strong>Marc Morgan Clients (2300 Broadway etc.)</strong></td>
+            <td class="sub-cell">Marc Morgan</td>
+            <td class="val-cell">7 jobs</td>
+            <td class="val-cell" style="color:#4a9eff;">$125M+ ROM pipeline</td>
+            <td class="sub-cell">Shell · Church · Storage</td>
+            <td><span class="chip orange">Bids Out</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- REFERRAL SOURCE TRACKER (interactive, localStorage) -->
+    <div style="background:white; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,0.07); overflow:hidden; margin-bottom:16px;">
+      <div style="background:#1a2744; padding:10px 14px; display:flex; align-items:center;">
+        <span style="font-size:11px; font-weight:700; color:#8fa3c8; text-transform:uppercase; letter-spacing:0.5px;">📊 Referral Source Win Tracker — Log Who Brings You Deals &amp; How Many You Close</span>
+        <button onclick="showAddReferral()" style="margin-left:auto; font-size:11px; background:#4a9eff; color:white; border:none; border-radius:6px; padding:5px 14px; cursor:pointer; font-weight:600;">+ Add Source</button>
+      </div>
+
+      <!-- Add form (hidden by default) -->
+      <div id="referral-add-form" style="display:none; padding:14px 16px; background:#f8f9fb; border-bottom:1px solid #eee;">
+        <div style="display:grid; grid-template-columns:1fr 1fr 80px 80px 80px 1fr auto; gap:8px; align-items:end;">
+          <div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Name</label><input id="rf-name" type="text" placeholder="e.g. Tom Taylor" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:6px; padding:5px 8px;"></div>
+          <div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Firm / Type</label><input id="rf-firm" type="text" placeholder="e.g. CBRE · Broker" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:6px; padding:5px 8px;"></div>
+          <div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Referred</label><input id="rf-referred" type="number" min="0" value="1" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:6px; padding:5px 8px;"></div>
+          <div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Won</label><input id="rf-won" type="number" min="0" value="0" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:6px; padding:5px 8px;"></div>
+          <div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">$ Closed</label><input id="rf-value" type="text" placeholder="$0" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:6px; padding:5px 8px;"></div>
+          <div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Notes</label><input id="rf-notes" type="text" placeholder="Context..." style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:6px; padding:5px 8px;"></div>
+          <div style="display:flex; gap:6px; padding-bottom:1px;">
+            <button onclick="saveReferral()" style="font-size:11px; background:#2ed573; color:#1a1a1a; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; font-weight:700;">Save</button>
+            <button onclick="document.getElementById('referral-add-form').style.display='none'" style="font-size:11px; background:#eee; color:#555; border:none; border-radius:6px; padding:6px 10px; cursor:pointer;">✕</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="referral-table-wrap">
+        <table class="funnel-table" style="margin-bottom:0;">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Firm / Type</th>
+              <th style="text-align:center;">Deals Referred</th>
+              <th style="text-align:center;">Deals Won</th>
+              <th style="text-align:center;">Win Rate</th>
+              <th>Total $ Closed</th>
+              <th>Notes</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="referral-tbody">
+          </tbody>
+        </table>
+        <div id="referral-empty" style="padding:20px; text-align:center; font-size:12px; color:#aaa; font-style:italic;">No referral sources logged yet. Click <strong>+ Add Source</strong> to start tracking who brings you deals and how many you close.</div>
+      </div>
+    </div>
+
+  </div><!-- /overview -->
+
+
+  <!-- ════════════════ BID LOG TAB ════════════════ -->
+  <div id="tab-bids" class="section-tab">
+    <div style="margin-top:16px;">
+
+      <div style="background:#fff0cc; border-radius:8px; padding:10px 14px; margin-bottom:14px; font-size:12px; color:#7a4f00;">
+        <strong>📌 What this log tracks:</strong> Preliminary budgets and ROMs sent out by the BD dept — whether or not they lead to a project. Goal: see what went out, to whom, what the response was, and what happened.
+      </div>
+
+      <div class="sec-header">
+        <span class="sec-badge badge-blue">Adam</span>
+        <span class="sec-title">BD ROM &amp; Preliminary Budget Tracker — Adam</span>
+        <span class="sec-count">5 items · $24.15M+ total</span>
+      </div>
+      <div class="bid-grid">
+
+        <div class="bid-card submitted">
+          <div class="bid-top">
+            <div>
+              <div class="bid-name">Hayward Airport Corporate Hangar</div>
+              <div style="font-size:11px; color:#666; margin-top:2px;">Hayward, CA · Industrial / Aviation</div>
+            </div>
+            <div>
+              <div class="bid-value">$9.9M</div>
+              <div class="bid-value-sub">50,400 SF</div>
+            </div>
+          </div>
+          <div class="bid-meta">
+            <span class="chip blue">✅ Submitted</span>
+            <span class="chip">ROM</span>
+            <span class="chip">Industrial</span>
+          </div>
+          <div class="bid-broker"><span>Sent To:</span> — &nbsp;&nbsp;<span>Date Sent:</span> —</div>
+          <div class="bid-broker"><span>Response:</span> Awaiting — largest active Adam ROM</div>
+        </div>
+
+        <div class="bid-card upcoming">
+          <div class="bid-top">
+            <div>
+              <div class="bid-name">The Plex Addition</div>
+              <div style="font-size:11px; color:#666; margin-top:2px;">Bay Area · Office / Mixed-Use</div>
+            </div>
+            <div>
+              <div class="bid-value">$13M</div>
+              <div class="bid-value-sub">50,000 SF</div>
+            </div>
+          </div>
+          <div class="bid-meta">
+            <span class="chip orange">🔜 Upcoming</span>
+            <span class="chip">ROM</span>
+            <span class="chip">Office</span>
+          </div>
+          <div class="bid-broker"><span>Sent To:</span> — &nbsp;&nbsp;<span>Date Sent:</span> —</div>
+          <div class="bid-broker"><span>Response:</span> Pending</div>
+        </div>
+
+        <div class="bid-card upcoming">
+          <div class="bid-top">
+            <div>
+              <div class="bid-name">Fellowship Center</div>
+              <div style="font-size:11px; color:#666; margin-top:2px;">Bay Area · Community / Church</div>
+            </div>
+            <div>
+              <div class="bid-value">TBD</div>
+              <div class="bid-value-sub">— SF</div>
+            </div>
+          </div>
+          <div class="bid-meta">
+            <span class="chip orange">🔜 Upcoming</span>
+            <span class="chip">ROM</span>
+            <span class="chip">Church</span>
+          </div>
+          <div class="bid-broker"><span>Sent To:</span> — &nbsp;&nbsp;<span>Date Sent:</span> —</div>
+          <div class="bid-broker"><span>Response:</span> Pending</div>
+          <div class="bid-note">⚠️ VE revisions doc on file — review before bid</div>
+        </div>
+
+        <div class="bid-card upcoming">
+          <div class="bid-top">
+            <div>
+              <div class="bid-name">VCHS Summer Work</div>
+              <div style="font-size:11px; color:#666; margin-top:2px;">Bay Area · Education</div>
+            </div>
+            <div>
+              <div class="bid-value">$250K</div>
+              <div class="bid-value-sub">— SF</div>
+            </div>
+          </div>
+          <div class="bid-meta">
+            <span class="chip orange">🔜 Upcoming</span>
+            <span class="chip">Education</span>
+            <span class="chip">Seasonal</span>
+          </div>
+          <div class="bid-broker"><span>Sent To:</span> — &nbsp;&nbsp;<span>Date Sent:</span> —</div>
+          <div class="bid-broker"><span>Response:</span> Pending</div>
+        </div>
+
+        <div class="bid-card upcoming">
+          <div class="bid-top">
+            <div>
+              <div class="bid-name">RMR 4720 Lakeview — Fremont</div>
+              <div style="font-size:11px; color:#666; margin-top:2px;">Fremont, CA · Commercial</div>
+            </div>
+            <div>
+              <div class="bid-value">$1M</div>
+              <div class="bid-value-sub">— SF</div>
+            </div>
+          </div>
+          <div class="bid-meta">
+            <span class="chip orange">🔜 Upcoming</span>
+            <span class="chip">Commercial</span>
+          </div>
+          <div class="bid-broker"><span>Sent To:</span> — &nbsp;&nbsp;<span>Date Sent:</span> —</div>
+          <div class="bid-broker"><span>Response:</span> Pending</div>
+        </div>
+
+      </div><!-- /bid-grid -->
+
+      <div class="divider"></div>
+
+      <!-- JB'S ROM TRACKER -->
+      <div class="sec-header">
+        <span class="sec-badge badge-orange">JB</span>
+        <span class="sec-title">BD ROM &amp; Preliminary Budget Tracker — JB Cahoon</span>
+        <span class="sec-count">5 active</span>
+      </div>
+      <table class="funnel-table">
+        <thead>
+          <tr><th>Project</th><th>Client / Broker</th><th>Value</th><th>Type</th><th>Status</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>600 Clipper</strong></td>
+            <td class="sub-cell">Peter Lund &mdash; Newmark SJ</td>
+            <td class="val-cell">TBD</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip orange">Revised #s Sent 5/4</span></td>
+            <td class="sub-cell">JB&rsquo;s own takeoffs + unit cost plugs, no set plans. Site walk done.</td>
+          </tr>
+          <tr>
+            <td><strong>384 Castro St &mdash; Mountain View</strong></td>
+            <td class="sub-cell">Shahmir Shunaid (Owner)</td>
+            <td class="val-cell">TBD</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip yellow">Awaiting Call</span></td>
+            <td class="sub-cell">5-story mixed-use ground-up. Adam intro&rsquo;d JB 5/4. Call pending.</td>
+          </tr>
+          <tr>
+            <td><strong>Make Matter</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$3.03M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip blue">Submitted 3/20</span></td>
+            <td class="sub-cell">Pending response.</td>
+          </tr>
+          <tr>
+            <td><strong>VW Belmont</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$2.09M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip blue">Submitted 3/22</span></td>
+            <td class="sub-cell">Pending response.</td>
+          </tr>
+          <tr>
+            <td><strong>Los Gatos Retail</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">TBD</td>
+            <td class="sub-cell">RFP</td>
+            <td><span class="chip orange">Bidding</span></td>
+            <td class="sub-cell">Active bid.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="divider"></div>
+
+      <!-- COMPANY NOTABLE BIDS -->
+      <div class="sec-header">
+        <span class="sec-badge badge-purple">Company-Wide</span>
+        <span class="sec-title">Notable Active Bids — Other PMs (Largest Deals)</span>
+        <span class="sec-count">$203M+ pending</span>
+      </div>
+      <table class="funnel-table">
+        <thead>
+          <tr><th>Project</th><th>PM</th><th>Value</th><th>Type</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>2300 Broadway</td><td>Marc Morgan</td><td class="val-cell">$97M</td><td class="sub-cell">ROM</td><td><span class="chip orange">Active Bid</span></td></tr>
+          <tr><td>Renesas TI</td><td>Charlie Griffin</td><td class="val-cell">$70M</td><td class="sub-cell">WIP</td><td><span class="chip green">Under Construction</span></td></tr>
+          <tr><td>Dumbarton Bldg 1B</td><td>David Girdley</td><td class="val-cell">$30M</td><td class="sub-cell">Active Bid</td><td><span class="chip purple">Estimating</span></td></tr>
+          <tr><td>Antiochian Orthodox Church</td><td>Marc Morgan</td><td class="val-cell">$14M</td><td class="sub-cell">ROM</td><td><span class="chip orange">Active Bid</span></td></tr>
+          <tr><td>Lotus Preschool</td><td>David Girdley</td><td class="val-cell">$9.8M</td><td class="sub-cell">Pre-Con</td><td><span class="chip blue">Submitted</span></td></tr>
+          <tr><td>540 University Ave</td><td>Marc Morgan</td><td class="val-cell">$16.5M</td><td class="sub-cell">ROM</td><td><span class="chip orange">Active Bid</span></td></tr>
+          <tr><td>Luxe Round Rock</td><td>Chip Hackett</td><td class="val-cell">$7M</td><td class="sub-cell">Budget</td><td><span class="chip orange">Active Bid</span></td></tr>
+          <tr><td>ASML D&E Lab + Generator</td><td>Marco Velasco</td><td class="val-cell">$2.75M</td><td class="sub-cell">WIP</td><td><span class="chip green">Under Construction</span></td></tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div><!-- /bids -->
+
+
+  <!-- ════════════════ TIM LEADS TAB ════════════════ -->
+  <div id="tab-tim" class="section-tab">
+    <div style="margin-top:16px;">
+      <div style="background:#fff0cc; border-radius:8px; padding:10px 14px; margin-bottom:16px; font-size:12px; color:#7a4f00;">
+        <strong>📡 TIM Source:</strong> April 20, 2026 · 85 active requirements · 6.4M–9.4M SF total in market · Avg deal: ~112k SF
+      </div>
+
+      <!-- TIER 1 -->
+      <div class="sec-header">
+        <span class="sec-badge badge-red">Tier 1</span>
+        <span class="sec-title">Mega Requirements — 200k+ SF · GC-Level Deals</span>
+        <span class="sec-count">12 reqs</span>
+      </div>
+      <div class="tim-grid">
+
+        <div class="tim-card t1">
+          <div class="tim-top">
+            <div class="tim-tenant">AMD</div>
+            <div class="tim-sf">300k–700k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Tom Taylor</strong> · CBRE · Mountain View / NSJ / Santa Clara</div>
+          <div class="tim-req">Office · RFPs out · 3 properties shortlisted · renewal/expansion likely</div>
+          <div class="tim-est">Est. Construction Value: ~$210M</div>
+        </div>
+
+        <div class="tim-card t1">
+          <div class="tim-top">
+            <div class="tim-tenant">Archer Aviation</div>
+            <div class="tim-sf">400k–500k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Jeff Cushman, Chris D'Ambrosia</strong> · C&W · MTV/SNVL</div>
+          <div class="tim-req">Office · 1 building · 5,000 amps @ 480V · largest single deal in TIM</div>
+          <div class="tim-est">Est. Construction Value: ~$150M</div>
+        </div>
+
+        <div class="tim-card t1">
+          <div class="tim-top">
+            <div class="tim-tenant">GM</div>
+            <div class="tim-sf">300k–400k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Andy Hueser</strong> · JLL · Sunnyvale / Mountain View</div>
+          <div class="tim-req">Office + 100k SF lab space · Fortune 100</div>
+          <div class="tim-note">⚠️ Email bounced — try andrew.hueser@jll.com or call (408) 982-8417 direct</div>
+          <div class="tim-est">Est. Construction Value: ~$105M</div>
+        </div>
+
+        <div class="tim-card t1">
+          <div class="tim-top">
+            <div class="tim-tenant">Nvidia</div>
+            <div class="tim-sf">200k–400k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Paul McManus</strong> · Colliers · NSJ / Santa Clara</div>
+          <div class="tim-req">R&D · Multiple locations · 5,500 amps minimum</div>
+          <div class="tim-est">Est. Construction Value: ~$90M</div>
+        </div>
+
+        <div class="tim-card t1">
+          <div class="tim-top">
+            <div class="tim-tenant">Stryker</div>
+            <div class="tim-sf">200k–300k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>John McMahon</strong> · Colliers · South San Jose</div>
+          <div class="tim-req">R&D · McMahon's req · 24 months out from LED</div>
+          <div class="tim-est">Est. Construction Value: ~$75M</div>
+        </div>
+
+        <div class="tim-card t1">
+          <div class="tim-top">
+            <div class="tim-tenant">ASML</div>
+            <div class="tim-sf">200k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Jere Hench, John McMahon</strong> · Colliers · NSJ</div>
+          <div class="tim-req">R&D · Q1–Q2 2027 occupancy · 3 offers out</div>
+          <div class="tim-est">Est. Construction Value: ~$60M · Also active WIP client (Marco Velasco)</div>
+        </div>
+
+        <div class="tim-card t1">
+          <div class="tim-top">
+            <div class="tim-tenant">LAM Research</div>
+            <div class="tim-sf">150k–200k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Tom Taylor</strong> · CBRE · NSJ–Fremont</div>
+          <div class="tim-req">R&D · Immediate timing</div>
+          <div class="tim-est">Est. Construction Value: ~$52M</div>
+        </div>
+
+        <div class="tim-card t1">
+          <div class="tim-top">
+            <div class="tim-tenant">Undisclosed (Ryan Adlesh)</div>
+            <div class="tim-sf">200k–300k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Ryan Adlesh</strong> · CBRE · Sunnyvale–San Jose</div>
+          <div class="tim-req">Office · Immediate · Large unnamed requirement</div>
+          <div class="tim-est">Est. Construction Value: ~$75M</div>
+        </div>
+
+      </div><!-- /tier1 -->
+
+      <div class="divider"></div>
+
+      <!-- TIER 2 -->
+      <div class="sec-header">
+        <span class="sec-badge badge-orange">Tier 2</span>
+        <span class="sec-title">Strong Requirements — 75k–200k SF</span>
+        <span class="sec-count">30+ reqs</span>
+      </div>
+      <div class="tim-grid">
+
+        <div class="tim-card t2">
+          <div class="tim-top">
+            <div class="tim-tenant">Derek Cuschieri — Unknown Tenant</div>
+            <div class="tim-sf">70k–100k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Derek Cuschieri, Todd Campbell</strong> · Avison Young · Santa Clara</div>
+          <div class="tim-req">R&D Clean Room · 10–20k clean room + 50–60k production</div>
+          <div class="tim-note">🔥 Derek replied 4/28 "no ROM need" BUT this TIM shows LIVE req — re-engage on clean room buildout specifically</div>
+          <div class="tim-est">Est. Construction Value: ~$30M–$45M (clean room premium)</div>
+        </div>
+
+        <div class="tim-card t2">
+          <div class="tim-top">
+            <div class="tim-tenant">Zoom</div>
+            <div class="tim-sf">125k–150k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Joe Brady</strong> · C&W · Immediate</div>
+          <div class="tim-req">Office · Immediate · Already in SBC sub list</div>
+          <div class="tim-est">Est. Construction Value: ~$45M</div>
+        </div>
+
+        <div class="tim-card t2">
+          <div class="tim-top">
+            <div class="tim-tenant">xAI (Elon Musk)</div>
+            <div class="tim-sf">50k–150k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Joe Long, Armand Tiano</strong> · JLL · Palo Alto</div>
+          <div class="tim-req">Office · Focused on Palo Alto</div>
+          <div class="tim-est">Est. Construction Value: ~$45M</div>
+        </div>
+
+        <div class="tim-card t2">
+          <div class="tim-top">
+            <div class="tim-tenant">Illumio</div>
+            <div class="tim-sf">120k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Joe Long, Bart Lammersen</strong> · JLL · SNVL/SC/MV</div>
+          <div class="tim-req">Office/R&D · Lease up Dec 2026 · Proposals out</div>
+          <div class="tim-est">Est. Construction Value: ~$36M</div>
+        </div>
+
+        <div class="tim-card t2">
+          <div class="tim-top">
+            <div class="tim-tenant">Mediatek</div>
+            <div class="tim-sf">100k–120k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>John McMahon, Sean McMahon</strong> · Colliers · NSJ / SC</div>
+          <div class="tim-req">Office · High-image building</div>
+          <div class="tim-est">Est. Construction Value: ~$36M</div>
+        </div>
+
+        <div class="tim-card t2">
+          <div class="tim-top">
+            <div class="tim-tenant">Marvell</div>
+            <div class="tim-sf">75k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Andy Hueser</strong> · JLL · Santa Clara</div>
+          <div class="tim-req">Office · 2-yr swing space · Plug & play</div>
+          <div class="tim-note">⚠️ Same broker as GM — Andy Hueser email bounced. Call direct.</div>
+          <div class="tim-est">Est. Construction Value: ~$22M</div>
+        </div>
+
+        <div class="tim-card t2">
+          <div class="tim-top">
+            <div class="tim-tenant">Hitachi</div>
+            <div class="tim-sf">80k–100k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Joe Long</strong> · JLL · Sunnyvale / Mountain View</div>
+          <div class="tim-req">Office · Class A renewal likely</div>
+          <div class="tim-est">Est. Construction Value: ~$30M</div>
+        </div>
+
+        <div class="tim-card t2">
+          <div class="tim-top">
+            <div class="tim-tenant">Guardant Health</div>
+            <div class="tim-sf">100k–150k SF</div>
+          </div>
+          <div class="tim-broker-line"><strong>Mike Mordaunt</strong> · C&W · Palo Alto / MV</div>
+          <div class="tim-req">R&D · Already in SBC sub list</div>
+          <div class="tim-est">Est. Construction Value: ~$45M</div>
+        </div>
+
+      </div><!-- /tier2 -->
+    </div>
+  </div><!-- /tim -->
+
+
+  <!-- ════════════════ OUTREACH TAB ════════════════ -->
+  <div id="tab-outreach" class="section-tab">
+    <div style="margin-top:16px;">
+      <div style="background:#e8f0ff; border-radius:8px; padding:10px 14px; margin-bottom:16px; font-size:12px; color:#1a3070;">
+        <strong>📅 Sprint:</strong> April 28 – May 12, 2026 · 14 priority brokers · Source: TIM 4/20/2026 · Click card header to mark contacted · Click <strong>📧 Correspondence</strong> to log/view emails &amp; calls
+      </div>
+
+      <!-- HOT / ACTION NEEDED -->
+      <div class="sec-header">
+        <span class="sec-badge badge-red">Action Required</span>
+        <span class="sec-title">Must Re-Engage This Week</span>
+        <span class="sec-count">2 contacts</span>
+      </div>
+      <div class="contact-grid">
+
+        <div class="contact-card hot" data-broker-id="derek-cuschieri" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Derek Cuschieri</div>
+              <div class="contact-co">Avison Young — Palo Alto</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip" style="background:#e8f0ff;color:#1a4080;">📞 (408) 608-8702</span>
+            <span class="chip red">🔥 ACTIVE REQ</span>
+          </div>
+          <div class="card-req">70–100k SF R&D · 10–20k clean room + 50–60k production · Santa Clara · Q1 2026</div>
+          <div class="card-note">Replied 4/28 "no ROM need" BUT TIM shows LIVE req — re-engage on clean room buildout specifically. Offer preliminary GC pricing + constructability input.</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('derek-cuschieri', this)">📧 Correspondence <span class="corr-count" id="cnt-derek-cuschieri">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-derek-cuschieri" style="display:none;">
+              <div class="corr-timeline" id="timeline-derek-cuschieri"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-derek-cuschieri"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-derek-cuschieri">
+                </div>
+                <textarea class="corr-text-input" id="text-derek-cuschieri" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('derek-cuschieri')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card warn" data-broker-id="andy-hueser" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Andy Hueser</div>
+              <div class="contact-co">JLL — San Jose / Menlo Park</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip" style="background:#e8f0ff;color:#1a4080;">📞 (408) 982-8417</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">🔥 TIM REQ</span>
+          </div>
+          <div class="card-req">GM 300–400k SF (inc. 100k lab) · Marvell 75k SF swing space · SNVL/MV</div>
+          <div class="card-note">⚠️ Email bounced last week — try andrew.hueser@jll.com or call direct. Exec MD with two of the biggest reqs in TIM.</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('andy-hueser', this)">📧 Correspondence <span class="corr-count" id="cnt-andy-hueser">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-andy-hueser" style="display:none;">
+              <div class="corr-timeline" id="timeline-andy-hueser"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-andy-hueser"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-andy-hueser">
+                </div>
+                <textarea class="corr-text-input" id="text-andy-hueser" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('andy-hueser')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /hot -->
+
+      <div class="divider"></div>
+
+      <!-- WARM RESPONSES -->
+      <div class="sec-header">
+        <span class="sec-badge badge-green">Replied ✅</span>
+        <span class="sec-title">Warm Responses — Follow Up</span>
+        <span class="sec-count">1 contact</span>
+      </div>
+      <div class="contact-grid">
+
+        <div class="contact-card done" data-broker-id="maryjane-bengiveno" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Maryjane Bengiveno</div>
+              <div class="contact-co">JLL — Silicon Valley</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip" style="background:#e8f0ff;color:#1a4080;">📞 (408) 866-5622</span>
+            <span class="chip green">✅ Replied 4/28</span>
+          </div>
+          <div class="card-reply">✅ Warm / positive — market picking up. Will keep SBC in mind for quick pricing gut-checks. Positions SBC as fast-budget resource.</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('maryjane-bengiveno', this)">📧 Correspondence <span class="corr-count" id="cnt-maryjane-bengiveno">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-maryjane-bengiveno" style="display:none;">
+              <div class="corr-timeline" id="timeline-maryjane-bengiveno"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-maryjane-bengiveno"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-maryjane-bengiveno">
+                </div>
+                <textarea class="corr-text-input" id="text-maryjane-bengiveno" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('maryjane-bengiveno')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- PRIORITY OUTREACH IN PROGRESS -->
+      <div class="sec-header">
+        <span class="sec-badge badge-orange">In Progress</span>
+        <span class="sec-title">Priority TIM Brokers — Awaiting Response</span>
+        <span class="sec-count">10 contacts</span>
+      </div>
+      <div class="contact-grid">
+
+        <div class="contact-card" data-broker-id="tom-taylor" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Tom Taylor</div>
+              <div class="contact-co">CBRE — San Jose</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip call">📞 (408) 453-7417</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">🔥 TIM REQ</span>
+          </div>
+          <div class="card-req">AMD 300–700k SF · LAM 150–200k SF · Undisclosed 20–200k SF</div>
+          <div class="card-note">EVP · Biggest book of business in the entire TIM list</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('tom-taylor', this)">📧 Correspondence <span class="corr-count" id="cnt-tom-taylor">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-tom-taylor" style="display:none;">
+              <div class="corr-timeline" id="timeline-tom-taylor"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-tom-taylor"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-tom-taylor">
+                </div>
+                <textarea class="corr-text-input" id="text-tom-taylor" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('tom-taylor')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card" data-broker-id="jeff-cushman" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Jeff Cushman</div>
+              <div class="contact-co">Cushman &amp; Wakefield — San Jose</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip call">📞 (917) 575-4722</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">🔥 TIM REQ</span>
+          </div>
+          <div class="card-req">Archer Aviation 400–500k SF Office · MTV/SNVL · Largest single deal in TIM</div>
+          <div class="card-note">Vice Chairman · C&W SJ · tag-team with Chris D'Ambrosia</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('jeff-cushman', this)">📧 Correspondence <span class="corr-count" id="cnt-jeff-cushman">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-jeff-cushman" style="display:none;">
+              <div class="corr-timeline" id="timeline-jeff-cushman"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-jeff-cushman"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-jeff-cushman">
+                </div>
+                <textarea class="corr-text-input" id="text-jeff-cushman" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('jeff-cushman')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card" data-broker-id="john-mcmahon" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">John McMahon</div>
+              <div class="contact-co">Colliers — San Jose</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip call">📞 (408) 282-3944</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">🔥 TIM REQ</span>
+          </div>
+          <div class="card-req">Stryker 200–300k · ASML 200k · Mediatek 100–120k · Trimble 65–75k</div>
+          <div class="card-note">EVP · Most active Colliers agent in TIM · 4 concurrent requirements</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('john-mcmahon', this)">📧 Correspondence <span class="corr-count" id="cnt-john-mcmahon">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-john-mcmahon" style="display:none;">
+              <div class="corr-timeline" id="timeline-john-mcmahon"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-john-mcmahon"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-john-mcmahon">
+                </div>
+                <textarea class="corr-text-input" id="text-john-mcmahon" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('john-mcmahon')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card" data-broker-id="paul-mcmanus" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Paul McManus</div>
+              <div class="contact-co">Colliers — San Jose</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip call">📞 (408) 282-3800</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">🔥 TIM REQ</span>
+          </div>
+          <div class="card-req">Nvidia 200–400k R&D · NSJ/SC · Multiple locations · 5,500 amps min</div>
+          <div class="card-note">Vice Chair · Colliers Occupier Services Bay Area · Senior point on major accounts</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('paul-mcmanus', this)">📧 Correspondence <span class="corr-count" id="cnt-paul-mcmanus">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-paul-mcmanus" style="display:none;">
+              <div class="corr-timeline" id="timeline-paul-mcmanus"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-paul-mcmanus"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-paul-mcmanus">
+                </div>
+                <textarea class="corr-text-input" id="text-paul-mcmanus" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('paul-mcmanus')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card" data-broker-id="joe-long" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Joe Long</div>
+              <div class="contact-co">JLL — San Jose</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip call">📞 (408) 402-2133</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">🔥 TIM REQ</span>
+          </div>
+          <div class="card-req">xAI 50–150k · Hitachi 80–100k · Illumio 120k · Cursoe 40–50k · Undisclosed 30–40k</div>
+          <div class="card-note">Most active JLL agent in TIM · 5 concurrent requirements</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('joe-long', this)">📧 Correspondence <span class="corr-count" id="cnt-joe-long">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-joe-long" style="display:none;">
+              <div class="corr-timeline" id="timeline-joe-long"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-joe-long"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-joe-long">
+                </div>
+                <textarea class="corr-text-input" id="text-joe-long" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('joe-long')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card" data-broker-id="ryan-adlesh" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Ryan Adlesh</div>
+              <div class="contact-co">CBRE — San Jose</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip call">📞 (408) 453-7414</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">🔥 TIM REQ</span>
+          </div>
+          <div class="card-req">Undisclosed 200–300k SF Office · SNVL–SJ · Immediate</div>
+          <div class="card-note">SVP · National Tech &amp; Media Practice Group · Large unnamed requirement</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('ryan-adlesh', this)">📧 Correspondence <span class="corr-count" id="cnt-ryan-adlesh">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-ryan-adlesh" style="display:none;">
+              <div class="corr-timeline" id="timeline-ryan-adlesh"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-ryan-adlesh"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-ryan-adlesh">
+                </div>
+                <textarea class="corr-text-input" id="text-ryan-adlesh" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('ryan-adlesh')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card" data-broker-id="bart-lammersen" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Bart Lammersen</div>
+              <div class="contact-co">JLL — San Jose</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip call">JLL San Jose Office</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">🔥 TIM REQ</span>
+          </div>
+          <div class="card-req">Illumio 120k · Intuitive Surgical 75–100k · Barracuda Networks</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('bart-lammersen', this)">📧 Correspondence <span class="corr-count" id="cnt-bart-lammersen">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-bart-lammersen" style="display:none;">
+              <div class="corr-timeline" id="timeline-bart-lammersen"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-bart-lammersen"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-bart-lammersen">
+                </div>
+                <textarea class="corr-text-input" id="text-bart-lammersen" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('bart-lammersen')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card" data-broker-id="vince-machado" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Vince Machado</div>
+              <div class="contact-co">CBRE — San Jose</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip call">CBRE SJ Office</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">🔥 TIM REQ</span>
+          </div>
+          <div class="card-req">Heron Power 250k SF Manufacturing/R&D · San Jose · Close to leases</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('vince-machado', this)">📧 Correspondence <span class="corr-count" id="cnt-vince-machado">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-vince-machado" style="display:none;">
+              <div class="corr-timeline" id="timeline-vince-machado"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-vince-machado"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-vince-machado">
+                </div>
+                <textarea class="corr-text-input" id="text-vince-machado" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('vince-machado')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card" data-broker-id="scott-mathisen" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Scott Mathisen</div>
+              <div class="contact-co">JLL — San Jose</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip call">JLL San Jose</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">🔥 TIM REQ</span>
+          </div>
+          <div class="card-req">Kaiser Permanente 100–150k · Los Gatos · Healthcare office expansion</div>
+          <div class="card-note">Healthcare = lab/office — good SBC fit</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('scott-mathisen', this)">📧 Correspondence <span class="corr-count" id="cnt-scott-mathisen">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-scott-mathisen" style="display:none;">
+              <div class="corr-timeline" id="timeline-scott-mathisen"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-scott-mathisen"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-scott-mathisen">
+                </div>
+                <textarea class="corr-text-input" id="text-scott-mathisen" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('scott-mathisen')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card" data-broker-id="mike-mordaunt" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Mike Mordaunt</div>
+              <div class="contact-co">Cushman &amp; Wakefield — San Jose</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip call">C&amp;W San Jose</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">🔥 TIM REQ</span>
+          </div>
+          <div class="card-req">Guardant Health 100–150k R&D · Palo Alto / Mountain View</div>
+          <div class="card-note">Already in SBC sub list — warm relationship opportunity</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('mike-mordaunt', this)">📧 Correspondence <span class="corr-count" id="cnt-mike-mordaunt">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-mike-mordaunt" style="display:none;">
+              <div class="corr-timeline" id="timeline-mike-mordaunt"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-mike-mordaunt"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-mike-mordaunt">
+                </div>
+                <textarea class="corr-text-input" id="text-mike-mordaunt" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('mike-mordaunt')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /in-progress -->
+
+    </div>
+  </div><!-- /outreach -->
+
+</div><!-- /body -->
+
+<div class="footer">SBC BD Command Dashboard · Week of May 4, 2026 · Adam Tafralis + JB Cahoon · South Bay Construction · Powered by Claw 🦞</div>
+
+<script>
+  // ── OUTREACH TRACKER SYNC ──
+  // Maps BD Dashboard broker slugs → SBC Weekly Outreach Tracker data-id values
+  const TRACKER_STORAGE_KEY = 'sbc-outreach-apr29-2wk';
+  const TRACKER_MAP = {
+    'tom-taylor':          'c1',
+    'jeff-cushman':        'c2',
+    'andy-hueser':         'c3',
+    'john-mcmahon':        'c4',
+    'paul-mcmanus':        'c5',
+    'joe-long':            'c6',
+    'derek-cuschieri':     'c7',
+    'ryan-adlesh':         'c8',
+    'scott-mathisen':      'c9',
+    'mike-mordaunt':       'c10',
+    'bart-lammersen':      'c17',
+    'vince-machado':       'c23',
+    'maryjane-bengiveno':  'c29'
+  };
+
+  function getTrackerState() {
+    try { return JSON.parse(localStorage.getItem(TRACKER_STORAGE_KEY) || '{}'); }
+    catch(e) { return {}; }
+  }
+  function setTrackerState(state) {
+    localStorage.setItem(TRACKER_STORAGE_KEY, JSON.stringify(state));
+  }
+
+  // ── TAB NAVIGATION ──
+  function showTab(name) {
+    document.querySelectorAll('.section-tab').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function toggleDone(card) {
+    card.classList.toggle('done');
+    const isDone = card.classList.contains('done');
+    const brokerId = card.dataset.brokerId;
+    // Sync to Weekly Outreach Tracker
+    if (brokerId && TRACKER_MAP[brokerId]) {
+      const state = getTrackerState();
+      state[TRACKER_MAP[brokerId]] = isDone;
+      setTrackerState(state);
+    }
+    // Also persist in BD Dashboard own store
+    if (brokerId) {
+      const bdState = getBdCheckedState();
+      bdState[brokerId] = isDone;
+      localStorage.setItem('sbc_bd_checked_v1', JSON.stringify(bdState));
+    }
+  }
+
+  function getBdCheckedState() {
+    try { return JSON.parse(localStorage.getItem('sbc_bd_checked_v1') || '{}'); }
+    catch(e) { return {}; }
+  }
+
+  // ── CORRESPONDENCE LOG ──
+  const BROKER_SEEDS = {
+    'derek-cuschieri': [
+      { date: '2026-04-28', type: 'email', text: 'Replied to outreach: "No current need for budgeting or ROMs at this time."\n\nNOTE: TIM 4/20 shows LIVE 70-100k R&D clean room requirement in Santa Clara (10-20k clean room + 50-60k production). His reply likely means the deal is further along, not dead. Re-engage with specific clean room buildout pitch + preliminary GC pricing.' }
+    ],
+    'andy-hueser': [
+      { date: '2026-04-27', type: 'email', text: 'Email to andy.hueser@jll.com BOUNCED. Active on GM (300-400k SF incl. 100k lab) + Marvell (75k SF swing space) per TIM 4/20. Try andrew.hueser@jll.com or call (408) 982-8417 direct.' }
+    ],
+    'maryjane-bengiveno': [
+      { date: '2026-04-28', type: 'email', text: 'Replied warm/positive. Confirmed market is picking up. Said she will keep SBC in mind for quick gut-checks on pricing. Good positioning — she frequently needs fast ROM/pricing input on deals. SBC = fast-budget resource.' }
+    ]
+  };
+
+  const TYPE_ICONS  = { email: '📧', call: '📞', linkedin: '💼', meeting: '🤝', note: '📝' };
+  const TYPE_LABELS = { email: 'Email', call: 'Call', linkedin: 'LinkedIn', meeting: 'Meeting', note: 'Note' };
+
+  function getCorr(id) {
+    const stored = localStorage.getItem('sbc_corr_v1_' + id);
+    if (stored) return JSON.parse(stored);
+    if (BROKER_SEEDS[id]) {
+      localStorage.setItem('sbc_corr_v1_' + id, JSON.stringify(BROKER_SEEDS[id]));
+      return BROKER_SEEDS[id];
+    }
+    return [];
+  }
+
+  function saveCorr(id, entries) {
+    localStorage.setItem('sbc_corr_v1_' + id, JSON.stringify(entries));
+  }
+
+  function renderCorr(id) {
+    const tl  = document.getElementById('timeline-' + id);
+    const cnt = document.getElementById('cnt-' + id);
+    if (!tl || !cnt) return;
+    const entries = getCorr(id);
+    const n = entries.length;
+    cnt.textContent = n + (n === 1 ? ' entry' : ' entries');
+    cnt.className = 'corr-count' + (n > 0 ? ' has-entries' : '');
+    if (n === 0) {
+      tl.innerHTML = '<div class="corr-empty">No correspondence logged yet.</div>';
+      return;
+    }
+    const sorted = [...entries].sort((a, b) => b.date.localeCompare(a.date));
+    tl.innerHTML = sorted.map((e, i) => `
+      <div class="corr-entry">
+        <div class="corr-dot ${e.type || 'note'}"></div>
+        <div class="corr-body">
+          <div class="corr-meta"><strong>${TYPE_ICONS[e.type] || '📝'} ${TYPE_LABELS[e.type] || e.type}</strong> &nbsp;·&nbsp; ${e.date}</div>
+          <div class="corr-text-display">${e.text.replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+        </div>
+      </div>${i < sorted.length - 1 ? '<div style="margin-left:4px; border-left:2px solid #f0f2f5; height:6px;"></div>' : ''}
+    `).join('');
+  }
+
+  function toggleCorr(id, toggleEl) {
+    const panel = document.getElementById('panel-' + id);
+    if (!panel) return;
+    const opening = panel.style.display === 'none';
+    panel.style.display = opening ? 'block' : 'none';
+    toggleEl.style.color = opening ? '#1a2744' : '#4a9eff';
+    if (opening) renderCorr(id);
+  }
+
+  function addCorr(id) {
+    const typeEl = document.getElementById('type-' + id);
+    const dateEl = document.getElementById('date-' + id);
+    const textEl = document.getElementById('text-' + id);
+    const text = (textEl.value || '').trim();
+    if (!text) { textEl.focus(); textEl.style.borderColor = '#ff4757'; setTimeout(() => textEl.style.borderColor = '#ddd', 1500); return; }
+    const entry = { date: dateEl.value || new Date().toISOString().slice(0,10), type: typeEl.value, text };
+    const entries = getCorr(id);
+    entries.push(entry);
+    saveCorr(id, entries);
+    textEl.value = '';
+    renderCorr(id);
+  }
+
+  // ── REFERRAL SOURCE TRACKER ──
+  function getReferrals() {
+    const stored = localStorage.getItem('sbc_referrals_v1');
+    return stored ? JSON.parse(stored) : [];
+  }
+  function saveReferrals(arr) {
+    localStorage.setItem('sbc_referrals_v1', JSON.stringify(arr));
+  }
+
+  function renderReferrals() {
+    const tbody = document.getElementById('referral-tbody');
+    const empty = document.getElementById('referral-empty');
+    if (!tbody) return;
+    const refs = getReferrals();
+    if (refs.length === 0) {
+      tbody.innerHTML = '';
+      if (empty) empty.style.display = 'block';
+      return;
+    }
+    if (empty) empty.style.display = 'none';
+    // Sort by $ closed desc, then by referred desc
+    const sorted = [...refs].sort((a, b) => {
+      const av = parseFloat((a.value||'0').replace(/[^0-9.]/g,'')) || 0;
+      const bv = parseFloat((b.value||'0').replace(/[^0-9.]/g,'')) || 0;
+      return bv - av || (b.referred||0) - (a.referred||0);
+    });
+    tbody.innerHTML = sorted.map((r, i) => {
+      const pct = r.referred > 0 ? Math.round((r.won / r.referred) * 100) : 0;
+      const pctColor = pct >= 50 ? '#2ed573' : pct >= 25 ? '#ffa502' : '#ff6b6b';
+      const barW = Math.min(pct, 100);
+      return `
+        <tr>
+          <td><strong>${r.name || '—'}</strong></td>
+          <td class="sub-cell">${r.firm || '—'}</td>
+          <td style="text-align:center;" class="val-cell">${r.referred || 0}</td>
+          <td style="text-align:center;" class="val-cell">${r.won || 0}</td>
+          <td style="text-align:center; min-width:80px;">
+            <div style="font-size:13px; font-weight:700; color:${pctColor};">${pct}%</div>
+            <div style="height:4px; background:#f0f2f5; border-radius:3px; margin-top:3px; overflow:hidden;">
+              <div style="height:100%; width:${barW}%; background:${pctColor}; border-radius:3px;"></div>
+            </div>
+          </td>
+          <td class="val-cell" style="color:#1a2744;">${r.value || '—'}</td>
+          <td class="sub-cell">${r.notes || ''}</td>
+          <td><button onclick="deleteReferral(${refs.indexOf(r)})" style="font-size:11px; background:none; border:1px solid #eee; border-radius:5px; padding:3px 8px; color:#aaa; cursor:pointer;">✕</button></td>
+        </tr>`;
+    }).join('');
+  }
+
+  function showAddReferral() {
+    const f = document.getElementById('referral-add-form');
+    f.style.display = f.style.display === 'none' ? 'flex' : 'none';
+    if (f.style.display !== 'none') document.getElementById('rf-name').focus();
+    f.style.display = f.style.display === 'flex' ? 'block' : 'none';
+  }
+
+  function saveReferral() {
+    const name = (document.getElementById('rf-name').value || '').trim();
+    if (!name) { document.getElementById('rf-name').focus(); return; }
+    const entry = {
+      name,
+      firm:     document.getElementById('rf-firm').value.trim(),
+      referred: parseInt(document.getElementById('rf-referred').value) || 0,
+      won:      parseInt(document.getElementById('rf-won').value) || 0,
+      value:    document.getElementById('rf-value').value.trim(),
+      notes:    document.getElementById('rf-notes').value.trim()
+    };
+    const refs = getReferrals();
+    refs.push(entry);
+    saveReferrals(refs);
+    // Reset form
+    ['rf-name','rf-firm','rf-value','rf-notes'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('rf-referred').value = '1';
+    document.getElementById('rf-won').value = '0';
+    document.getElementById('referral-add-form').style.display = 'none';
+    renderReferrals();
+  }
+
+  function deleteReferral(idx) {
+    if (!confirm('Remove this referral source?')) return;
+    const refs = getReferrals();
+    refs.splice(idx, 1);
+    saveReferrals(refs);
+    renderReferrals();
+  }
+
+  // ── INIT ──
+  window.addEventListener('load', function() {
+    const today = new Date().toISOString().slice(0,10);
+    const ALL_BROKERS = [
+      'derek-cuschieri','andy-hueser','maryjane-bengiveno',
+      'tom-taylor','jeff-cushman','john-mcmahon','paul-mcmanus',
+      'joe-long','ryan-adlesh','bart-lammersen','vince-machado',
+      'scott-mathisen','mike-mordaunt'
+    ];
+    ALL_BROKERS.forEach(id => {
+      const cnt  = document.getElementById('cnt-' + id);
+      const date = document.getElementById('date-' + id);
+      if (date) date.value = today;
+      if (cnt) {
+        const n = getCorr(id).length;
+        cnt.textContent = n + (n === 1 ? ' entry' : ' entries');
+        if (n > 0) cnt.classList.add('has-entries');
+      }
+    });
+    renderReferrals();
+
+    // ── Sync checked state from Outreach Tracker ──
+    const trackerState = getTrackerState();
+    const bdState = getBdCheckedState();
+    document.querySelectorAll('.contact-card[data-broker-id]').forEach(card => {
+      const brokerId = card.dataset.brokerId;
+      const trackerId = TRACKER_MAP[brokerId];
+      // Outreach Tracker is source of truth if it has a value; fall back to BD store
+      const isDone = trackerId !== undefined
+        ? !!trackerState[trackerId]
+        : !!bdState[brokerId];
+      card.classList.toggle('done', isDone);
+    });
+  });
+</script>
+
+</body>
+</html>
