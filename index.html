@@ -272,41 +272,102 @@
 
     <!-- MARKET INTEL ALERT -->
     <div style="background:#fff8f0; border:2px solid #ffa502; border-radius:10px; padding:14px 18px; margin-bottom:20px;">
-      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
         <span style="background:#ffa502; color:white; font-size:11px; font-weight:700; padding:3px 10px; border-radius:12px; text-transform:uppercase; letter-spacing:0.5px;">&#x1F4E8; Intel Drop</span>
         <span style="font-size:14px; font-weight:600; color:#1a2744;">Market Chitter-Chatter &mdash; Toss Vallentine, JLL &mdash; May 11, 2026</span>
-        <span style="font-size:12px; color:#888; margin-left:auto;">Source: JLL 4/28/26 report</span>
+        <span style="font-size:12px; color:#888; margin-left:auto; display:flex; align-items:center; gap:10px;">Source: JLL 4/28/26 report <button onclick="showAddIntelForm()" style="font-size:11px; background:#4a9eff; color:white; border:none; border-radius:6px; padding:4px 10px; cursor:pointer; font-weight:600;">+ Add Intel</button></span>
       </div>
-      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:8px;">
-        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #ff4757;">
+      <!-- Add Intel Form -->
+      <div id="add-intel-form" style="display:none; background:#f0f4ff; border-radius:8px; padding:10px 12px; margin-bottom:10px;">
+        <div style="display:grid; grid-template-columns:1fr 80px 1fr 1fr auto; gap:8px; align-items:end;">
+          <div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Company / Tenant</label><input id="ai-company" type="text" placeholder="e.g. Etched AI" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:6px; padding:5px 8px;"></div>
+          <div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">SF</label><input id="ai-sf" type="text" placeholder="70k SF" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:6px; padding:5px 8px;"></div>
+          <div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Description</label><input id="ai-desc" type="text" placeholder="Lab + power &bull; Silicon Valley" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:6px; padding:5px 8px;"></div>
+          <div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Broker Name</label><input id="ai-broker" type="text" placeholder="Spencer Galli (JLL)" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:6px; padding:5px 8px;"></div>
+          <div style="display:flex; gap:6px; padding-bottom:1px;">
+            <button onclick="saveNewIntel()" style="font-size:11px; background:#2ed573; color:#1a1a1a; border:none; border-radius:6px; padding:6px 12px; cursor:pointer; font-weight:700;">Save</button>
+            <button onclick="document.getElementById('add-intel-form').style.display='none'" style="font-size:11px; background:#eee; color:#555; border:none; border-radius:6px; padding:6px 10px; cursor:pointer;">✕</button>
+          </div>
+        </div>
+      </div>
+      <div id="intel-grid" style="display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:8px;">
+        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #ff4757;" data-intel-id="etched-ai">
           <div style="font-size:12px; font-weight:700; color:#1a2744;">Etched AI &mdash; 70k SF</div>
           <div style="font-size:11px; color:#555; margin-top:3px;">Electronics lab + power &bull; Silicon Valley</div>
           <div style="font-size:11px; color:#e85d04; margin-top:4px;">Broker: Spencer Galli (JLL) &mdash; reach out this week</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleIntelNote('etched-ai')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="intel-note-dot-etched-ai" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="intel-note-panel-etched-ai" style="display:none; margin-top:4px;">
+            <textarea id="intel-note-text-etched-ai" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;"></textarea>
+            <button onclick="saveIntelNote('etched-ai')" style="margin-top:3px; font-size:10px; background:#ffa502; color:white; border:none; border-radius:5px; padding:2px 8px; cursor:pointer; font-weight:600;">Save</button>
+          </div>
         </div>
-        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #ff4757;">
+        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #ff4757;" data-intel-id="alamar-biosciences">
           <div style="font-size:12px; font-weight:700; color:#1a2744;">Alamar Biosciences &mdash; 70k SF R&amp;D</div>
           <div style="font-size:11px; color:#555; margin-top:3px;">R&amp;D build-out &bull; Fremont</div>
           <div style="font-size:11px; color:#e85d04; margin-top:4px;">Broker: Sherman Chan (CBRE) &mdash; warm reply, mention this</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleIntelNote('alamar-biosciences')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="intel-note-dot-alamar-biosciences" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="intel-note-panel-alamar-biosciences" style="display:none; margin-top:4px;">
+            <textarea id="intel-note-text-alamar-biosciences" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;"></textarea>
+            <button onclick="saveIntelNote('alamar-biosciences')" style="margin-top:3px; font-size:10px; background:#ffa502; color:white; border:none; border-radius:5px; padding:2px 8px; cursor:pointer; font-weight:600;">Save</button>
+          </div>
         </div>
-        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #ffa502;">
+        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #ffa502;" data-intel-id="arya-networks">
           <div style="font-size:12px; font-weight:700; color:#1a2744;">Arya Networks &mdash; 35k SF</div>
           <div style="font-size:11px; color:#555; margin-top:3px;">Lab + power &bull; Sunnyvale/Mountain View</div>
           <div style="font-size:11px; color:#e85d04; margin-top:4px;">Broker: Jeff Rogers &amp; Eric Bluestein</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleIntelNote('arya-networks')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="intel-note-dot-arya-networks" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="intel-note-panel-arya-networks" style="display:none; margin-top:4px;">
+            <textarea id="intel-note-text-arya-networks" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;"></textarea>
+            <button onclick="saveIntelNote('arya-networks')" style="margin-top:3px; font-size:10px; background:#ffa502; color:white; border:none; border-radius:5px; padding:2px 8px; cursor:pointer; font-weight:600;">Save</button>
+          </div>
         </div>
-        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #ffa502;">
+        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #ffa502;" data-intel-id="monolithic-power-systems">
           <div style="font-size:12px; font-weight:700; color:#1a2744;">Monolithic Power Systems</div>
           <div style="font-size:11px; color:#555; margin-top:3px;">2 floors &bull; 8x8 sublease &bull; Campbell (SBC backyard)</div>
           <div style="font-size:11px; color:#e85d04; margin-top:4px;">Broker: Connor Flannery &mdash; TI work coming</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleIntelNote('monolithic-power-systems')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="intel-note-dot-monolithic-power-systems" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="intel-note-panel-monolithic-power-systems" style="display:none; margin-top:4px;">
+            <textarea id="intel-note-text-monolithic-power-systems" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;"></textarea>
+            <button onclick="saveIntelNote('monolithic-power-systems')" style="margin-top:3px; font-size:10px; background:#ffa502; color:white; border:none; border-radius:5px; padding:2px 8px; cursor:pointer; font-weight:600;">Save</button>
+          </div>
         </div>
-        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #2ed573;">
+        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #2ed573;" data-intel-id="extreme-networks">
           <div style="font-size:12px; font-weight:700; color:#1a2744;">Extreme Networks &mdash; 70&ndash;120k SF</div>
           <div style="font-size:11px; color:#555; margin-top:3px;">R&amp;D &bull; San Jose to Menlo Hills</div>
           <div style="font-size:11px; color:#e85d04; margin-top:4px;">Broker: Ben Knight (CBRE)</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleIntelNote('extreme-networks')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="intel-note-dot-extreme-networks" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="intel-note-panel-extreme-networks" style="display:none; margin-top:4px;">
+            <textarea id="intel-note-text-extreme-networks" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;"></textarea>
+            <button onclick="saveIntelNote('extreme-networks')" style="margin-top:3px; font-size:10px; background:#ffa502; color:white; border:none; border-radius:5px; padding:2px 8px; cursor:pointer; font-weight:600;">Save</button>
+          </div>
         </div>
-        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #a55eea;">
+        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #a55eea;" data-intel-id="nvidia-intel">
           <div style="font-size:12px; font-weight:700; color:#1a2744;">NVIDIA &mdash; 2,000-person campus</div>
           <div style="font-size:11px; color:#555; margin-top:3px;">Office + R&amp;D &bull; Santa Clara &bull; Rumored land buy on Walsh</div>
           <div style="font-size:11px; color:#e85d04; margin-top:4px;">Broker: Paul McManus (Colliers) &mdash; Tier 1 priority</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleIntelNote('nvidia-intel')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="intel-note-dot-nvidia-intel" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="intel-note-panel-nvidia-intel" style="display:none; margin-top:4px;">
+            <textarea id="intel-note-text-nvidia-intel" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;"></textarea>
+            <button onclick="saveIntelNote('nvidia-intel')" style="margin-top:3px; font-size:10px; background:#ffa502; color:white; border:none; border-radius:5px; padding:2px 8px; cursor:pointer; font-weight:600;">Save</button>
+          </div>
         </div>
       </div>
     </div>
@@ -335,27 +396,6 @@
         <tr><td>Chip Hackett</td><td>2</td><td>&mdash;</td><td class="val-cell" style="color:#888;">TBD</td><td class="sub-cell">Luxelocker national rollout (AUS, Bozeman, Round Rock, McKinney, Arvada)</td></tr>
         <tr><td>Larry Lenz</td><td>&mdash;</td><td>&mdash;</td><td class="val-cell" style="color:#888;">&mdash;</td><td class="sub-cell">Sheet updated 5/4 &mdash; no bids logged yet</td></tr>
         <tr><td>Stephen Archer</td><td>&mdash;</td><td>&mdash;</td><td class="val-cell" style="color:#888;">&mdash;</td><td class="sub-cell">Sheet not updated &mdash; no data available</td></tr>
-      </tbody>
-    </table>
-
-    <!-- WIN RATES -->
-    <div class="sec-header">
-      <span class="sec-badge badge-green">Performance</span>
-      <span class="sec-title">PM Win Rates (2025–2026 Combined)</span>
-    </div>
-    <table class="funnel-table" style="margin-bottom:20px;">
-      <thead>
-        <tr><th>PM</th><th>Submitted</th><th>Awarded</th><th>Win Rate</th><th>Notable</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Chris Beekman</td><td>35</td><td>18</td><td class="val-cell" style="color:#2ed573;">51%</td><td class="sub-cell">Highest volume + win rate</td></tr>
-        <tr><td>Dusty Furtado</td><td>7</td><td>4</td><td class="val-cell" style="color:#2ed573;">57%</td><td class="sub-cell">Best win % on team</td></tr>
-        <tr><td>John Machi</td><td>15</td><td>6</td><td class="val-cell">43%</td><td class="sub-cell"></td></tr>
-        <tr><td>Charlie Griffin</td><td>13</td><td>4</td><td class="val-cell">31%</td><td class="sub-cell">Renesas $70M is his flagship</td></tr>
-        <tr><td>Marco Velasco</td><td>14</td><td>5</td><td class="val-cell">38%</td><td class="sub-cell">ASML relationship owner</td></tr>
-        <tr><td>Avi Kripalani</td><td>12</td><td>3</td><td class="val-cell">27%</td><td class="sub-cell">Amazon + data center focus</td></tr>
-        <tr style="background:#f0f4ff;"><td><strong>Adam Tafralis</strong> <span style="font-size:10px; color:#4a9eff; font-weight:600; background:#e8f0ff; border-radius:8px; padding:1px 7px; margin-left:4px;">BD / Marketing</span></td><td>5</td><td>1</td><td class="val-cell" style="color:#ffa502;">25%</td><td class="sub-cell">BD lead — not a PM. Tracks preliminary ROMs &amp; budgets sent to market.</td></tr>
-        <tr><td>Cameron Peach</td><td>4</td><td>0</td><td class="val-cell" style="color:#888;">0%</td><td class="sub-cell">New PM</td></tr>
       </tbody>
     </table>
 
@@ -555,11 +595,12 @@
       </div>
 
       <div class="sec-header">
-        <span class="sec-badge badge-blue">Adam</span>
-        <span class="sec-title">BD ROM &amp; Preliminary Budget Tracker — Adam</span>
-        <span class="sec-count">5 items · $24.15M+ total</span>
+        <span class="sec-badge badge-blue">RFPs</span>
+        <span class="sec-title">RFPs &amp; Budgets Submitted — Last 90 Days</span>
+        <span class="sec-count">5 items · $24.15M+ total · Last updated May 12, 2026</span>
+        <button onclick="showAddRFPModal()" style="margin-left:12px; font-size:11px; background:#4a9eff; color:white; border:none; border-radius:6px; padding:5px 12px; cursor:pointer; font-weight:600;">+ Add RFP</button>
       </div>
-      <div class="bid-grid">
+      <div class="bid-grid" id="rfp-bid-grid">
 
         <div class="bid-card submitted">
           <div class="bid-top">
@@ -770,6 +811,14 @@
           <div class="tim-broker-line"><strong>Tom Taylor</strong> · CBRE · Mountain View / NSJ / Santa Clara</div>
           <div class="tim-req">Office · RFPs out · 3 properties shortlisted · renewal/expansion likely</div>
           <div class="tim-est">Est. Construction Value: ~$210M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('amd')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-amd" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-amd" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-amd" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('amd')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t1">
@@ -780,6 +829,14 @@
           <div class="tim-broker-line"><strong>Jeff Cushman, Chris D'Ambrosia</strong> · C&W · MTV/SNVL</div>
           <div class="tim-req">Office · 1 building · 5,000 amps @ 480V · largest single deal in TIM</div>
           <div class="tim-est">Est. Construction Value: ~$150M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('archer-aviation')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-archer-aviation" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-archer-aviation" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-archer-aviation" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('archer-aviation')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t1">
@@ -791,6 +848,14 @@
           <div class="tim-req">Office + 100k SF lab space · Fortune 100</div>
           <div class="tim-note">⚠️ Email bounced — try andrew.hueser@jll.com or call (408) 982-8417 direct</div>
           <div class="tim-est">Est. Construction Value: ~$105M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('gm')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-gm" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-gm" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-gm" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('gm')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t1">
@@ -801,6 +866,14 @@
           <div class="tim-broker-line"><strong>Paul McManus</strong> · Colliers · NSJ / Santa Clara</div>
           <div class="tim-req">R&D · Multiple locations · 5,500 amps minimum</div>
           <div class="tim-est">Est. Construction Value: ~$90M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('nvidia')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-nvidia" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-nvidia" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-nvidia" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('nvidia')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t1">
@@ -811,6 +884,14 @@
           <div class="tim-broker-line"><strong>John McMahon</strong> · Colliers · South San Jose</div>
           <div class="tim-req">R&D · McMahon's req · 24 months out from LED</div>
           <div class="tim-est">Est. Construction Value: ~$75M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('stryker')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-stryker" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-stryker" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-stryker" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('stryker')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t1">
@@ -821,6 +902,14 @@
           <div class="tim-broker-line"><strong>Jere Hench, John McMahon</strong> · Colliers · NSJ</div>
           <div class="tim-req">R&D · Q1–Q2 2027 occupancy · 3 offers out</div>
           <div class="tim-est">Est. Construction Value: ~$60M · Also active WIP client (Marco Velasco)</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('asml')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-asml" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-asml" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-asml" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('asml')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t1">
@@ -831,6 +920,14 @@
           <div class="tim-broker-line"><strong>Tom Taylor</strong> · CBRE · NSJ–Fremont</div>
           <div class="tim-req">R&D · Immediate timing</div>
           <div class="tim-est">Est. Construction Value: ~$52M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('lam-research')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-lam-research" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-lam-research" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-lam-research" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('lam-research')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t1">
@@ -841,6 +938,14 @@
           <div class="tim-broker-line"><strong>Ryan Adlesh</strong> · CBRE · Sunnyvale–San Jose</div>
           <div class="tim-req">Office · Immediate · Large unnamed requirement</div>
           <div class="tim-est">Est. Construction Value: ~$75M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('undisclosed-ryan-adlesh')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-undisclosed-ryan-adlesh" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-undisclosed-ryan-adlesh" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-undisclosed-ryan-adlesh" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('undisclosed-ryan-adlesh')"></textarea>
+          </div>
         </div>
 
       </div><!-- /tier1 -->
@@ -864,6 +969,14 @@
           <div class="tim-req">R&D Clean Room · 10–20k clean room + 50–60k production</div>
           <div class="tim-note">🔥 Derek replied 4/28 "no ROM need" BUT this TIM shows LIVE req — re-engage on clean room buildout specifically</div>
           <div class="tim-est">Est. Construction Value: ~$30M–$45M (clean room premium)</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('derek-cuschieri')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-derek-cuschieri" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-derek-cuschieri" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-derek-cuschieri" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('derek-cuschieri')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t2">
@@ -874,6 +987,14 @@
           <div class="tim-broker-line"><strong>Joe Brady</strong> · C&W · Immediate</div>
           <div class="tim-req">Office · Immediate · Already in SBC sub list</div>
           <div class="tim-est">Est. Construction Value: ~$45M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('zoom')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-zoom" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-zoom" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-zoom" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('zoom')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t2">
@@ -884,6 +1005,14 @@
           <div class="tim-broker-line"><strong>Joe Long, Armand Tiano</strong> · JLL · Palo Alto</div>
           <div class="tim-req">Office · Focused on Palo Alto</div>
           <div class="tim-est">Est. Construction Value: ~$45M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('xai-elon-musk')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-xai-elon-musk" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-xai-elon-musk" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-xai-elon-musk" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('xai-elon-musk')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t2">
@@ -894,6 +1023,14 @@
           <div class="tim-broker-line"><strong>Joe Long, Bart Lammersen</strong> · JLL · SNVL/SC/MV</div>
           <div class="tim-req">Office/R&D · Lease up Dec 2026 · Proposals out</div>
           <div class="tim-est">Est. Construction Value: ~$36M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('illumio')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-illumio" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-illumio" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-illumio" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('illumio')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t2">
@@ -904,6 +1041,14 @@
           <div class="tim-broker-line"><strong>John McMahon, Sean McMahon</strong> · Colliers · NSJ / SC</div>
           <div class="tim-req">Office · High-image building</div>
           <div class="tim-est">Est. Construction Value: ~$36M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('mediatek')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-mediatek" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-mediatek" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-mediatek" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('mediatek')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t2">
@@ -915,6 +1060,14 @@
           <div class="tim-req">Office · 2-yr swing space · Plug & play</div>
           <div class="tim-note">⚠️ Same broker as GM — Andy Hueser email bounced. Call direct.</div>
           <div class="tim-est">Est. Construction Value: ~$22M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('marvell')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-marvell" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-marvell" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-marvell" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('marvell')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t2">
@@ -925,6 +1078,14 @@
           <div class="tim-broker-line"><strong>Joe Long</strong> · JLL · Sunnyvale / Mountain View</div>
           <div class="tim-req">Office · Class A renewal likely</div>
           <div class="tim-est">Est. Construction Value: ~$30M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('hitachi')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-hitachi" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-hitachi" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-hitachi" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('hitachi')"></textarea>
+          </div>
         </div>
 
         <div class="tim-card t2">
@@ -935,6 +1096,14 @@
           <div class="tim-broker-line"><strong>Mike Mordaunt</strong> · C&W · Palo Alto / MV</div>
           <div class="tim-req">R&D · Already in SBC sub list</div>
           <div class="tim-est">Est. Construction Value: ~$45M</div>
+
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('guardant-health')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="tim-note-dot-guardant-health" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="tim-note-panel-guardant-health" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-guardant-health" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('guardant-health')"></textarea>
+          </div>
         </div>
 
       </div><!-- /tier2 -->
@@ -1633,6 +1802,182 @@
       card.classList.toggle('done', isDone);
     });
   });
+  // --- INTEL NOTES ---
+  function toggleIntelNote(id) {
+    var panel = document.getElementById('intel-note-panel-' + id);
+    if (!panel) return;
+    var isOpen = panel.style.display !== 'none';
+    panel.style.display = isOpen ? 'none' : 'block';
+    if (!isOpen) {
+      var ta = document.getElementById('intel-note-text-' + id);
+      if (ta) { ta.value = localStorage.getItem('intel-note-' + id) || ''; ta.focus(); }
+    }
+  }
+  function saveIntelNote(id) {
+    var ta = document.getElementById('intel-note-text-' + id);
+    if (!ta) return;
+    var val = ta.value.trim();
+    if (val) localStorage.setItem('intel-note-' + id, val); else localStorage.removeItem('intel-note-' + id);
+    var dot = document.getElementById('intel-note-dot-' + id);
+    if (dot) dot.style.display = val ? 'inline-block' : 'none';
+  }
+  function showAddIntelForm() {
+    var f = document.getElementById('add-intel-form');
+    if (f) f.style.display = f.style.display === 'none' ? 'block' : 'none';
+  }
+  function saveNewIntel() {
+    var company = (document.getElementById('ai-company').value || '').trim();
+    if (!company) { document.getElementById('ai-company').focus(); return; }
+    var sf = (document.getElementById('ai-sf').value || '').trim();
+    var desc = (document.getElementById('ai-desc').value || '').trim();
+    var broker = (document.getElementById('ai-broker').value || '').trim();
+    var slug = company.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+$/, '');
+    var date = new Date().toLocaleDateString('en-US', {month:'short', day:'numeric', year:'numeric'});
+    var card = document.createElement('div');
+    card.setAttribute('data-intel-id', slug);
+    card.style.cssText = 'background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #4a9eff;';
+    card.innerHTML = '<div style="font-size:12px; font-weight:700; color:#1a2744;">' + company + (sf ? ' &mdash; ' + sf : '') + ' <span style="font-size:10px; color:#4a9eff;">' + date + '</span></div>' +
+      (desc ? '<div style="font-size:11px; color:#555; margin-top:3px;">' + desc + '</div>' : '') +
+      (broker ? '<div style="font-size:11px; color:#e85d04; margin-top:4px;">Broker: ' + broker + '</div>' : '') +
+      '<div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">' +
+        '<button onclick="toggleIntelNote(\'' + slug + '\')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>' +
+        '<span id="intel-note-dot-' + slug + '" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span></div>' +
+      '<div id="intel-note-panel-' + slug + '" style="display:none; margin-top:4px;">' +
+        '<textarea id="intel-note-text-' + slug + '" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveIntelNote(\'' + slug + '\')"></textarea></div>';
+    var grid = document.getElementById('intel-grid');
+    if (grid) grid.appendChild(card);
+    var saved = JSON.parse(localStorage.getItem('custom-intel') || '[]');
+    saved.push({company:company, sf:sf, desc:desc, broker:broker, slug:slug, date:date});
+    localStorage.setItem('custom-intel', JSON.stringify(saved));
+    ['ai-company','ai-sf','ai-desc','ai-broker'].forEach(function(id){ var el=document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('add-intel-form').style.display = 'none';
+  }
+
+  // --- TIM NOTES ---
+  function toggleTimNote(id) {
+    var panel = document.getElementById('tim-note-panel-' + id);
+    if (!panel) return;
+    var isOpen = panel.style.display !== 'none';
+    panel.style.display = isOpen ? 'none' : 'block';
+    if (!isOpen) {
+      var ta = document.getElementById('tim-note-text-' + id);
+      if (ta) { ta.value = localStorage.getItem('tim-note-' + id) || ''; ta.focus(); }
+    }
+  }
+  function saveTimNote(id) {
+    var ta = document.getElementById('tim-note-text-' + id);
+    if (!ta) return;
+    var val = ta.value.trim();
+    if (val) localStorage.setItem('tim-note-' + id, val); else localStorage.removeItem('tim-note-' + id);
+    var dot = document.getElementById('tim-note-dot-' + id);
+    if (dot) dot.style.display = val ? 'inline-block' : 'none';
+  }
+
+  // --- RFP MODAL ---
+  function showAddRFPModal() {
+    var modal = document.getElementById('rfp-modal');
+    if (!modal) {
+      modal = document.createElement('div');
+      modal.id = 'rfp-modal';
+      modal.style.cssText = 'position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:9999; display:flex; align-items:center; justify-content:center;';
+      modal.innerHTML = '<div style="background:white; border-radius:12px; padding:24px; width:480px; max-width:95vw; box-shadow:0 8px 32px rgba(0,0,0,0.2);">' +
+        '<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;"><div style="font-size:15px; font-weight:700; color:#1a2744;">+ Add RFP / Budget</div>' +
+        '<button onclick="document.getElementById(\'rfp-modal\').style.display=\'none\'" style="background:none; border:none; font-size:20px; cursor:pointer; color:#888;">&times;</button></div>' +
+        '<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">' +
+          '<div style="grid-column:1/-1;"><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Project Name *</label><input id="rfp-name" type="text" placeholder="e.g. Santana West 5th Floor" style="width:100%; font-size:13px; border:1px solid #ddd; border-radius:7px; padding:7px 10px; box-sizing:border-box;"></div>' +
+          '<div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Location / Type</label><input id="rfp-loc" type="text" placeholder="San Jose � Office TI" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; box-sizing:border-box;"></div>' +
+          '<div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Value</label><input id="rfp-val" type="text" placeholder="$2.5M" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; box-sizing:border-box;"></div>' +
+          '<div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">SF</label><input id="rfp-sf" type="text" placeholder="10,000 SF" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; box-sizing:border-box;"></div>' +
+          '<div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Status</label><select id="rfp-status" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; box-sizing:border-box; background:white;"><option value="submitted">Submitted</option><option value="upcoming">Upcoming</option><option value="awarded">Awarded</option><option value="no-go">No-Go</option></select></div>' +
+          '<div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Sent To</label><input id="rfp-sent" type="text" placeholder="Client or broker" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; box-sizing:border-box;"></div>' +
+          '<div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Date Sent</label><input id="rfp-date" type="date" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; box-sizing:border-box;"></div>' +
+          '<div style="grid-column:1/-1;"><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Notes / Response</label><textarea id="rfp-notes" placeholder="Response, outcome, follow-up action..." style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; min-height:56px; resize:vertical; font-family:inherit; box-sizing:border-box;"></textarea></div>' +
+        '</div>' +
+        '<div style="display:flex; gap:8px; justify-content:flex-end; margin-top:16px;"><button onclick="document.getElementById(\'rfp-modal\').style.display=\'none\'" style="font-size:12px; background:#f0f2f5; border:none; border-radius:7px; padding:8px 16px; cursor:pointer; color:#555;">Cancel</button><button onclick="saveRFP()" style="font-size:12px; background:#4a9eff; color:white; border:none; border-radius:7px; padding:8px 18px; cursor:pointer; font-weight:700;">Save RFP</button></div>' +
+        '</div>';
+      document.body.appendChild(modal);
+      var today = new Date().toISOString().slice(0,10);
+      document.getElementById('rfp-date').value = today;
+    } else {
+      modal.style.display = 'flex';
+      var today = new Date().toISOString().slice(0,10);
+      document.getElementById('rfp-date').value = today;
+    }
+  }
+  function saveRFP() {
+    var name = (document.getElementById('rfp-name').value || '').trim();
+    if (!name) { document.getElementById('rfp-name').focus(); return; }
+    var loc = (document.getElementById('rfp-loc').value || '').trim();
+    var val = (document.getElementById('rfp-val').value || '').trim();
+    var sf = (document.getElementById('rfp-sf').value || '').trim();
+    var status = document.getElementById('rfp-status').value;
+    var sent = (document.getElementById('rfp-sent').value || '').trim();
+    var date = (document.getElementById('rfp-date').value || '').trim();
+    var notes = (document.getElementById('rfp-notes').value || '').trim();
+    var statusMap = { submitted: ['blue','&#x1F4E4; Submitted'], upcoming: ['orange','&#x1F4AC; Upcoming'], awarded: ['green','&#x2705; Awarded'], 'no-go': ['red','&#x274C; No-Go'] };
+    var chipCls = statusMap[status][0]; var chipLabel = statusMap[status][1];
+    var card = document.createElement('div');
+    card.className = 'bid-card ' + status;
+    card.innerHTML = '<div class="bid-top"><div><div class="bid-name">' + name + '</div>' + (loc ? '<div style="font-size:11px; color:#666; margin-top:2px;">' + loc + '</div>' : '') + '</div><div><div class="bid-value">' + (val || 'TBD') + '</div>' + (sf ? '<div class="bid-value-sub">' + sf + '</div>' : '') + '</div></div>' +
+      '<div class="bid-meta"><span class="chip ' + chipCls + '">' + chipLabel + '</span></div>' +
+      (sent ? '<div class="bid-broker"><span>Sent To:</span> ' + sent + (date ? '&nbsp;&nbsp;<span>Date:</span> ' + date : '') + '</div>' : '') +
+      (notes ? '<div class="bid-broker"><span>Notes:</span> ' + notes + '</div>' : '');
+    var grid = document.getElementById('rfp-bid-grid');
+    if (grid) grid.appendChild(card);
+    var rfps = JSON.parse(localStorage.getItem('custom-rfps') || '[]');
+    rfps.push({name:name, loc:loc, val:val, sf:sf, status:status, sent:sent, date:date, notes:notes});
+    localStorage.setItem('custom-rfps', JSON.stringify(rfps));
+    document.getElementById('rfp-modal').style.display = 'none';
+  }
+
+  // --- RESTORE SAVED NOTES & CUSTOM CARDS ON LOAD ---
+  document.addEventListener('DOMContentLoaded', function() {
+    // Intel note dots
+    document.querySelectorAll('[data-intel-id]').forEach(function(card) {
+      var id = card.getAttribute('data-intel-id');
+      if (localStorage.getItem('intel-note-' + id)) {
+        var dot = document.getElementById('intel-note-dot-' + id);
+        if (dot) dot.style.display = 'inline-block';
+      }
+    });
+    // TIM note dots
+    ['amd','archer-aviation','gm','nvidia','stryker','asml','lam-research','undisclosed-ryan-adlesh','derek-cuschieri','zoom','xai-elon-musk','illumio','mediatek','marvell','hitachi','guardant-health'].forEach(function(id) {
+      if (localStorage.getItem('tim-note-' + id)) {
+        var dot = document.getElementById('tim-note-dot-' + id);
+        if (dot) dot.style.display = 'inline-block';
+      }
+    });
+    // Custom intel cards
+    try {
+      JSON.parse(localStorage.getItem('custom-intel') || '[]').forEach(function(item) {
+        var grid = document.getElementById('intel-grid');
+        if (!grid) return;
+        var card = document.createElement('div');
+        card.setAttribute('data-intel-id', item.slug);
+        card.style.cssText = 'background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #4a9eff;';
+        card.innerHTML = '<div style="font-size:12px; font-weight:700; color:#1a2744;">' + item.company + (item.sf ? ' &mdash; ' + item.sf : '') + '</div>' +
+          (item.desc ? '<div style="font-size:11px; color:#555; margin-top:3px;">' + item.desc + '</div>' : '') +
+          (item.broker ? '<div style="font-size:11px; color:#e85d04; margin-top:4px;">Broker: ' + item.broker + '</div>' : '') +
+          '<div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;"><button onclick="toggleIntelNote(\'' + item.slug + '\')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button><span id="intel-note-dot-' + item.slug + '" style="' + (localStorage.getItem('intel-note-' + item.slug) ? '' : 'display:none; ') + 'width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span></div>' +
+          '<div id="intel-note-panel-' + item.slug + '" style="display:none; margin-top:4px;"><textarea id="intel-note-text-' + item.slug + '" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveIntelNote(\'' + item.slug + '\')"></textarea></div>';
+        grid.appendChild(card);
+      });
+    } catch(e) {}
+    // Custom RFPs
+    try {
+      JSON.parse(localStorage.getItem('custom-rfps') || '[]').forEach(function(item) {
+        var statusMap = { submitted: ['blue','&#x1F4E4; Submitted'], upcoming: ['orange','&#x1F4AC; Upcoming'], awarded: ['green','&#x2705; Awarded'], 'no-go': ['red','&#x274C; No-Go'] };
+        var chipCls = statusMap[item.status][0]; var chipLabel = statusMap[item.status][1];
+        var grid = document.getElementById('rfp-bid-grid');
+        if (!grid) return;
+        var card = document.createElement('div');
+        card.className = 'bid-card ' + item.status;
+        card.innerHTML = '<div class="bid-top"><div><div class="bid-name">' + item.name + '</div>' + (item.loc ? '<div style="font-size:11px; color:#666; margin-top:2px;">' + item.loc + '</div>' : '') + '</div><div><div class="bid-value">' + (item.val||'TBD') + '</div>' + (item.sf ? '<div class="bid-value-sub">' + item.sf + '</div>' : '') + '</div></div><div class="bid-meta"><span class="chip ' + chipCls + '">' + chipLabel + '</span></div>' + (item.sent ? '<div class="bid-broker"><span>Sent To:</span> ' + item.sent + (item.date ? '&nbsp;&nbsp;<span>Date:</span> ' + item.date : '') + '</div>' : '') + (item.notes ? '<div class="bid-broker"><span>Notes:</span> ' + item.notes + '</div>' : '');
+        grid.appendChild(card);
+      });
+    } catch(e) {}
+  });
+
 </script>
 
 </body>
