@@ -5,6 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SBC BD Command Dashboard</title>
 <style>
+  #pw-gate {
+    position: fixed; inset: 0; z-index: 99999;
+    background: #0f1a30;
+    display: flex; align-items: center; justify-content: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  #pw-gate .box {
+    background: #1a2744; border-radius: 12px; padding: 40px 48px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    text-align: center; width: 340px;
+  }
+  #pw-gate .logo { font-size: 28px; font-weight: 800; color: #fff; letter-spacing: 1px; margin-bottom: 4px; }
+  #pw-gate .sub { font-size: 12px; color: #8fa3c8; margin-bottom: 28px; text-transform: uppercase; letter-spacing: 1px; }
+  #pw-gate input {
+    width: 100%; padding: 12px 16px; border-radius: 8px;
+    border: 1.5px solid #2a3d5e; background: #0f1a30; color: #fff;
+    font-size: 15px; outline: none; margin-bottom: 14px;
+    letter-spacing: 2px;
+  }
+  #pw-gate input:focus { border-color: #4a9eff; }
+  #pw-gate button {
+    width: 100%; padding: 12px; border-radius: 8px;
+    background: #4a9eff; color: #fff; font-size: 14px; font-weight: 600;
+    border: none; cursor: pointer; transition: background 0.15s;
+  }
+  #pw-gate button:hover { background: #2d7dd2; }
+  #pw-gate .err { color: #ff6b6b; font-size: 13px; margin-top: 10px; min-height: 18px; }
+</style>
+<script>
+  (function() {
+    const HASH = '68da2d604aaa940a596530337ec9fc87bedaabd0b89ffb5bf2de39bc242a6131';
+    async function sha256(msg) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+    async function tryPass(pw) {
+      const h = await sha256(pw);
+      if (h === HASH) {
+        sessionStorage.setItem('sbc_auth', '1');
+        document.getElementById('pw-gate').remove();
+        document.body.style.overflow = '';
+      } else {
+        document.getElementById('pw-err').textContent = 'Incorrect password';
+        document.getElementById('pw-input').value = '';
+        document.getElementById('pw-input').focus();
+      }
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      if (sessionStorage.getItem('sbc_auth') === '1') return;
+      document.body.style.overflow = 'hidden';
+      const gate = document.createElement('div');
+      gate.id = 'pw-gate';
+      gate.innerHTML = `
+        <div class="box">
+          <div class="logo">SBC</div>
+          <div class="sub">BD Command Dashboard</div>
+          <input id="pw-input" type="password" placeholder="Enter password" autofocus />
+          <button id="pw-btn">Unlock</button>
+          <div class="err" id="pw-err"></div>
+        </div>`;
+      document.body.prepend(gate);
+      document.getElementById('pw-btn').addEventListener('click', () => tryPass(document.getElementById('pw-input').value));
+      document.getElementById('pw-input').addEventListener('keydown', e => { if (e.key === 'Enter') tryPass(document.getElementById('pw-input').value); });
+    });
+  })();
+</script>
+<style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f0f2f5; color: #1a1a1a; }
 
@@ -266,6 +333,55 @@
               <div class="jb-item"><span style="color:#e85d04;">+ New Leads</span><span class="jv">Etched AI, Alamar, Arya Networks, Monolithic &bull; <strong>NEW IN:</strong> Federal Realty (Del Monte), PNC Bank (10k SF TI Santana West)</span></div>
             </div>
           </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JB ROM PIPELINE -->
+    <div style="margin-bottom:20px;">
+      <div class="jb-box">
+        <div class="jb-title">&#128204; JB Cahoon &mdash; ROM Pipeline (18 Projects &mdash; $436.9M) &mdash; Not counted toward revenue &bull; Graduates when on PM Job List</div>
+        <div style="overflow-x:auto;">
+          <table style="width:100%; border-collapse:collapse; font-size:12px;">
+            <thead>
+              <tr style="background:#f5f7fa; text-align:left;">
+                <th style="padding:7px 10px; color:#888; font-weight:600; border-bottom:1px solid #eee;">#</th>
+                <th style="padding:7px 10px; color:#888; font-weight:600; border-bottom:1px solid #eee;">Project</th>
+                <th style="padding:7px 10px; color:#888; font-weight:600; border-bottom:1px solid #eee;">City</th>
+                <th style="padding:7px 10px; color:#888; font-weight:600; border-bottom:1px solid #eee;">Type</th>
+                <th style="padding:7px 10px; color:#888; font-weight:600; border-bottom:1px solid #eee; text-align:right;">ROM Value</th>
+                <th style="padding:7px 10px; color:#888; font-weight:600; border-bottom:1px solid #eee;">Stage</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P001</td><td style="padding:6px 10px; font-weight:600;">541 Jefferson Shell (3 down / 6 up)</td><td style="padding:6px 10px; color:#555;">Redwood City</td><td style="padding:6px 10px; color:#555;">Shell Construction</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$125M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P002</td><td style="padding:6px 10px; font-weight:600;">600 Clipper TI</td><td style="padding:6px 10px; color:#555;">Belmont</td><td style="padding:6px 10px; color:#555;">TI</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$3M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P003</td><td style="padding:6px 10px; font-weight:600;">100 View MR TI</td><td style="padding:6px 10px; color:#555;">Mountain View</td><td style="padding:6px 10px; color:#555;">TI &ndash; Market Ready</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$3.5M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P004</td><td style="padding:6px 10px; font-weight:600;">100 View Exterior</td><td style="padding:6px 10px; color:#555;">Mountain View</td><td style="padding:6px 10px; color:#555;">Exterior / Reskin</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$3.5M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P005</td><td style="padding:6px 10px; font-weight:600;">260 Sheridan MR TI</td><td style="padding:6px 10px; color:#555;">Palo Alto</td><td style="padding:6px 10px; color:#555;">TI &ndash; Market Ready</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$13M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P006</td><td style="padding:6px 10px; font-weight:600;">395 Page Mill TI</td><td style="padding:6px 10px; color:#555;">Palo Alto</td><td style="padding:6px 10px; color:#555;">TI</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$1.3M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P007</td><td style="padding:6px 10px; font-weight:600;">800 Oak Grove Reskin</td><td style="padding:6px 10px; color:#555;">Menlo Park</td><td style="padding:6px 10px; color:#555;">Exterior / Reskin</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$7M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P008</td><td style="padding:6px 10px; font-weight:600;">877 W Fremont MOB Shell</td><td style="padding:6px 10px; color:#555;">Sunnyvale</td><td style="padding:6px 10px; color:#555;">Shell &ndash; Medical Office</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$23M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P009</td><td style="padding:6px 10px; font-weight:600;">2610 Bay Rd Advanced Mfg Shell</td><td style="padding:6px 10px; color:#555;">Redwood City</td><td style="padding:6px 10px; color:#555;">Shell &ndash; Adv. Manufacturing</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$50M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P010</td><td style="padding:6px 10px; font-weight:600;">6001 American Center Dr TI</td><td style="padding:6px 10px; color:#555;">San Jose</td><td style="padding:6px 10px; color:#555;">TI</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$45M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P011</td><td style="padding:6px 10px; font-weight:600;">Evelyn Reskin Shell</td><td style="padding:6px 10px; color:#555;">Mountain View</td><td style="padding:6px 10px; color:#555;">Shell / Reskin</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$7M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P012</td><td style="padding:6px 10px; font-weight:600;">Evelyn MR TI</td><td style="padding:6px 10px; color:#555;">Mountain View</td><td style="padding:6px 10px; color:#555;">TI &ndash; Market Ready</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$6M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P013</td><td style="padding:6px 10px; font-weight:600;">Stanford Research Park Site &amp; Shell</td><td style="padding:6px 10px; color:#555;">Palo Alto</td><td style="padding:6px 10px; color:#555;">Shell Construction</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$45M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P014</td><td style="padding:6px 10px; font-weight:600;">Stanford Research Park GM TI</td><td style="padding:6px 10px; color:#555;">Palo Alto</td><td style="padding:6px 10px; color:#555;">TI</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$75M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P015</td><td style="padding:6px 10px; font-weight:600;">970 Stewart Make Matter TI</td><td style="padding:6px 10px; color:#555;">Sunnyvale</td><td style="padding:6px 10px; color:#555;">TI</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$3M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P016</td><td style="padding:6px 10px; font-weight:600;">Mission Towers Suite 650</td><td style="padding:6px 10px; color:#555;">San Jose</td><td style="padding:6px 10px; color:#555;">TI</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$1.6M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P017</td><td style="padding:6px 10px; font-weight:600;">The Plex SJ Shell</td><td style="padding:6px 10px; color:#555;">San Jose</td><td style="padding:6px 10px; color:#555;">Shell Construction</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$13M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr style="border-bottom:1px solid #f0f2f5;"><td style="padding:6px 10px; color:#aaa;">P018</td><td style="padding:6px 10px; font-weight:600;">Illumio TI</td><td style="padding:6px 10px; color:#555;">Santa Clara</td><td style="padding:6px 10px; color:#555;">TI</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$12M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+              <tr><td style="padding:6px 10px; color:#aaa;">P019</td><td style="padding:6px 10px; font-weight:600;">580 Dubuque LS TI</td><td style="padding:6px 10px; color:#555;">South San Francisco</td><td style="padding:6px 10px; color:#555;">TI &ndash; Life Science</td><td style="padding:6px 10px; font-weight:700; color:#1a2744; text-align:right;">$40M</td><td style="padding:6px 10px;"><span style="background:#fff3cd; color:#856404; font-size:10px; padding:2px 8px; border-radius:10px; font-weight:600;">ROM Pricing</span></td></tr>
+            </tbody>
+            <tfoot>
+              <tr style="background:#f5f7fa; border-top:2px solid #eee;">
+                <td colspan="4" style="padding:8px 10px; font-weight:700; color:#1a2744;">TOTAL ROM (19 projects)</td>
+                <td style="padding:8px 10px; font-weight:700; color:#1a2744; text-align:right; font-size:14px;">$476.9M</td>
+                <td style="padding:8px 10px; font-size:10px; color:#aaa; font-style:italic;">Not in revenue total</td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
       </div>
     </div>
@@ -718,12 +834,156 @@
         </thead>
         <tbody>
           <tr>
-            <td><strong>600 Clipper</strong></td>
+            <td><strong>541 Jefferson Shell</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$125M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">3-story below / 6-story above grade shell. Redwood City.</td>
+          </tr>
+          <tr>
+            <td><strong>2610 Bay Rd Adv. Mfg Shell</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$50M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">Advanced manufacturing shell. Redwood City.</td>
+          </tr>
+          <tr>
+            <td><strong>Stanford Research Park GM TI</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$75M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">GM TI at Stanford Research Park, Palo Alto.</td>
+          </tr>
+          <tr>
+            <td><strong>Stanford Research Park Site &amp; Shell</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$45M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">Full site and shell. Stanford Research Park, Palo Alto.</td>
+          </tr>
+          <tr>
+            <td><strong>6001 American Center Dr TI</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$45M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">San Jose.</td>
+          </tr>
+          <tr>
+            <td><strong>580 Dubuque LS TI</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$40M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">Life science TI. South San Francisco.</td>
+          </tr>
+          <tr>
+            <td><strong>877 W Fremont MOB Shell</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$23M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">Medical office building shell. Sunnyvale.</td>
+          </tr>
+          <tr>
+            <td><strong>260 Sheridan MR TI</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$13M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">Market ready TI. Palo Alto.</td>
+          </tr>
+          <tr>
+            <td><strong>The Plex SJ Shell</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$13M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">Shell construction. San Jose.</td>
+          </tr>
+          <tr>
+            <td><strong>Illumio TI</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$12M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">Santa Clara.</td>
+          </tr>
+          <tr>
+            <td><strong>800 Oak Grove Reskin</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$7M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">Exterior reskin. Menlo Park.</td>
+          </tr>
+          <tr>
+            <td><strong>Evelyn Reskin Shell</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$7M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">Shell / reskin. Mountain View.</td>
+          </tr>
+          <tr>
+            <td><strong>Evelyn MR TI</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$6M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">Market ready TI. Mountain View.</td>
+          </tr>
+          <tr>
+            <td><strong>100 View MR TI</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$3.5M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">Market ready TI. Mountain View.</td>
+          </tr>
+          <tr>
+            <td><strong>100 View Exterior</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$3.5M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">Exterior / reskin. Mountain View.</td>
+          </tr>
+          <tr>
+            <td><strong>970 Stewart &mdash; Make Matter TI</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$3.03M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip blue">Submitted 3/20</span></td>
+            <td class="sub-cell">Pending response. Sunnyvale.</td>
+          </tr>
+          <tr>
+            <td><strong>600 Clipper TI</strong></td>
             <td class="sub-cell">Peter Lund &mdash; Newmark SJ</td>
             <td class="val-cell">TBD</td>
             <td class="sub-cell">ROM</td>
             <td><span class="chip orange">Revised #s Sent 5/4</span></td>
-            <td class="sub-cell">JB&rsquo;s own takeoffs + unit cost plugs, no set plans. Site walk done.</td>
+            <td class="sub-cell">JB&rsquo;s own takeoffs + unit cost plugs, no set plans. Site walk done. Belmont.</td>
+          </tr>
+          <tr>
+            <td><strong>395 Page Mill TI</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$1.3M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">Palo Alto.</td>
+          </tr>
+          <tr>
+            <td><strong>Mission Towers Suite 650</strong></td>
+            <td class="sub-cell">&mdash;</td>
+            <td class="val-cell">$1.6M</td>
+            <td class="sub-cell">ROM</td>
+            <td><span class="chip green">Active Pursuit</span></td>
+            <td class="sub-cell">San Jose.</td>
           </tr>
           <tr>
             <td><strong>384 Castro St &mdash; Mountain View</strong></td>
@@ -732,14 +992,6 @@
             <td class="sub-cell">ROM</td>
             <td><span class="chip yellow">Awaiting Call</span></td>
             <td class="sub-cell">5-story mixed-use ground-up. Adam intro&rsquo;d JB 5/4. Call pending.</td>
-          </tr>
-          <tr>
-            <td><strong>Make Matter</strong></td>
-            <td class="sub-cell">&mdash;</td>
-            <td class="val-cell">$3.03M</td>
-            <td class="sub-cell">ROM</td>
-            <td><span class="chip blue">Submitted 3/20</span></td>
-            <td class="sub-cell">Pending response.</td>
           </tr>
           <tr>
             <td><strong>VW Belmont</strong></td>
@@ -757,8 +1009,7 @@
             <td><span class="chip orange">Bidding</span></td>
             <td class="sub-cell">Active bid.</td>
           </tr>
-        </tbody>
-      </table>
+        </tbody>      </table>
 
       <div class="divider"></div>
 
@@ -1885,7 +2136,7 @@
         '<button onclick="document.getElementById(\'rfp-modal\').style.display=\'none\'" style="background:none; border:none; font-size:20px; cursor:pointer; color:#888;">&times;</button></div>' +
         '<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">' +
           '<div style="grid-column:1/-1;"><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Project Name *</label><input id="rfp-name" type="text" placeholder="e.g. Santana West 5th Floor" style="width:100%; font-size:13px; border:1px solid #ddd; border-radius:7px; padding:7px 10px; box-sizing:border-box;"></div>' +
-          '<div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Location / Type</label><input id="rfp-loc" type="text" placeholder="San Jose · Office TI" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; box-sizing:border-box;"></div>' +
+          '<div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Location / Type</label><input id="rfp-loc" type="text" placeholder="San Jose ï¿½ Office TI" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; box-sizing:border-box;"></div>' +
           '<div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Value</label><input id="rfp-val" type="text" placeholder="$2.5M" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; box-sizing:border-box;"></div>' +
           '<div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">SF</label><input id="rfp-sf" type="text" placeholder="10,000 SF" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; box-sizing:border-box;"></div>' +
           '<div><label style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;">Status</label><select id="rfp-status" style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; box-sizing:border-box; background:white;"><option value="submitted">Submitted</option><option value="upcoming">Upcoming</option><option value="awarded">Awarded</option><option value="no-go">No-Go</option></select></div>' +
