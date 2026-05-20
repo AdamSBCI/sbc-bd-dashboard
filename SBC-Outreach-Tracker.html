@@ -263,7 +263,7 @@
   </div>
 </div>
 
-<div class="footer">SBC Outreach Tracker · May 4–16, 2026 · Powered by Claw 🦞 · 1,857 contacts in pool</div>
+<div class="footer">SBC Outreach Tracker · May 4–16, 2026 · Powered by Claw 🦞 · 1,866 contacts in pool</div>
 
 <script>
 // ── CONTACT DATA ──
@@ -2123,7 +2123,16 @@ const FRESH_CONTACTS = [
 {id:"C-2084",name:"David Cheatham; Darren Pitts; Bonnie Arlia,",company:"VELOCITY RETAIL GROUP LLC25",type:"Broker",email:"bonnie.arlia@velocityretail.com",phone:"",owner:"",fondness:"",notes:""},
 {id:"C-2085",name:"Ryan Desmond, ; Eric Termansen",company:"WESTERN RETAIL ADVISORS20",type:"Broker",email:"rdesmond@w-retail.com",phone:"",owner:"",fondness:"",notes:""},
 {id:"C-2086",name:"Jonny Miroyan",company:"Cushman & Wakefield - SJ",type:"Broker",email:"jonny.miroyan@cushwake.com",phone:"408-656-8254",owner:"",fondness:"",notes:"Senior Director, tenant rep specialist. Silicon Valley/SF Bay Area. Top 10 Producer C&W 2023. Added from JLL TIM list cross-ref 2026-04-14."},
-{id:"C-2087",name:"Dave Black",company:"CBRE - SJ",type:"Broker",email:"david.black@cbre.com",phone:"",owner:"",fondness:"",notes:"CBRE San Jose. Email inferred from standard CBRE format - confirm. Added from JLL TIM list cross-ref 2026-04-14."}
+{id:"C-2087",name:"Dave Black",company:"CBRE - SJ",type:"Broker",email:"david.black@cbre.com",phone:"",owner:"",fondness:"",notes:"CBRE San Jose. Email inferred from standard CBRE format - confirm. Added from JLL TIM list cross-ref 2026-04-14."},
+{id:"C-0002",name:"Pete Beritzhoff",company:"Bay West Development",type:"CRB",email:"Pete@baywestdevelopment.com",phone:"(408) 680-4938",owner:"",fondness:"5",notes:""},
+{id:"C-0003",name:"Keith Lundquist",company:"CBRE",type:"Broker",email:"Keith.Lundquist@cbre.com",phone:"(408) 472-2584",owner:"Cameron Peach",fondness:"5",notes:""},
+{id:"C-0005",name:"Evan Chang",company:"CBRE - PA",type:"Broker",email:"evan.chang@cbre.com",phone:"+1 650 5772962",owner:"",fondness:"4",notes:""},
+{id:"C-0006",name:"George Fox",company:"CBRE - PA",type:"Broker",email:"george.fox@cbre.com",phone:"+1 650 4945162",owner:"",fondness:"4",notes:""},
+{id:"C-0007",name:"Ryan Carr",company:"CBRE - PA",type:"Broker",email:"ryan.carr@cbre.com",phone:"+1 650 4945115",owner:"",fondness:"5",notes:""},
+{id:"C-0008",name:"Ken Churich",company:"CBRE - SF",type:"Broker",email:"Ken.Churich@cbre.com",phone:"+1 415 2911728",owner:"",fondness:"5",notes:""},
+{id:"C-0011",name:"Matt Taylor",company:"CBRE - SJ",type:"Broker",email:"matthew.taylor@cbre.com",phone:"408 453-7469",owner:"",fondness:"4",notes:""},
+{id:"C-0015",name:"Vincent Machado",company:"CBRE - SJ",type:"Broker",email:"vince.machado@cbre.com",phone:"408-453-7411",owner:"JB",fondness:"4",notes:""},
+{id:"C-0016",name:"Mark Sanchez",company:"Colliers International - Gilroy",type:"Broker",email:"Mark.Sanchez@colliers.com",phone:"+1 408 842 7000",owner:"",fondness:"5",notes:""}
 ]
 
 const BATCH_SIZE = 25;
@@ -2144,7 +2153,9 @@ const PRE_TOUCHED = {
   'C-0069':'2026-05-04','C-0070':'2026-05-04','C-0071':'2026-04-20',
   'C-0073':'2026-05-04','C-0074':'2026-04-22','C-0075':'2026-04-20',
   'C-0076':'2026-04-20','C-0081':'2026-05-04','C-0085':'2026-05-04'
-};
+,
+  'C-1139':'2026-05-04','C-0210':'2026-05-04','C-0209':'2026-05-04','C-0211':'2026-05-04','C-0468':'2026-05-04','C-0212':'2026-05-04','C-0469':'2026-05-04','C-1351':'2026-05-04','C-1349':'2026-05-04','C-1798':'2026-05-04','C-1844':'2026-05-04','C-1841':'2026-05-04','C-1723':'2026-05-04','C-1269':'2026-05-04','C-1716':'2026-05-04','C-1725':'2026-05-04','C-1843':'2026-05-04','C-1797':'2026-05-04','C-1799':'2026-05-04','C-1350':'2026-05-04','C-1268':'2026-05-04','C-0737':'2026-05-04','C-0470':'2026-05-04','C-0736':'2026-05-04','C-1266':'2026-05-04',
+  'C-0121':'2026-05-20','C-0122':'2026-05-20','C-0123':'2026-05-20','C-0738':'2026-05-20','C-0739':'2026-05-20','C-0740':'2026-05-20','C-0022':'2026-05-20','C-0040':'2026-05-20','C-0009':'2026-05-20','C-0013':'2026-05-20','C-0024':'2026-05-20','C-0031':'2026-05-20','C-0036':'2026-05-20','C-0025':'2026-05-20','C-0033':'2026-05-20','C-0037':'2026-05-20','C-0038':'2026-05-20','C-0039':'2026-05-20','C-0041':'2026-05-20','C-0044':'2026-05-20','C-0045':'2026-05-20','C-0047':'2026-05-20','C-0049':'2026-05-20','C-0050':'2026-05-20','C-0046':'2026-05-20','C-0003':'2026-05-20','C-0002':'2026-05-20','C-0016':'2026-05-20','C-0011':'2026-05-20','C-0007':'2026-05-20','C-0005':'2026-05-20','C-0006':'2026-05-20','C-0008':'2026-05-20','C-0015':'2026-05-20'};
 
 function seedPreTouched() {
   Object.keys(PRE_TOUCHED).forEach(id => {
