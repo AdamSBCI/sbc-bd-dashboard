@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -1042,602 +1042,161 @@
   <!-- ════════════════ TIM LEADS TAB ════════════════ -->
   <div id="tab-tim" class="section-tab">
     <div style="margin-top:16px;">
-      <div style="background:#fff0cc; border-radius:8px; padding:10px 14px; margin-bottom:16px; font-size:12px; color:#7a4f00;">
-        <strong>📡 TIM Sources:</strong> April 20, 2026 (Bay Area TIM · 85 reqs · 6.4M–9.4M SF) + <strong>Apex/Quad/Genesis Portfolio Report · May 19, 2026</strong> (C&amp;W · 40+ active prospects · SBC named as GC partner)
+      <div style="background:#fff0cc; border-radius:8px; padding:10px 14px; margin-bottom:14px; font-size:12px; color:#7a4f00;">
+        <strong>📡 TIM Sources:</strong> Bay Area Broker Network · May 2026 · 35 Active Requirements · 6.4M–9.4M SF in market &nbsp;|&nbsp;
+        <strong>Portfolio Intelligence:</strong> C&amp;W May 19 · Apex/Quad/Genesis Point · 40+ Prospects ·
+        <strong style="color:#c8100a;">SBC named as GC partner at Genesis Point (JB Cahoon)</strong>
       </div>
 
-      <!-- TIER 1 -->
-      <div class="sec-header">
-        <span class="sec-badge badge-red">Tier 1</span>
-        <span class="sec-title">Mega Requirements — 200k+ SF · GC-Level Deals</span>
-        <span class="sec-count">12 reqs</span>
-      </div>
-      <div class="tim-grid">
-
-        <div class="tim-card t1">
-          <div class="tim-top">
-            <div class="tim-tenant">AMD</div>
-            <div class="tim-sf">300k–700k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Tom Taylor</strong> · CBRE · Mountain View / NSJ / Santa Clara</div>
-          <div class="tim-req">Office · RFPs out · 3 properties shortlisted · renewal/expansion likely</div>
-          <div class="tim-est">Est. Construction Value: ~$210M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('amd')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-amd" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-amd" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-amd" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('amd')"></textarea>
-          </div>
+      <!-- FILTER BAR -->
+      <div style="background:white; border-radius:10px; padding:12px 16px; margin-bottom:14px; box-shadow:0 1px 4px rgba(0,0,0,0.07);">
+        <div style="display:flex; flex-wrap:wrap; gap:10px; align-items:center;">
+          <input id="tim-search" type="text" oninput="filterTIMs()" placeholder="&#x1F50D; Search tenant, broker, location, notes..." style="flex:1; min-width:200px; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:7px 11px; outline:none; font-family:inherit;">
+          <select id="tim-tier" onchange="filterTIMs()" style="font-size:12px; border:1px solid #ddd; border-radius:7px; padding:7px 10px; background:white; cursor:pointer; font-family:inherit;">
+            <option value="">All Tiers</option>
+            <option value="1">&#x1F525; Tier 1 (200k+ SF)</option>
+            <option value="2">&#x1F7E0; Tier 2</option>
+          </select>
+          <select id="tim-firm" onchange="filterTIMs()" style="font-size:12px; border:1px solid #ddd; border-radius:7px; padding:7px 10px; background:white; cursor:pointer; font-family:inherit;">
+            <option value="">All Firms</option>
+            <option value="CBRE">CBRE</option>
+            <option value="C&amp;W">C&amp;W (Cushman)</option>
+            <option value="JLL">JLL</option>
+            <option value="Colliers">Colliers</option>
+            <option value="Avison">Avison Young</option>
+            <option value="Cresa">Cresa</option>
+            <option value="Newmark">Newmark</option>
+          </select>
+          <select id="tim-type" onchange="filterTIMs()" style="font-size:12px; border:1px solid #ddd; border-radius:7px; padding:7px 10px; background:white; cursor:pointer; font-family:inherit;">
+            <option value="">All Types</option>
+            <option value="Office">Office</option>
+            <option value="RD">R&amp;D</option>
+            <option value="Lab">Lab / Life Science</option>
+          </select>
+          <select id="tim-source-f" onchange="filterTIMs()" style="font-size:12px; border:1px solid #ddd; border-radius:7px; padding:7px 10px; background:white; cursor:pointer; font-family:inherit;">
+            <option value="">TIM + Portfolio</option>
+            <option value="TIM">TIM Market Only</option>
+            <option value="Portfolio">Portfolio Prospects</option>
+          </select>
+          <button onclick="resetTimFilters()" style="font-size:11px; background:#f0f2f5; color:#666; border:1px solid #e5e9f2; border-radius:7px; padding:7px 12px; cursor:pointer; white-space:nowrap; font-family:inherit;">&#x2715; Reset</button>
+          <div style="font-size:12px; white-space:nowrap; color:#888; margin-left:auto;">Showing&nbsp;<strong id="tim-vis-count" style="color:#1a2744; font-size:14px;">&#8212;</strong>&nbsp;of&nbsp;<strong id="tim-tot-count" style="color:#1a2744; font-size:14px;">&#8212;</strong></div>
         </div>
-
-        <div class="tim-card t1">
-          <div class="tim-top">
-            <div class="tim-tenant">Archer Aviation</div>
-            <div class="tim-sf">400k–500k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Jeff Cushman, Chris D'Ambrosia</strong> · C&W · MTV/SNVL</div>
-          <div class="tim-req">Office · 1 building · 5,000 amps @ 480V · largest single deal in TIM</div>
-          <div class="tim-est">Est. Construction Value: ~$150M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('archer-aviation')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-archer-aviation" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-archer-aviation" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-archer-aviation" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('archer-aviation')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t1">
-          <div class="tim-top">
-            <div class="tim-tenant">GM</div>
-            <div class="tim-sf">300k–400k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Andy Hueser</strong> · JLL · Sunnyvale / Mountain View</div>
-          <div class="tim-req">Office + 100k SF lab space · Fortune 100</div>
-          <div class="tim-note">⚠️ Email bounced — try andrew.hueser@jll.com or call (408) 982-8417 direct</div>
-          <div class="tim-est">Est. Construction Value: ~$105M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('gm')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-gm" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-gm" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-gm" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('gm')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t1">
-          <div class="tim-top">
-            <div class="tim-tenant">Nvidia</div>
-            <div class="tim-sf">200k–400k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Paul McManus</strong> · Colliers · NSJ / Santa Clara</div>
-          <div class="tim-req">R&D · Multiple locations · 5,500 amps minimum</div>
-          <div class="tim-est">Est. Construction Value: ~$90M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('nvidia')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-nvidia" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-nvidia" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-nvidia" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('nvidia')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t1">
-          <div class="tim-top">
-            <div class="tim-tenant">Stryker</div>
-            <div class="tim-sf">200k–300k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>John McMahon</strong> · Colliers · South San Jose</div>
-          <div class="tim-req">R&D · McMahon's req · 24 months out from LED</div>
-          <div class="tim-est">Est. Construction Value: ~$75M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('stryker')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-stryker" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-stryker" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-stryker" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('stryker')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t1">
-          <div class="tim-top">
-            <div class="tim-tenant">ASML</div>
-            <div class="tim-sf">200k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Jere Hench, John McMahon</strong> · Colliers · NSJ</div>
-          <div class="tim-req">R&D · Q1–Q2 2027 occupancy · 3 offers out</div>
-          <div class="tim-est">Est. Construction Value: ~$60M · Also active WIP client (Marco Velasco)</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('asml')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-asml" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-asml" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-asml" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('asml')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t1">
-          <div class="tim-top">
-            <div class="tim-tenant">LAM Research</div>
-            <div class="tim-sf">150k–200k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Tom Taylor</strong> · CBRE · NSJ–Fremont</div>
-          <div class="tim-req">R&D · Immediate timing</div>
-          <div class="tim-est">Est. Construction Value: ~$52M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('lam-research')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-lam-research" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-lam-research" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-lam-research" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('lam-research')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t1">
-          <div class="tim-top">
-            <div class="tim-tenant">Undisclosed (Ryan Adlesh)</div>
-            <div class="tim-sf">200k–300k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Ryan Adlesh</strong> · CBRE · Sunnyvale–San Jose</div>
-          <div class="tim-req">Office · Immediate · Large unnamed requirement</div>
-          <div class="tim-est">Est. Construction Value: ~$75M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('undisclosed-ryan-adlesh')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-undisclosed-ryan-adlesh" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-undisclosed-ryan-adlesh" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-undisclosed-ryan-adlesh" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('undisclosed-ryan-adlesh')"></textarea>
-          </div>
-        </div>
-
-      </div><!-- /tier1 -->
-
-      <div class="divider"></div>
-
-      <!-- TIER 2 -->
-      <div class="sec-header">
-        <span class="sec-badge badge-orange">Tier 2</span>
-        <span class="sec-title">Strong Requirements — 75k–200k SF</span>
-        <span class="sec-count">30+ reqs</span>
-      </div>
-      <div class="tim-grid">
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">Derek Cuschieri — Unknown Tenant</div>
-            <div class="tim-sf">70k–100k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Derek Cuschieri, Todd Campbell</strong> · Avison Young · Santa Clara</div>
-          <div class="tim-req">R&D Clean Room · 10–20k clean room + 50–60k production</div>
-          <div class="tim-note">🔥 Derek replied 4/28 "no ROM need" BUT this TIM shows LIVE req — re-engage on clean room buildout specifically</div>
-          <div class="tim-est">Est. Construction Value: ~$30M–$45M (clean room premium)</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('derek-cuschieri')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-derek-cuschieri" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-derek-cuschieri" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-derek-cuschieri" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('derek-cuschieri')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">Zoom</div>
-            <div class="tim-sf">125k–150k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Joe Brady</strong> · C&W · Immediate</div>
-          <div class="tim-req">Office · Immediate · Already in SBC sub list</div>
-          <div class="tim-est">Est. Construction Value: ~$45M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('zoom')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-zoom" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-zoom" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-zoom" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('zoom')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">xAI (Elon Musk)</div>
-            <div class="tim-sf">50k–150k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Joe Long, Armand Tiano</strong> · JLL · Palo Alto</div>
-          <div class="tim-req">Office · Focused on Palo Alto</div>
-          <div class="tim-est">Est. Construction Value: ~$45M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('xai-elon-musk')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-xai-elon-musk" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-xai-elon-musk" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-xai-elon-musk" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('xai-elon-musk')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">Illumio</div>
-            <div class="tim-sf">120k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Joe Long, Bart Lammersen</strong> · JLL · SNVL/SC/MV</div>
-          <div class="tim-req">Office/R&D · Lease up Dec 2026 · Proposals out</div>
-          <div class="tim-est">Est. Construction Value: ~$36M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('illumio')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-illumio" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-illumio" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-illumio" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('illumio')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">Mediatek</div>
-            <div class="tim-sf">100k–120k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>John McMahon, Sean McMahon</strong> · Colliers · NSJ / SC</div>
-          <div class="tim-req">Office · High-image building</div>
-          <div class="tim-est">Est. Construction Value: ~$36M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('mediatek')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-mediatek" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-mediatek" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-mediatek" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('mediatek')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">Marvell</div>
-            <div class="tim-sf">75k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Andy Hueser</strong> · JLL · Santa Clara</div>
-          <div class="tim-req">Office · 2-yr swing space · Plug & play</div>
-          <div class="tim-note">⚠️ Same broker as GM — Andy Hueser email bounced. Call direct.</div>
-          <div class="tim-est">Est. Construction Value: ~$22M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('marvell')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-marvell" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-marvell" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-marvell" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('marvell')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">Hitachi</div>
-            <div class="tim-sf">80k–100k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Joe Long</strong> · JLL · Sunnyvale / Mountain View</div>
-          <div class="tim-req">Office · Class A renewal likely</div>
-          <div class="tim-est">Est. Construction Value: ~$30M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('hitachi')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-hitachi" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-hitachi" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-hitachi" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('hitachi')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">Guardant Health</div>
-            <div class="tim-sf">100k–150k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Mike Mordaunt</strong> · C&W · Palo Alto / MV</div>
-          <div class="tim-req">R&D · Already in SBC sub list</div>
-          <div class="tim-est">Est. Construction Value: ~$45M</div>
-
-          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
-            <button onclick="toggleTimNote('guardant-health')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-guardant-health" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-guardant-health" style="display:none; margin-top:4px;">
-            <textarea id="tim-note-text-guardant-health" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('guardant-health')"></textarea>
-          </div>
-        </div>
-
-      </div><!-- /tier2 -->
-
-      <div class="divider"></div>
-
-      <!-- ════════════════ APEX / QUAD / GENESIS PORTFOLIO INTEL ════════════════ -->
-      <div style="background:linear-gradient(135deg,#1a2744,#2a3a5a);border-radius:10px;padding:12px 16px;margin-bottom:14px;">
-        <div style="font-size:13px;font-weight:700;color:white;">🏢 Apex / Quad / Genesis — Portfolio TI Pipeline · C&amp;W · May 19, 2026</div>
-        <div style="font-size:11px;color:#8fa3c8;margin-top:4px;">40+ active prospects · <strong style="color:#4a9eff;">SBC named as GC partner in Genesis Point action list (JB Cahoon)</strong> · These tenants are actively touring = direct TI opportunity</div>
       </div>
 
-      <!-- APEX AT TASMAN -->
-      <div class="sec-header">
-        <span class="sec-badge" style="background:#c0392b;color:white;">APEX</span>
-        <span class="sec-title">260–350 E Tasman + 3750 Zanker, Santa Clara · $2.75 NNN · Up to 8,000 amps/bldg (12–14 mo upgrade)</span>
+      <!-- STATS TILES -->
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px;">
+        <div style="background:white; border-radius:10px; padding:12px 14px; box-shadow:0 1px 4px rgba(0,0,0,0.07); border-left:4px solid #c0392b;">
+          <div style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Tier 1 Active (200k+ SF)</div>
+          <div style="font-size:26px; font-weight:800; color:#1a2744; margin-top:4px;">10</div>
+          <div style="font-size:11px; color:#c0392b; margin-top:2px;">$750M+ est. TI construction</div>
+        </div>
+        <div style="background:white; border-radius:10px; padding:12px 14px; box-shadow:0 1px 4px rgba(0,0,0,0.07); border-left:4px solid #f39c12;">
+          <div style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Tier 2 Active</div>
+          <div style="font-size:26px; font-weight:800; color:#1a2744; margin-top:4px;">23</div>
+          <div style="font-size:11px; color:#f39c12; margin-top:2px;">$400M+ est. TI construction</div>
+        </div>
+        <div style="background:white; border-radius:10px; padding:12px 14px; box-shadow:0 1px 4px rgba(0,0,0,0.07); border-left:4px solid #4a9eff;">
+          <div style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Total SF in Market</div>
+          <div style="font-size:26px; font-weight:800; color:#1a2744; margin-top:4px;">6.4M&#8211;9.4M</div>
+          <div style="font-size:11px; color:#4a9eff; margin-top:2px;">Bay Area active requirements</div>
+        </div>
+        <div style="background:white; border-radius:10px; padding:12px 14px; box-shadow:0 1px 4px rgba(0,0,0,0.07); border-left:4px solid #7c3aed;">
+          <div style="font-size:10px; color:#888; font-weight:600; text-transform:uppercase; letter-spacing:0.5px;">Portfolio Prospects</div>
+          <div style="font-size:26px; font-weight:800; color:#1a2744; margin-top:4px;">14</div>
+          <div style="font-size:11px; color:#7c3aed; margin-top:2px;">Apex &#183; Genesis &#183; Quad</div>
+        </div>
+      </div>
+
+      <!-- FILTERABLE TABLE -->
+      <div style="background:white; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,0.07); overflow:hidden; margin-bottom:20px;">
+        <div style="background:#1a2744; padding:10px 16px; display:flex; align-items:center; gap:10px;">
+          <span style="font-size:11px; font-weight:700; color:#8fa3c8; text-transform:uppercase; letter-spacing:0.5px;">&#x1F525; Active Requirements + Portfolio Prospects &#8212; Bay Area Tenant Intelligence</span>
+          <span style="font-size:11px; color:#4a9eff; margin-left:auto;">May 2026 &#183; Confidential</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table id="tim-list-table" style="width:100%; border-collapse:collapse; font-size:12px; min-width:920px;">
+            <thead>
+              <tr style="background:#f4f6fb; border-bottom:2px solid #e5e9f2;">
+                <th style="padding:8px 10px; text-align:left; font-size:11px; font-weight:700; color:#1a2744; white-space:nowrap; width:72px;">Tier</th>
+                <th style="padding:8px 10px; text-align:left; font-size:11px; font-weight:700; color:#1a2744; min-width:140px;">Tenant / Company</th>
+                <th style="padding:8px 10px; text-align:left; font-size:11px; font-weight:700; color:#1a2744; white-space:nowrap; width:110px;">SF Range</th>
+                <th style="padding:8px 10px; text-align:left; font-size:11px; font-weight:700; color:#1a2744; width:78px;">Firm</th>
+                <th style="padding:8px 10px; text-align:left; font-size:11px; font-weight:700; color:#1a2744; min-width:155px;">Broker(s)</th>
+                <th style="padding:8px 10px; text-align:left; font-size:11px; font-weight:700; color:#1a2744; min-width:110px;">Location</th>
+                <th style="padding:8px 10px; text-align:left; font-size:11px; font-weight:700; color:#1a2744; width:80px;">Type</th>
+                <th style="padding:8px 10px; text-align:left; font-size:11px; font-weight:700; color:#1a2744; width:88px;">Est. Value</th>
+                <th style="padding:8px 10px; text-align:left; font-size:11px; font-weight:700; color:#1a2744; min-width:220px;">Notes / Status</th>
+                <th style="padding:8px 8px; text-align:center; font-size:11px; font-weight:700; color:#1a2744; width:46px;">&#128221;</th>
+              </tr>
+            </thead>
+            <tbody id="tim-tbody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- NEAR-DEAL WATCH (pinned) -->
+      <div style="background:linear-gradient(135deg,#1a2744,#2a3a5a); border-radius:10px; padding:12px 16px; margin-bottom:14px;">
+        <div style="font-size:13px; font-weight:700; color:white;">&#x1F6A8; Near-Deal Watch &#8212; Board &amp; Exec Decisions Imminent</div>
+        <div style="font-size:11px; color:#8fa3c8; margin-top:4px;">Wherever these land, SBC should be positioned for the TI buildout</div>
       </div>
       <div class="tim-grid">
 
         <div class="tim-card t1">
           <div class="tim-top">
-            <div class="tim-tenant">Bloom Energy</div>
-            <div class="tim-sf">200k–300k SF</div>
+            <div class="tim-tenant">Ayar Labs &#x1F6A8; Board Deciding NOW</div>
+            <div class="tim-sf">93k&#8211;150k SF</div>
           </div>
-          <div class="tim-broker-line"><strong>Ryan Adlesh / Steinbock / V. Scott</strong> · CBRE · Apex + Sunnyvale survey</div>
-          <div class="tim-req">R&amp;D / Office · CEO making decision · Toured 300 E Tasman 4/28 · Also reviewing Sunnyvale options</div>
-          <div class="tim-note">🔥 5/19: "Continuing to review the market" — Ryan says "will take some time." Ryan Adlesh is your key contact.</div>
-          <div class="tim-est">Est. Construction Value: ~$30M–$45M</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('bloom-energy')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-bloom-energy" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
+          <div class="tim-broker-line"><strong>Mark George</strong> &#183; Cresa &#183; Genesis Point vs Quad at Tasman</div>
+          <div class="tim-req">Lab + Clean Room &#183; Genesis: 92,764 SF &#183; 108mo &#183; $2.95 NNN &#183; $50 TIA &nbsp;|&nbsp; Quad: 128mo &#183; $2.75 NNN &#183; $85 TIA &#183; Board subcommittee deciding this week</div>
+          <div class="tim-note">&#x1F6A8; $200/SF contractor bids circulating. <strong>SBC named at Genesis Point (JB).</strong> Call Mark George (Cresa) immediately &#8212; clean room = premium TI.</div>
+          <div class="tim-est">Est. Construction Value: ~$20M&#8211;$37M (clean room premium)</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('ayar-watch')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#128221; Note</button>
+            <span id="tim-note-dot-ayar-watch" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
           </div>
-          <div id="tim-note-panel-bloom-energy" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-bloom-energy" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('bloom-energy')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t1">
-          <div class="tim-top">
-            <div class="tim-tenant">Etched AI (Apex)</div>
-            <div class="tim-sf">300k–500k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Mike Mordaunt</strong> · C&amp;W · Apex (backup to 195 Milpitas)</div>
-          <div class="tim-req">High-power R&amp;D · Needs 16K amps in 3 mo · Focused on 195 Milpitas (6K amp expansion) · Apex backup if Milpitas falls through</div>
-          <div class="tim-note">⚡ 5/19: Apex power upgrade timeline too slow for immediate need. If Milpitas falls through, Apex is next. Mike Mordaunt your contact.</div>
-          <div class="tim-est">Est. Construction Value: ~$45M–$75M</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('etched-ai-apex')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-etched-ai-apex" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-etched-ai-apex" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-etched-ai-apex" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('etched-ai-apex')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">Stryker (Apex)</div>
-            <div class="tim-sf">200k–250k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Sean McMahon</strong> · Colliers · Apex at Tasman</div>
-          <div class="tim-req">R&amp;D · ~30 days from establishing program · Double rent from Fremont a concern · Proposal submitted recommending LL help mitigate</div>
-          <div class="tim-note">🔥 5/19: Active. SBC fits well for R&amp;D buildout. Sean McMahon (Colliers — separate from John McMahon).</div>
-          <div class="tim-est">Est. Construction Value: ~$30M–$37M</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('stryker-apex')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-stryker-apex" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-stryker-apex" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-stryker-apex" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('stryker-apex')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">Undisclosed (Adlesh · 120–150k)</div>
-            <div class="tim-sf">120k–150k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Ryan Adlesh</strong> · CBRE · Apex (PA–SJ survey)</div>
-          <div class="tim-req">Office · Credit tech tenant · Palo Alto to San Jose range · 5/19: Presented on survey to client</div>
-          <div class="tim-est">Est. Construction Value: ~$12M–$15M</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('adlesh-apex-120k')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-adlesh-apex-120k" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-adlesh-apex-120k" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-adlesh-apex-120k" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('adlesh-apex-120k')"></textarea>
-          </div>
-        </div>
-
-      </div><!-- /apex-grid -->
-
-      <!-- GENESIS POINT -->
-      <div class="sec-header" style="margin-top:14px;">
-        <span class="sec-badge" style="background:#7c3aed;color:white;">GENESIS</span>
-        <span class="sec-title">2660–2740 Zanker Rd + 2585/2595 Junction Ave, N. San Jose · Ask: $2.95 NNN ($2.75 on 2700) · Labs available · SBC built here</span>
-      </div>
-      <div class="tim-grid">
-
-        <div class="tim-card t1">
-          <div class="tim-top">
-            <div class="tim-tenant">Ayar Labs 🚨 NEAR DEAL</div>
-            <div class="tim-sf">~93k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Mark George</strong> · Cresa · Genesis Point (2720 + 2700)</div>
-          <div class="tim-req">Lab + Office · Proposal submitted for 92,764 SF · Board subcommittee deciding this week · Choosing between Genesis vs Sobrato Great America · Deal: $2.95 NNN, 108 mo, 8 mo abated, TIA ~$50/SF</div>
-          <div class="tim-note">🚨 5/19: Board decision imminent. If they land here, SBC builds it. Call Mark George (Cresa) immediately. Clean room needs = premium TI value.</div>
-          <div class="tim-est">Est. Construction Value: ~$5M–$9M (clean room premium possible)</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('ayar-labs-genesis')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-ayar-labs-genesis" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-ayar-labs-genesis" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-ayar-labs-genesis" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('ayar-labs-genesis')"></textarea>
+          <div id="tim-note-panel-ayar-watch" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-ayar-watch" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('ayar-watch')"></textarea>
           </div>
         </div>
 
         <div class="tim-card t1">
           <div class="tim-top">
-            <div class="tim-tenant">GSME</div>
+            <div class="tim-tenant">GSME &#8212; Near Close</div>
             <div class="tim-sf">~40k SF</div>
           </div>
-          <div class="tim-broker-line"><strong>Alex Lagemann</strong> · JLL · Genesis Point · Target: Sep 2026</div>
-          <div class="tim-req">Office/Lab · Waiting on LL draft lease · Deal: Suite 150 &amp; 200 (~39,622 SF), 90 mo, 6 free, $20 TIA · 5/19: "Waiting on draft lease from Landlord"</div>
-          <div class="tim-note">🔥 Near-deal. Sep 2026 occupancy target. Alex Lagemann (JLL) is your contact.</div>
-          <div class="tim-est">Est. Construction Value: ~$4M–$6M</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('gsme-genesis')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-gsme-genesis" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
+          <div class="tim-broker-line"><strong>Alex Lagemann</strong> &#183; JLL &#183; Genesis Point &#183; Sep 2026</div>
+          <div class="tim-req">Office/Lab &#183; Suites 150+200 &#183; 39,622 SF &#183; 90mo &#183; 6 free &#183; $20 TIA &#183; Waiting on LL draft lease</div>
+          <div class="tim-note">&#x1F525; Near-deal. Sep 2026 occupancy target. When lease executes, have SBC precon approach ready.</div>
+          <div class="tim-est">Est. Construction Value: ~$4M&#8211;$6M</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('gsme-watch')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#128221; Note</button>
+            <span id="tim-note-dot-gsme-watch" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
           </div>
-          <div id="tim-note-panel-gsme-genesis" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-gsme-genesis" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('gsme-genesis')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">Genista</div>
-            <div class="tim-sf">100k–150k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Dylan Plane / Jerry Inguagiato</strong> · CBRE · Genesis Point</div>
-          <div class="tim-req">Owner/User · Want one building + excess power from others · 5/19: Jerry presenting to client, will report back</div>
-          <div class="tim-est">Est. Construction Value: ~$10M–$15M</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('genista-genesis')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-genista-genesis" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-genista-genesis" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-genista-genesis" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('genista-genesis')"></textarea>
+          <div id="tim-note-panel-gsme-watch" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-gsme-watch" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('gsme-watch')"></textarea>
           </div>
         </div>
 
         <div class="tim-card t2">
           <div class="tim-top">
-            <div class="tim-tenant">Alpha Omega Semiconductor</div>
-            <div class="tim-sf">80k–100k SF</div>
+            <div class="tim-tenant">ATR &#9889; RFP Submitted</div>
+            <div class="tim-sf">6k&#8211;8k SF</div>
           </div>
-          <div class="tim-broker-line"><strong>Tom Sweeney (Newmark) / Chad Leiker (KM)</strong> · Genesis Point</div>
-          <div class="tim-req">R&amp;D · Owner user · 4 yrs left on current lease · Pricing likely above target · 5/19: Continue to track</div>
-          <div class="tim-est">Est. Construction Value: ~$16M–$20M</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('alpha-omega-genesis')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-alpha-omega-genesis" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
+          <div class="tim-broker-line"><strong>Kate Myers</strong> &#183; C&amp;W &#183; Quad at Tasman (Suite 110)</div>
+          <div class="tim-req">Office &#183; RFP submitted &#183; 5-yr term &#183; TI at or below market-ready work &#183; Deal in motion as of 5/11</div>
+          <div class="tim-est">Est. Construction Value: ~$0.6M&#8211;$1.2M</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleTimNote('atr-watch')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#128221; Note</button>
+            <span id="tim-note-dot-atr-watch" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
           </div>
-          <div id="tim-note-panel-alpha-omega-genesis" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-alpha-omega-genesis" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('alpha-omega-genesis')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">PCB Amalgamated</div>
-            <div class="tim-sf">50k–80k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Mike Mordaunt</strong> · C&amp;W · Genesis Point (2700 Zanker)</div>
-          <div class="tim-req">Owner/User · Purchase proposal at $320/SF on 2700 Zanker · 5/19: Sunnyvale fell through — now focused on Genesis</div>
-          <div class="tim-est">Est. Construction Value: ~$5M–$8M</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('pcb-amal-genesis')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-pcb-amal-genesis" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-pcb-amal-genesis" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-pcb-amal-genesis" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('pcb-amal-genesis')"></textarea>
+          <div id="tim-note-panel-atr-watch" style="display:none; margin-top:4px;">
+            <textarea id="tim-note-text-atr-watch" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;" onblur="saveTimNote('atr-watch')"></textarea>
           </div>
         </div>
 
-        <div class="tim-card t3">
-          <div class="tim-top">
-            <div class="tim-tenant">Figure AI</div>
-            <div class="tim-sf">TBD</div>
-          </div>
-          <div class="tim-broker-line"><strong>Romy Zeid</strong> · Colliers · Genesis Point</div>
-          <div class="tim-req">Robotics R&amp;D · 5/19: Being tracked · Size/timing TBD</div>
-          <div class="tim-est">Track for TI potential</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('figure-ai-genesis')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-figure-ai-genesis" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-figure-ai-genesis" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-figure-ai-genesis" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('figure-ai-genesis')"></textarea>
-          </div>
-        </div>
+      </div><!-- /near-deal -->
 
-      </div><!-- /genesis-grid -->
-
-      <!-- THE QUAD -->
-      <div class="sec-header" style="margin-top:14px;">
-        <span class="sec-badge" style="background:#0284c7;color:white;">QUAD</span>
-        <span class="sec-title">2962 Bunker Hill + 3001–3005 Tasman Dr, Santa Clara</span>
-      </div>
-      <div class="tim-grid">
-
-        <div class="tim-card t1">
-          <div class="tim-top">
-            <div class="tim-tenant">Ayar Labs (Quad) 🚨 NEAR DEAL</div>
-            <div class="tim-sf">100k–150k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Mark George</strong> · Cresa · Quad (3003 Tasman) + Genesis</div>
-          <div class="tim-req">Clean room / Lab · CEO choosing Quad (3003) vs Genesis · $200/SF contractor bids · Deal: 128 mo, $2.75 NNN, 8 mo free, $85 TI · Board deciding NOW</div>
-          <div class="tim-note">🚨 Same tenant as Genesis near-deal. Wherever they land, SBC should build. Clean room = top-tier TI value. Watch closely with Mark George (Cresa).</div>
-          <div class="tim-est">Est. Construction Value: ~$20M–$37M (clean room premium)</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('ayar-labs-quad')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-ayar-labs-quad" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-ayar-labs-quad" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-ayar-labs-quad" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('ayar-labs-quad')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">Marvell Semiconductor</div>
-            <div class="tim-sf">100k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Andy Heuser</strong> · JLL · Quad (3003 Tasman)</div>
-          <div class="tim-req">Office/R&amp;D · HQ move · Touring 3003 Tasman · Class A only · 5/19: Confirmed 3003 available — still no direction from client</div>
-          <div class="tim-est">Est. Construction Value: ~$10M–$15M</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('marvell-quad')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-marvell-quad" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-marvell-quad" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-marvell-quad" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('marvell-quad')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">d-Matrix</div>
-            <div class="tim-sf">50k–100k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Chris Errecart / Mike Mordaunt</strong> · C&amp;W · Quad</div>
-          <div class="tim-req">Office/R&amp;D · In sublease, needs flexibility to grow · 3-yr as-is term on table · Furniture from 3003 Celestial · 5/14: Draft out for client approval</div>
-          <div class="tim-est">Est. Construction Value: ~$5M–$15M</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('d-matrix-quad')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-d-matrix-quad" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-d-matrix-quad" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-d-matrix-quad" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('d-matrix-quad')"></textarea>
-          </div>
-        </div>
-
-        <div class="tim-card t2">
-          <div class="tim-top">
-            <div class="tim-tenant">ATR ⚡ RFP Submitted</div>
-            <div class="tim-sf">6k–8k SF</div>
-          </div>
-          <div class="tim-broker-line"><strong>Kate Myers</strong> · C&amp;W · Quad (Suite 110)</div>
-          <div class="tim-req">Office · RFP submitted for 5-yr term · TI at or less than planned market ready work · 5/19: Deal in motion</div>
-          <div class="tim-note">⚡ RFP live as of 5/11. Small deal but moving toward close — position SBC for the TI.</div>
-          <div class="tim-est">Est. Construction Value: ~$0.6M–$1.2M</div>
-          <div style="margin-top:6px;border-top:1px solid #f0f2f5;padding-top:5px;display:flex;align-items:center;gap:5px;">
-            <button onclick="toggleTimNote('atr-quad')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 7px;cursor:pointer;color:#888;">&#x1F4DD; Note</button>
-            <span id="tim-note-dot-atr-quad" style="display:none;width:7px;height:7px;border-radius:50%;background:#ffa502;flex-shrink:0;"></span>
-          </div>
-          <div id="tim-note-panel-atr-quad" style="display:none;margin-top:4px;">
-            <textarea id="tim-note-text-atr-quad" placeholder="Add a note..." style="width:100%;font-size:11px;border:1px solid #ddd;border-radius:5px;padding:4px 6px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;" onblur="saveTimNote('atr-quad')"></textarea>
-          </div>
-        </div>
-
-      </div><!-- /quad-grid -->
 
     </div>
   </div><!-- /tim -->
@@ -2320,6 +1879,7 @@
       }
     });
     renderReferrals();
+    renderTIMTable();
 
     // ── Sync checked state from Outreach Tracker ──
     const trackerState = getTrackerState();
@@ -2405,6 +1965,158 @@
     if (dot) dot.style.display = val ? 'inline-block' : 'none';
   }
 
+  // ── TIM FILTERABLE TABLE ──
+  var TIM_DATA = [
+    // ═══ TIER 1 — Active Requirements (200k+ SF) ═══
+    {id:'amd',         tier:'1', tenant:'AMD',                        sf:'300k–700k',  firm:'CBRE',       broker:'Tom Taylor',                       loc:'MV / NSJ / SC',     type:'Office',     val:'~$210M',         src:'TIM',       notes:'RFPs out, 3 properties shortlisted. Renewal/expansion likely.'},
+    {id:'scc',         tier:'1', tenant:'Santa Clara County',         sf:'200k–500k',  firm:'Multiple',   broker:'Multiple Brokers',                 loc:'SC / SJ',           type:'Office',     val:'~$75M',          src:'TIM',       notes:'Owner-user purchase. 12–36 month timeline.'},
+    {id:'archer',      tier:'1', tenant:'Archer Aviation',            sf:'400k–500k',  firm:'C&W',        broker:'Jeff Cushman / Chris D\'Ambrosia', loc:'MTV / SNVL',        type:'Office',     val:'~$150M',         src:'TIM',       notes:'1 building. 5,000 amps @ 480V required. Largest single deal in TIM.'},
+    {id:'gm',          tier:'1', tenant:'GM',                         sf:'300k–400k',  firm:'JLL',        broker:'Andy Hueser',                      loc:'SNVL / MV',         type:'Office/Lab', val:'~$105M',         src:'TIM',       notes:'Fortune 100. Needs 100k SF lab component. Andy Hueser email bounced — call (408) 982-8417.'},
+    {id:'nvidia',      tier:'1', tenant:'Nvidia',                     sf:'200k–400k',  firm:'Colliers',   broker:'Paul McManus',                     loc:'NSJ / SC',          type:'R&D',        val:'~$90M',          src:'TIM',       notes:'Multiple locations. 5,500 amps min. Rumored buying near Montague/Walsh.'},
+    {id:'stryker',     tier:'1', tenant:'Stryker',                    sf:'200k–300k',  firm:'Colliers',   broker:'John McMahon',                     loc:'South San Jose',    type:'R&D',        val:'~$75M',          src:'TIM',       notes:'24 months from lease execution date.'},
+    {id:'adlesh-und',  tier:'1', tenant:'Undisclosed (Ryan Adlesh)',  sf:'200k–300k',  firm:'CBRE',       broker:'Ryan Adlesh',                      loc:'SNVL – SJ',    type:'Office',     val:'~$75M',          src:'TIM',       notes:'Immediate. SVP National Tech & Media Practice Group.'},
+    {id:'apple',       tier:'1', tenant:'Apple',                      sf:'~200k',           firm:'Confid.',    broker:'Confidential',                     loc:'Sunnyvale',         type:'Office/R&D', val:'~$60M',          src:'TIM',       notes:'Ongoing expansion. Lease/purchase. Rumored 590 Mary (125k) + buying Catalyst bldg.'},
+    {id:'asml',        tier:'1', tenant:'ASML',                       sf:'200k',            firm:'Colliers',   broker:'Jere Hench / John McMahon',        loc:'North San Jose',    type:'R&D',        val:'~$60M',          src:'TIM',       notes:'Q1–Q2 2027 occupancy. 3 offers outstanding. Also active WIP client (Marco Velasco).'},
+    {id:'lam',         tier:'1', tenant:'LAM Research',               sf:'150k–200k',  firm:'CBRE',       broker:'Tom Taylor',                       loc:'NSJ – Fremont', type:'R&D',       val:'~$52M',          src:'TIM',       notes:'Immediate requirement.'},
+    // ═══ TIER 2 — Strong Requirements ═══
+    {id:'tt-und',      tier:'2', tenant:'Undisclosed (Tom Taylor)',   sf:'20k–200k',   firm:'CBRE',       broker:'Tom Taylor',                       loc:'North San Jose',    type:'R&D',        val:'~$30M',          src:'TIM',       notes:'Needs power specs, clear height specs.'},
+    {id:'tt-req-lg',   tier:'2', tenant:'Tom Taylor Req (Unknown)',   sf:'400k–600k',  firm:'CBRE',       broker:'Tom Taylor',                       loc:'Bay Area',          type:'—',     val:'Unknown',        src:'TIM',       notes:'Identity unknown. Large requirement circulating in market.'},
+    {id:'zoom',        tier:'2', tenant:'Zoom',                       sf:'125k–150k',  firm:'C&W',        broker:'Joe Brady',                        loc:'Bay Area',          type:'Office',     val:'~$45M',          src:'TIM',       notes:'Immediate. Still in market. Already in SBC sub list.'},
+    {id:'xai',         tier:'2', tenant:'xAI (Elon Musk)',            sf:'50k–150k',   firm:'JLL',        broker:'Joe Long / Armand Tiano',          loc:'Palo Alto',         type:'Office',     val:'~$30M',          src:'TIM',       notes:'Focused on PA. Possibly on Atlassian sublease at MVCC.'},
+    {id:'guardant',    tier:'2', tenant:'Guardant Health',            sf:'100k–150k',  firm:'C&W',        broker:'Mike Mordaunt',                    loc:'PA / MV',           type:'R&D',        val:'~$45M',          src:'TIM',       notes:'Life science / R&D. In SBC sub list.'},
+    {id:'kaiser',      tier:'2', tenant:'Kaiser Permanente',          sf:'100k–150k',  firm:'JLL',        broker:'Scott Mathisen',                   loc:'Los Gatos',         type:'Office',     val:'~$35M',          src:'TIM',       notes:'Healthcare TI + lab buildout.'},
+    {id:'hpe',         tier:'2', tenant:'HPE',                        sf:'80k–120k',   firm:'C&W',        broker:'Erik Hallgrimson',                 loc:'NSJ / SC',          type:'Office/R&D', val:'~$30M',          src:'TIM',       notes:'Active requirement.'},
+    {id:'illumio',     tier:'2', tenant:'Illumio',                    sf:'120k',            firm:'JLL',        broker:'Joe Long / Bart Lammersen',        loc:'SNVL / SC / MV',   type:'Office/R&D', val:'~$36M',          src:'TIM',       notes:'Lease up Dec 2026. COMP: Signed Campus at Scott @ $4.55 NNN.'},
+    {id:'mediatek',    tier:'2', tenant:'Mediatek',                   sf:'100k–120k',  firm:'Colliers',   broker:'John McMahon / Sean McMahon',      loc:'NSJ / SC',          type:'Office',     val:'~$36M',          src:'TIM',       notes:'High-image Class A. COMP: Gateway 5453 — 110k, 7.5yr, $3.70 NNN, $65 TIA.'},
+    {id:'hitachi',     tier:'2', tenant:'Hitachi',                    sf:'80k–100k',   firm:'JLL',        broker:'Joe Long',                         loc:'SNVL / MV',         type:'Office',     val:'~$30M',          src:'TIM',       notes:'Class A renewal. Giving back floors staggered Jan 2027–Jan 2028.'},
+    {id:'derek-cr',    tier:'2', tenant:'Unknown (Clean Room)',       sf:'70k–100k',   firm:'Avison Young',broker:'Derek Cuschieri / Todd Campbell', loc:'Santa Clara',       type:'R&D',        val:'~$30M–$45M',src:'TIM',       notes:'10–20k SF clean room + 50–60k SF production. Derek replied no ROM 4/28 — TIM shows LIVE req.'},
+    {id:'extreme-net', tier:'2', tenant:'Extreme Networks',           sf:'70k–120k',   firm:'CBRE',       broker:'Ben Knight / Sherman Chan',        loc:'SJ – Morgan Hill',type:'R&D',    val:'~$28M',          src:'TIM',       notes:'Purchase or lease.'},
+    {id:'alamar',      tier:'2', tenant:'Alamar Biosciences',         sf:'70k',             firm:'CBRE',       broker:'Sherman Chan',                     loc:'Fremont',           type:'R&D',        val:'~$21M',          src:'TIM',       notes:'Active requirement.'},
+    {id:'marvell',     tier:'2', tenant:'Marvell',                    sf:'75k',             firm:'JLL',        broker:'Andy Hueser',                      loc:'Santa Clara',       type:'Office',     val:'~$22M',          src:'TIM',       notes:'2-yr swing space, plug & play. Andy Hueser email bounced.'},
+    {id:'nxp',         tier:'2', tenant:'NXP Semiconductors',         sf:'75k–100k',   firm:'CBRE',       broker:'Mike Filice',                      loc:'North San Jose',    type:'R&D',        val:'~$24M',          src:'TIM',       notes:'Q4 2026 timing. Renewal likely.'},
+    {id:'stealth-lee', tier:'2', tenant:'Stealth Co. (Mike Lee)',     sf:'70k–150k',   firm:'Colliers',   broker:'Mike Lee',                         loc:'SSF – SC',     type:'Office/R&D', val:'~$28M',          src:'TIM',       notes:'Stealth/undisclosed tenant.'},
+    {id:'kraft',       tier:'2', tenant:'John Kraft Req',             sf:'100k',            firm:'—',     broker:'John Kraft',                       loc:'Stanford Res. Park', type:'—',    val:'~$20M',          src:'TIM',       notes:'Stanford Research Park requirement.'},
+    {id:'covington',   tier:'2', tenant:'Covington',                  sf:'45k',             firm:'CBRE',       broker:'George Fox',                       loc:'Stanford Res. Park', type:'Office',    val:'~$9M',           src:'TIM',       notes:'Stanford Research Park office.'},
+    {id:'teradyne',    tier:'2', tenant:'Teradyne',                   sf:'15k–20k Lab',firm:'—',     broker:'—',                           loc:'Bay Area',          type:'Lab',        val:'~$6M',           src:'TIM',       notes:'Back in market for lab space.'},
+    {id:'jed-spr',     tier:'2', tenant:'Jed Springer / Unknown',     sf:'up to 35k',       firm:'—',     broker:'Jed Springer',                     loc:'PA / MV / SNVL',   type:'Office/R&D', val:'~$7M',           src:'TIM',       notes:'Possibly Heartflow.'},
+    {id:'schwab',      tier:'2', tenant:'Schwab',                     sf:'10k–15k',    firm:'—',     broker:'Zamudio',                          loc:'SJC Gateway',       type:'Office',     val:'~$3M',           src:'TIM',       notes:'Small requirement.'},
+    {id:'gallardo',    tier:'2', tenant:'Aaron Gallardo Req',         sf:'30k–40k',    firm:'Cresa',      broker:'Aaron Gallardo',                   loc:'Unknown',           type:'—',     val:'~$6M',           src:'TIM',       notes:'New requirement.'},
+    {id:'nancy-morse', tier:'2', tenant:'Nancy Morse Req',            sf:'20k–30k',    firm:'—',     broker:'Nancy Morse',                      loc:'—',            type:'—',     val:'~$4M',           src:'TIM',       notes:'Active requirement.'},
+    {id:'lambda',      tier:'2', tenant:'Dave Sesi / Lambda',         sf:'50k',             firm:'—',     broker:'Dave Sesi / Cash Fields',          loc:'PA – NSJ',     type:'Office',     val:'~$10M',          src:'TIM',       notes:'AI company requirement.'},
+    // ═══ PORTFOLIO PROSPECTS — Apex / Genesis / Quad ═══
+    {id:'bloom',       tier:'1', tenant:'Bloom Energy',               sf:'200–300k',   firm:'CBRE',       broker:'Ryan Adlesh / Steinbock',          loc:'Apex • Santa Clara', type:'R&D/Office',val:'~$30M–$45M',src:'Portfolio',notes:'CEO making decision. Toured 300 E Tasman 4/28. Also reviewing Sunnyvale. Adlesh = key contact.'},
+    {id:'etched-ai',   tier:'1', tenant:'Etched AI',                  sf:'300–500k',   firm:'C&W',        broker:'Mike Mordaunt',                    loc:'Apex (backup to Milpitas)',type:'R&D', val:'~$45M–$75M',src:'Portfolio',notes:'Needs 16K amps in 3 mo. Focused on 195 Milpitas. Apex is backup if Milpitas falls through.'},
+    {id:'stryker-apex',tier:'2', tenant:'Stryker (Apex)',             sf:'200–250k',   firm:'Colliers',   broker:'Sean McMahon',                     loc:'Apex • Santa Clara', type:'R&D', val:'~$30M–$37M',src:'Portfolio',notes:'30 days from establishing program. Proposal submitted recommending LL help mitigate double rent.'},
+    {id:'adl-apex',    tier:'2', tenant:'Undisclosed (Adlesh/Apex)',  sf:'120–150k',   firm:'CBRE',       broker:'Ryan Adlesh',                      loc:'Apex • Santa Clara', type:'Office',val:'~$12M–$15M',src:'Portfolio',notes:'Credit tech tenant. PA to SJ survey. 5/19: Presented to client.'},
+    {id:'ayar-gen',    tier:'1', tenant:'Ayar Labs (Genesis) 🚨',sf:'~93k',       firm:'Cresa',      broker:'Mark George',                      loc:'Genesis Point • NSJ', type:'Lab', val:'~$5M–$9M',  src:'Portfolio',notes:'BOARD DECIDING NOW. 92,764 SF, 108mo, $2.95 NNN, $50 TIA. SBC NAMED AS GC PARTNER. Call Mark George immediately.'},
+    {id:'gsme',        tier:'2', tenant:'GSME',                       sf:'~40k',            firm:'JLL',        broker:'Alex Lagemann',                    loc:'Genesis Point • NSJ', type:'Lab/Office',val:'~$4M–$6M',src:'Portfolio',notes:'Near-deal. Sep 2026 occupancy. Waiting on LL draft lease. 90mo, 6 free, $20 TIA.'},
+    {id:'genista',     tier:'2', tenant:'Genista',                    sf:'100k–150k',  firm:'CBRE',       broker:'Dylan Plane / Jerry Inguagiato',   loc:'Genesis Point • NSJ', type:'R&D', val:'~$10M–$15M',src:'Portfolio',notes:'Owner/User. Want one building + excess power. Jerry presenting to client.'},
+    {id:'alpha-omega', tier:'2', tenant:'Alpha Omega Semiconductor',  sf:'80k–100k',   firm:'Newmark',    broker:'Tom Sweeney / Chad Leiker',        loc:'Genesis Point • NSJ', type:'R&D', val:'~$16M–$20M',src:'Portfolio',notes:'Owner user. 4 yrs left on current lease. Pricing likely above target.'},
+    {id:'pcb-amal',    tier:'2', tenant:'PCB Amalgamated',            sf:'50k–80k',    firm:'C&W',        broker:'Mike Mordaunt',                    loc:'Genesis Point • NSJ', type:'R&D', val:'~$5M–$8M',  src:'Portfolio',notes:'Purchase proposal $320/SF on 2700 Zanker. Sunnyvale fell through — now Genesis.'},
+    {id:'figure-ai',   tier:'2', tenant:'Figure AI',                  sf:'TBD',             firm:'Colliers',   broker:'Romy Zeid',                        loc:'Genesis Point • NSJ', type:'R&D', val:'TBD',            src:'Portfolio',notes:'Robotics R&D. Size/timing TBD. Being tracked.'},
+    {id:'ayar-quad',   tier:'1', tenant:'Ayar Labs (Quad) 🚨',  sf:'100k–150k',firm:'Cresa',   broker:'Mark George',                      loc:'Quad • Santa Clara',  type:'Lab', val:'~$20M–$37M',src:'Portfolio',notes:'SAME TENANT as Genesis near-deal. Board deciding NOW. 128mo, $2.75 NNN, $85 TIA. $200/SF contractor bids.'},
+    {id:'marvell-quad',tier:'2', tenant:'Marvell Semiconductor (Quad)',sf:'100k',           firm:'JLL',        broker:'Andy Heuser',                      loc:'Quad • Santa Clara',  type:'Office/R&D',val:'~$10M–$15M',src:'Portfolio',notes:'HQ move. Touring 3003 Tasman. Class A only. Still no direction from client as of 5/19.'},
+    {id:'d-matrix',    tier:'2', tenant:'d-Matrix',                   sf:'50k–100k',   firm:'C&W',        broker:'Chris Errecart / Mike Mordaunt',   loc:'Quad • Santa Clara',  type:'Office/R&D',val:'~$5M–$15M', src:'Portfolio',notes:'In sublease, needs flexibility. 3-yr as-is term on table. 5/14: Draft out for client approval.'},
+    {id:'atr-quad',    tier:'2', tenant:'ATR',                        sf:'6k–8k',      firm:'C&W',        broker:'Kate Myers',                       loc:'Quad • Santa Clara',  type:'Office',val:'~$0.6M–$1.2M',src:'Portfolio',notes:'RFP submitted. 5-yr term. TI at or below market-ready work. Deal in motion 5/11.'}
+  ];
+
+  var TIM_FIRM_COLORS = {
+    'CBRE':'#0070c0', 'C&W':'#007b5e', 'JLL':'#d91c2a',
+    'Colliers':'#004b87', 'Avison Young':'#ff6600', 'Cresa':'#00529b',
+    'Newmark':'#8b0000', 'Multiple':'#555', 'Confid.':'#888'
+  };
+
+  function renderTIMTable() {
+    var tbody = document.getElementById('tim-tbody');
+    if (!tbody) return;
+    var html = '';
+    TIM_DATA.forEach(function(d) {
+      var tierBadge = d.tier === '1'
+        ? '<span style="font-size:10px;font-weight:700;color:white;background:#c0392b;border-radius:4px;padding:2px 6px;white-space:nowrap;">&#x1F525; T1</span>'
+        : '<span style="font-size:10px;font-weight:700;color:white;background:#f39c12;border-radius:4px;padding:2px 6px;white-space:nowrap;">&#x1F7E0; T2</span>';
+      var srcBadge = d.src === 'Portfolio'
+        ? '<br><span style="font-size:9px;color:white;background:#7c3aed;border-radius:3px;padding:1px 5px;margin-top:3px;display:inline-block;white-space:nowrap;">Portfolio</span>'
+        : '';
+      var fc = TIM_FIRM_COLORS[d.firm] || '#555';
+      var hasNote = !!localStorage.getItem('tim-note-' + d.id);
+      var dotVis = hasNote ? 'inline-block' : 'none';
+      var srch = (d.tenant + ' ' + d.broker + ' ' + d.firm + ' ' + d.loc + ' ' + d.type + ' ' + d.notes + ' ' + d.sf).toLowerCase().replace(/"/g, '');
+      html += '<tr class="tim-data-row" data-id="' + d.id + '" data-tier="' + d.tier + '" data-firm="' + d.firm.toLowerCase() + '" data-type="' + d.type.toLowerCase().replace('&','').replace('/','') + '" data-src="' + d.src + '" data-search="' + srch.replace(/'/g,'') + '" style="border-bottom:1px solid #f0f2f5; transition:background 0.1s;" onmouseover="this.style.background=\'#fafbfd\'" onmouseout="this.style.background=\'\'">'
+        + '<td style="padding:7px 10px;vertical-align:top;">' + tierBadge + srcBadge + '</td>'
+        + '<td style="padding:7px 10px;vertical-align:top;font-weight:600;color:#1a2744;">' + d.tenant + '</td>'
+        + '<td style="padding:7px 10px;vertical-align:top;color:#555;white-space:nowrap;">' + d.sf + '</td>'
+        + '<td style="padding:7px 10px;vertical-align:top;"><span style="font-size:11px;font-weight:700;color:' + fc + ';">' + d.firm + '</span></td>'
+        + '<td style="padding:7px 10px;vertical-align:top;font-size:11px;color:#444;">' + d.broker + '</td>'
+        + '<td style="padding:7px 10px;vertical-align:top;font-size:11px;color:#555;">' + d.loc + '</td>'
+        + '<td style="padding:7px 10px;vertical-align:top;font-size:11px;color:#555;white-space:nowrap;">' + d.type + '</td>'
+        + '<td style="padding:7px 10px;vertical-align:top;font-weight:700;color:#2ed573;font-size:11px;white-space:nowrap;">' + d.val + '</td>'
+        + '<td style="padding:7px 10px;vertical-align:top;font-size:11px;color:#555;max-width:240px;">' + d.notes + '</td>'
+        + '<td style="padding:7px 8px;vertical-align:top;text-align:center;">'
+          + '<button onclick="toggleTimNote(\'' + d.id + '\')" style="font-size:10px;background:none;border:1px solid #ddd;border-radius:5px;padding:2px 6px;cursor:pointer;color:#888;white-space:nowrap;">'
+            + '&#128221;<span id="tim-note-dot-' + d.id + '" style="display:' + dotVis + ';margin-left:2px;width:6px;height:6px;border-radius:50%;background:#ffa502;vertical-align:middle;display:' + dotVis + ';"></span>'
+          + '</button>'
+        + '</td>'
+        + '</tr>'
+        + '<tr id="tim-note-row-' + d.id + '" style="display:none;background:#fffbf0;">'
+          + '<td colspan="10" style="padding:6px 10px 8px 10px;">'
+            + '<textarea id="tim-note-text-' + d.id + '" placeholder="Add a note about ' + d.tenant.replace(/'/g,'') + '..." style="width:100%;font-size:11px;border:1px solid #e8d87a;border-radius:5px;padding:5px 8px;resize:vertical;min-height:44px;font-family:inherit;box-sizing:border-box;background:#fffbe6;" onblur="saveTimNote(\'' + d.id + '\')"></textarea>'
+          + '</td>'
+        + '</tr>';
+    });
+    tbody.innerHTML = html;
+    filterTIMs();
+  }
+
+  function filterTIMs() {
+    var search = (document.getElementById('tim-search') ? document.getElementById('tim-search').value : '').toLowerCase();
+    var tier   = document.getElementById('tim-tier')     ? document.getElementById('tim-tier').value     : '';
+    var firmV  = document.getElementById('tim-firm')     ? document.getElementById('tim-firm').value.toLowerCase().replace('&amp;','&') : '';
+    var typeV  = document.getElementById('tim-type')     ? document.getElementById('tim-type').value.toLowerCase().replace('&amp;','') : '';
+    var srcV   = document.getElementById('tim-source-f') ? document.getElementById('tim-source-f').value : '';
+    var rows   = document.querySelectorAll('#tim-tbody tr.tim-data-row');
+    var visible = 0;
+    rows.forEach(function(row) {
+      var noteRow = document.getElementById('tim-note-row-' + row.dataset.id);
+      var show = true;
+      if (search && row.dataset.search.indexOf(search) === -1) show = false;
+      if (tier   && row.dataset.tier !== tier)                  show = false;
+      if (firmV  && row.dataset.firm.indexOf(firmV) === -1)     show = false;
+      if (typeV  && row.dataset.type.indexOf(typeV) === -1)     show = false;
+      if (srcV   && row.dataset.src !== srcV)                   show = false;
+      row.style.display = show ? '' : 'none';
+      if (noteRow) noteRow.style.display = (show && noteRow.style.display !== 'none') ? '' : (show ? 'none' : 'none');
+      if (show) visible++;
+    });
+    var vc = document.getElementById('tim-vis-count');
+    var tc = document.getElementById('tim-tot-count');
+    if (vc) vc.textContent = visible;
+    if (tc) tc.textContent = TIM_DATA.length;
+  }
+
+  function resetTimFilters() {
+    ['tim-search','tim-tier','tim-firm','tim-type','tim-source-f'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) { if (el.tagName === 'INPUT') el.value = ''; else el.selectedIndex = 0; }
+    });
+    filterTIMs();
+  }
+
+  // Enhanced toggleTimNote: handles both table rows and legacy card panels
+  var _origToggleTimNote = toggleTimNote;
+  toggleTimNote = function(id) {
+    var noteRow = document.getElementById('tim-note-row-' + id);
+    if (noteRow) {
+      var isOpen = noteRow.style.display !== 'none';
+      noteRow.style.display = isOpen ? 'none' : '';
+      if (!isOpen) {
+        var ta = document.getElementById('tim-note-text-' + id);
+        if (ta) { ta.value = localStorage.getItem('tim-note-' + id) || ''; ta.focus(); }
+      }
+    } else {
+      _origToggleTimNote(id);
+    }
+  };
+
   // --- RFP MODAL ---
   function showAddRFPModal() {
     var modal = document.getElementById('rfp-modal');
@@ -2473,7 +2185,8 @@
       }
     });
     // TIM note dots
-    ['amd','archer-aviation','gm','nvidia','stryker','asml','lam-research','undisclosed-ryan-adlesh','derek-cuschieri','zoom','xai-elon-musk','illumio','mediatek','marvell','hitachi','guardant-health','bloom-energy','etched-ai-apex','stryker-apex','adlesh-apex-120k','ayar-labs-genesis','gsme-genesis','genista-genesis','alpha-omega-genesis','pcb-amal-genesis','figure-ai-genesis','ayar-labs-quad','marvell-quad','d-matrix-quad','atr-quad'].forEach(function(id) {
+    // Near-Deal Watch card note dots (table rows are handled by renderTIMTable)
+    ['ayar-watch','gsme-watch','atr-watch'].forEach(function(id) {
       if (localStorage.getItem('tim-note-' + id)) {
         var dot = document.getElementById('tim-note-dot-' + id);
         if (dot) dot.style.display = 'inline-block';
