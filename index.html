@@ -245,7 +245,7 @@
 <div class="header">
   <div class="header-left">
     <h1>SBC BD Command Dashboard</h1>
-    <div class="sub">Week of May 12&ndash;16, 2026 &nbsp;·&nbsp; Adam Tafralis &nbsp;·&nbsp; TIM-Powered &nbsp;·&nbsp; For: Adam + JB Cahoon</div>
+    <div class="sub">Week of June 1, 2026 &nbsp;·&nbsp; Adam Tafralis &nbsp;·&nbsp; TIM-Powered &nbsp;·&nbsp; For: Adam + JB Cahoon</div>
   </div>
   <div class="header-stats">
     <div class="hstat">
@@ -253,7 +253,7 @@
       <div class="lbl">Total Bids Pipeline</div>
     </div>
     <div class="hstat">
-      <div class="val blue">85</div>
+      <div class="val blue">49</div>
       <div class="lbl">TIM Leads</div>
     </div>
     <div class="hstat">
@@ -312,8 +312,8 @@
             </div>
           </div>
           <div class="jb-col">
-            <div class="jb-num">85</div>
-            <div class="jb-lbl">TIM Active Requirements (4/20/26)</div>
+            <div class="jb-num">49</div>
+            <div class="jb-lbl">TIM Active Requirements (May 2026)</div>
             <div class="jb-items" style="margin-top:10px;">
               <div class="jb-item"><span>Total SF in market</span><span class="jv">6.4M – 9.4M SF</span></div>
               <div class="jb-item"><span>Tier 1 (200k+ SF)</span><span class="jv">12 reqs · $1B+ potential</span></div>
@@ -485,6 +485,91 @@
             <button onclick="saveIntelNote('nvidia-intel')" style="margin-top:3px; font-size:10px; background:#ffa502; color:white; border:none; border-radius:5px; padding:2px 8px; cursor:pointer; font-weight:600;">Save</button>
           </div>
         </div>
+        <!-- ── MAY 2026 COMPS ── -->
+        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #0070c0;" data-intel-id="pan-renewal">
+          <div style="font-size:10px; font-weight:700; color:#0070c0; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">&#x1F4CB; Lease Comp</div>
+          <div style="font-size:12px; font-weight:700; color:#1a2744;">Palo Alto Networks &mdash; 1M SF Renewal</div>
+          <div style="font-size:11px; color:#555; margin-top:3px;">$3.825 NNN + 2% annual &bull; 12-yr term &bull; $72.50 TI/SF &bull; SNVL/SC</div>
+          <div style="font-size:11px; color:#e85d04; margin-top:4px;">Benchmark: $72.50/SF TI allowance for large Fortune 500 renewal</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleIntelNote('pan-renewal')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="intel-note-dot-pan-renewal" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="intel-note-panel-pan-renewal" style="display:none; margin-top:4px;">
+            <textarea id="intel-note-text-pan-renewal" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;"></textarea>
+            <button onclick="saveIntelNote('pan-renewal')" style="margin-top:3px; font-size:10px; background:#ffa502; color:white; border:none; border-radius:5px; padding:2px 8px; cursor:pointer; font-weight:600;">Save</button>
+          </div>
+        </div>
+        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #0070c0;" data-intel-id="womble-comp">
+          <div style="font-size:10px; font-weight:700; color:#0070c0; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">&#x1F4CB; Lease Comp</div>
+          <div style="font-size:12px; font-weight:700; color:#1a2744;">Womble Bond Dickinson &mdash; 13,380 SF</div>
+          <div style="font-size:11px; color:#555; margin-top:3px;">$3.75 NNN &bull; 130mo term &bull; 10 free months &bull; <strong>$150 TI/SF</strong> &bull; Mission Towers SJ</div>
+          <div style="font-size:11px; color:#e85d04; margin-top:4px;">Benchmark: $150/SF TI allowance = premium law firm fit-out comp</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleIntelNote('womble-comp')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="intel-note-dot-womble-comp" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="intel-note-panel-womble-comp" style="display:none; margin-top:4px;">
+            <textarea id="intel-note-text-womble-comp" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;"></textarea>
+            <button onclick="saveIntelNote('womble-comp')" style="margin-top:3px; font-size:10px; background:#ffa502; color:white; border:none; border-radius:5px; padding:2px 8px; cursor:pointer; font-weight:600;">Save</button>
+          </div>
+        </div>
+        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #0070c0;" data-intel-id="axiato-comp">
+          <div style="font-size:10px; font-weight:700; color:#0070c0; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">&#x1F4CB; Lease Comp</div>
+          <div style="font-size:12px; font-weight:700; color:#1a2744;">HPP / Axiato &mdash; 28,930 SF</div>
+          <div style="font-size:11px; color:#555; margin-top:3px;">$7.70 NNN &bull; 7 free mo &bull; 72mo term &bull; <strong>$80 TI/SF LL Turnkey</strong> &bull; 1741 Technology Dr SJ</div>
+          <div style="font-size:11px; color:#e85d04; margin-top:4px;">Broker: JLL (Long / Dettmer) &bull; Benchmark for mid-size Class A TI</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleIntelNote('axiato-comp')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="intel-note-dot-axiato-comp" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="intel-note-panel-axiato-comp" style="display:none; margin-top:4px;">
+            <textarea id="intel-note-text-axiato-comp" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;"></textarea>
+            <button onclick="saveIntelNote('axiato-comp')" style="margin-top:3px; font-size:10px; background:#ffa502; color:white; border:none; border-radius:5px; padding:2px 8px; cursor:pointer; font-weight:600;">Save</button>
+          </div>
+        </div>
+        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #f59f00;" data-intel-id="skhynix-purchase">
+          <div style="font-size:10px; font-weight:700; color:#f59f00; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">&#x1F3E2; User Purchase</div>
+          <div style="font-size:12px; font-weight:700; color:#1a2744;">SK Hynix &mdash; PLC Optical Court</div>
+          <div style="font-size:11px; color:#555; margin-top:3px;">$49.5M &bull; <strong>$440/SF</strong> &bull; 10,000 amps &bull; San Jose &bull; Direct (no broker)</div>
+          <div style="font-size:11px; color:#e85d04; margin-top:4px;">User buy at $440/SF with 10k amp power req = TI build-out opportunity</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleIntelNote('skhynix-purchase')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="intel-note-dot-skhynix-purchase" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="intel-note-panel-skhynix-purchase" style="display:none; margin-top:4px;">
+            <textarea id="intel-note-text-skhynix-purchase" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;"></textarea>
+            <button onclick="saveIntelNote('skhynix-purchase')" style="margin-top:3px; font-size:10px; background:#ffa502; color:white; border:none; border-radius:5px; padding:2px 8px; cursor:pointer; font-weight:600;">Save</button>
+          </div>
+        </div>
+        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #7c3aed;" data-intel-id="assembly-first">
+          <div style="font-size:10px; font-weight:700; color:#7c3aed; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">&#x1F3E2; Investment Sale</div>
+          <div style="font-size:12px; font-weight:700; color:#1a2744;">Assembly @ First &mdash; 490k SF</div>
+          <div style="font-size:11px; color:#555; margin-top:3px;">Preylock buying at <strong>$570/SF</strong> &bull; San Jose &bull; 490,000 SF project</div>
+          <div style="font-size:11px; color:#e85d04; margin-top:4px;">New ownership = potential TI/repositioning work. Watch for GC RFP.</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleIntelNote('assembly-first')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="intel-note-dot-assembly-first" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="intel-note-panel-assembly-first" style="display:none; margin-top:4px;">
+            <textarea id="intel-note-text-assembly-first" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;"></textarea>
+            <button onclick="saveIntelNote('assembly-first')" style="margin-top:3px; font-size:10px; background:#ffa502; color:white; border:none; border-radius:5px; padding:2px 8px; cursor:pointer; font-weight:600;">Save</button>
+          </div>
+        </div>
+        <div style="background:white; border-radius:8px; padding:10px 12px; border-left:3px solid #e85d04;" data-intel-id="google-quad-intel">
+          <div style="font-size:10px; font-weight:700; color:#e85d04; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:3px;">&#x1F4CC; Market Rumor</div>
+          <div style="font-size:12px; font-weight:700; color:#1a2744;">Google / The Quad &mdash; $2M/month</div>
+          <div style="font-size:11px; color:#555; margin-top:3px;">Lease extension includes $2M/month restoration payment &bull; Restriction: cannot lease to OpenAI</div>
+          <div style="font-size:11px; color:#e85d04; margin-top:4px;">Restoration payment = future TI scope at The Quad. Watch closely.</div>
+          <div style="margin-top:6px; border-top:1px solid #f0f2f5; padding-top:5px; display:flex; align-items:center; gap:5px;">
+            <button onclick="toggleIntelNote('google-quad-intel')" style="font-size:10px; background:none; border:1px solid #ddd; border-radius:5px; padding:2px 7px; cursor:pointer; color:#888;">&#x1F4DD; Note</button>
+            <span id="intel-note-dot-google-quad-intel" style="display:none; width:7px; height:7px; border-radius:50%; background:#ffa502; flex-shrink:0;"></span>
+          </div>
+          <div id="intel-note-panel-google-quad-intel" style="display:none; margin-top:4px;">
+            <textarea id="intel-note-text-google-quad-intel" placeholder="Add a note..." style="width:100%; font-size:11px; border:1px solid #ddd; border-radius:5px; padding:4px 6px; resize:vertical; min-height:44px; font-family:inherit; box-sizing:border-box;"></textarea>
+            <button onclick="saveIntelNote('google-quad-intel')" style="margin-top:3px; font-size:10px; background:#ffa502; color:white; border:none; border-radius:5px; padding:2px 8px; cursor:pointer; font-weight:600;">Save</button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -525,8 +610,8 @@
     <!-- TOP TIM BROKERS BY $ POTENTIAL -->
     <div style="background:white; border-radius:10px; box-shadow:0 1px 4px rgba(0,0,0,0.07); overflow:hidden; margin-bottom:16px;">
       <div style="background:#1a2744; padding:10px 14px; display:flex; align-items:center; gap:10px;">
-        <span style="font-size:11px; font-weight:700; color:#8fa3c8; text-transform:uppercase; letter-spacing:0.5px;">🔥 Current TIM Brokers — $ Potential in Market Right Now (4/20/2026)</span>
-        <span style="font-size:11px; color:#4a9eff; margin-left:auto;">Source: TIM April 2026</span>
+        <span style="font-size:11px; font-weight:700; color:#8fa3c8; text-transform:uppercase; letter-spacing:0.5px;">🔥 Current TIM Brokers — $ Potential in Market Right Now (May 2026)</span>
+        <span style="font-size:11px; color:#4a9eff; margin-left:auto;">Source: TIM May 2026</span>
       </div>
       <table class="funnel-table" style="margin-bottom:0;">
         <thead>
@@ -1043,7 +1128,7 @@
   <div id="tab-tim" class="section-tab">
     <div style="margin-top:16px;">
       <div style="background:#fff0cc; border-radius:8px; padding:10px 14px; margin-bottom:14px; font-size:12px; color:#7a4f00;">
-        <strong>📡 TIM Sources:</strong> Bay Area Broker Network · May 2026 · 35 Active Requirements · 6.4M–9.4M SF in market &nbsp;|&nbsp;
+        <strong>📡 TIM Sources:</strong> Bay Area Broker Network · May 2026 · 49 Active Requirements · 6.4M–9.4M SF in market &nbsp;|&nbsp;
         <strong>Portfolio Intelligence:</strong> C&amp;W May 19 · Apex/Quad/Genesis Point · 40+ Prospects ·
         <strong style="color:#c8100a;">SBC named as GC partner at Genesis Point (JB Cahoon)</strong>
       </div>
@@ -1206,7 +1291,7 @@
   <div id="tab-outreach" class="section-tab">
     <div style="margin-top:16px;">
       <div style="background:#e8f0ff; border-radius:8px; padding:10px 14px; margin-bottom:16px; font-size:12px; color:#1a3070;">
-        <strong>📅 Sprint:</strong> April 28 – May 12, 2026 · 14 priority brokers · Source: TIM 4/20/2026 · Click card header to mark contacted · Click <strong>📧 Correspondence</strong> to log/view emails &amp; calls
+        <strong>📅 Sprint:</strong> June 1–13, 2026 · 18 priority brokers · Source: TIM May 2026 · Click card header to mark contacted · Click <strong>📧 Correspondence</strong> to log/view emails &amp; calls
       </div>
 
       <!-- HOT / ACTION NEEDED -->
@@ -1319,6 +1404,168 @@
         </div>
 
       </div>
+
+      <div class="divider"></div>
+
+      <!-- NEW JUNE 2026 — ACTIVE DEALS / NEW INTROS -->
+      <div class="sec-header">
+        <span class="sec-badge badge-red">New — June 2026</span>
+        <span class="sec-title">Active Deals &amp; Fresh Intros — Reach Out Now</span>
+        <span class="sec-count">5 contacts</span>
+      </div>
+      <div class="contact-grid">
+
+        <div class="contact-card hot" data-broker-id="mark-george" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Mark George</div>
+              <div class="contact-co">Cresa — Bay Area</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip red">🚨 BOARD DECIDING NOW</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">Ayar Labs — Genesis Point</span>
+          </div>
+          <div class="card-req">Ayar Labs — 92,764 SF · 108mo · $2.95 NNN · $50 TIA · Genesis Point NSJ + Quad 100-150k</div>
+          <div class="card-note">SBC named as GC partner on Ayar Labs deal. Board deciding between Genesis Point and Sobrato. Call Mark George immediately — this is the most time-sensitive deal in the pipeline.</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('mark-george', this)">📧 Correspondence <span class="corr-count" id="cnt-mark-george">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-mark-george" style="display:none;">
+              <div class="corr-timeline" id="timeline-mark-george"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-mark-george"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-mark-george">
+                </div>
+                <textarea class="corr-text-input" id="text-mark-george" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('mark-george')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card hot" data-broker-id="chris-dambrosia" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Chris D'Ambrosia</div>
+              <div class="contact-co">Cushman &amp; Wakefield — San Jose</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip red">🔥 TIER 1</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">Archer Aviation — 5,000 amps</span>
+          </div>
+          <div class="card-req">Archer Aviation 400–500k SF · MTV / SNVL · 5,000 amps @ 480V required</div>
+          <div class="card-note">Largest single deal in TIM alongside Bloom Energy. Massive high-power R&D/office shell TI. SBC's power infrastructure experience is the pitch. Co-repping with Jeff Cushman.</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('chris-dambrosia', this)">📧 Correspondence <span class="corr-count" id="cnt-chris-dambrosia">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-chris-dambrosia" style="display:none;">
+              <div class="corr-timeline" id="timeline-chris-dambrosia"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-chris-dambrosia"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-chris-dambrosia">
+                </div>
+                <textarea class="corr-text-input" id="text-chris-dambrosia" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('chris-dambrosia')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card hot" data-broker-id="alex-lagemann" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Alex Lagemann</div>
+              <div class="contact-co">JLL — Silicon Valley</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip" style="background:#22c55e;color:white;">NEAR CLOSE — GSME</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">🟠 TIER 2</span>
+          </div>
+          <div class="card-req">GSME 44,644 SF · Genesis Point NSJ · Aug 2026 LCD · PDF Solutions 60k SF</div>
+          <div class="card-note">GSME deal is nearly signed — waiting on LL draft lease. 90mo, 6 free months, $20 TIA. Once signed they need a GC fast. SBC has Genesis Point connection (JB power work). Get on shortlist NOW.</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('alex-lagemann', this)">📧 Correspondence <span class="corr-count" id="cnt-alex-lagemann">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-alex-lagemann" style="display:none;">
+              <div class="corr-timeline" id="timeline-alex-lagemann"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-alex-lagemann"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-alex-lagemann">
+                </div>
+                <textarea class="corr-text-input" id="text-alex-lagemann" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('alex-lagemann')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card" data-broker-id="kate-myers" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">Kate Myers</div>
+              <div class="contact-co">Cushman &amp; Wakefield — Silicon Valley</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip red">🔥 RFP ACTIVE</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">ATR @ The Quad</span>
+          </div>
+          <div class="card-req">ATR — 6–8k SF · The Quad, Santa Clara · 5-yr term · TI at/below market-ready</div>
+          <div class="card-note">Small deal but RFP is ACTIVE right now. The Quad is an SBC target property. Confirm SBC is on the short list — fast win to get the Quad relationship started.</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('kate-myers', this)">📧 Correspondence <span class="corr-count" id="cnt-kate-myers">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-kate-myers" style="display:none;">
+              <div class="corr-timeline" id="timeline-kate-myers"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-kate-myers"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-kate-myers">
+                </div>
+                <textarea class="corr-text-input" id="text-kate-myers" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('kate-myers')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-card hot" data-broker-id="david-hiebert" onclick="toggleDone(this)">
+          <div class="card-top">
+            <div>
+              <div class="contact-name">David Hiebert</div>
+              <div class="contact-co">Cushman &amp; Wakefield — Bay Area</div>
+            </div>
+            <div class="check"><span class="check-inner">✓</span></div>
+          </div>
+          <div class="card-chips">
+            <span class="chip green">✅ Intro 5/28 via JB</span>
+            <span class="chip" style="background:#fff0cc;color:#7a4f00;">Sand Hill Properties</span>
+          </div>
+          <div class="card-req">Sand Hill Properties — 3300 El Camino Real, Palo Alto · ~60k SF · New office development</div>
+          <div class="card-note">JB introduced SBC via David on 5/28. New office development project — precon opportunity. Follow up within the week to keep the momentum from the intro.</div>
+          <div class="corr-section" onclick="event.stopPropagation()">
+            <div class="corr-toggle" onclick="toggleCorr('david-hiebert', this)">📧 Correspondence <span class="corr-count" id="cnt-david-hiebert">0 entries</span> ▾</div>
+            <div class="corr-panel" id="panel-david-hiebert" style="display:none;">
+              <div class="corr-timeline" id="timeline-david-hiebert"></div>
+              <div class="corr-add">
+                <div class="corr-add-row">
+                  <select class="corr-type-sel" id="type-david-hiebert"><option value="email">📧 Email</option><option value="call">📞 Call</option><option value="linkedin">💼 LinkedIn</option><option value="meeting">🤝 Meeting</option><option value="note">📝 Note</option></select>
+                  <input type="date" class="corr-date-input" id="date-david-hiebert">
+                </div>
+                <textarea class="corr-text-input" id="text-david-hiebert" placeholder="Subject / notes..."></textarea>
+                <div class="corr-footer"><button class="corr-add-btn" onclick="addCorr('david-hiebert')">+ Log Entry</button></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /new-june-2026 -->
 
       <div class="divider"></div>
 
@@ -1610,8 +1857,8 @@
             <span class="chip call">C&amp;W San Jose</span>
             <span class="chip" style="background:#fff0cc;color:#7a4f00;">🔥 TIM REQ</span>
           </div>
-          <div class="card-req">Guardant Health 100–150k R&D · Palo Alto / Mountain View</div>
-          <div class="card-note">Already in SBC sub list — warm relationship opportunity</div>
+          <div class="card-req">Etched AI 300–500k R&D (16k amps) · Guardant Health 100–150k · PCB Amalgamated 50–80k · d-Matrix 50–100k</div>
+          <div class="card-note">Biggest book in C&amp;W SJ — Etched AI alone is a monster high-power R&D deal needing 16k amps. SBC has the experience to pitch this. Already in sub list on Guardant.</div>
           <div class="corr-section" onclick="event.stopPropagation()">
             <div class="corr-toggle" onclick="toggleCorr('mike-mordaunt', this)">📧 Correspondence <span class="corr-count" id="cnt-mike-mordaunt">0 entries</span> ▾</div>
             <div class="corr-panel" id="panel-mike-mordaunt" style="display:none;">
@@ -1635,35 +1882,83 @@
 
 </div><!-- /body -->
 
-<div class="footer">SBC BD Command Dashboard · Week of May 12, 2026 · Adam Tafralis + JB Cahoon · South Bay Construction · Powered by Claw 🦞</div>
+<div class="footer">SBC BD Command Dashboard · Week of June 1, 2026 · Adam Tafratis + JB Cahoon · South Bay Construction · Powered by Claude</div>
 
 <script>
-  // ── OUTREACH TRACKER SYNC ──
-  // Maps BD Dashboard broker slugs → SBC Weekly Outreach Tracker data-id values
-  const TRACKER_STORAGE_KEY = 'sbc-outreach-apr29-2wk';
-  const TRACKER_MAP = {
-    'tom-taylor':          'c1',
-    'jeff-cushman':        'c2',
-    'andy-hueser':         'c3',
-    'john-mcmahon':        'c4',
-    'paul-mcmanus':        'c5',
-    'joe-long':            'c6',
-    'derek-cuschieri':     'c7',
-    'ryan-adlesh':         'c8',
-    'scott-mathisen':      'c9',
-    'mike-mordaunt':       'c10',
-    'bart-lammersen':      'c17',
-    'vince-machado':       'c23',
-    'maryjane-bengiveno':  'c29'
-  };
+  // ── OUTREACH SYNC BRIDGE v2 ──
+  // Shared localStorage key written by both this file and SBC-Outreach-Tracker.html
+  const SBC_SYNC_KEY = 'sbc_sync_touches_v2';
 
-  function getTrackerState() {
-    try { return JSON.parse(localStorage.getItem(TRACKER_STORAGE_KEY) || '{}'); }
+  // Dashboard broker-id → Outreach Tracker data-id
+  const SYNC_MAP = {
+    'derek-cuschieri':    'f-derek',
+    'andy-hueser':        't1-andy',
+    'maryjane-bengiveno': 't1-maryjane',
+    'tom-taylor':         't1-tom',
+    'jeff-cushman':       't1-jeff',
+    'john-mcmahon':       't1-mcmahon',
+    'paul-mcmanus':       't1-paul',
+    'joe-long':           't1-joe',
+    'ryan-adlesh':        't1-ryan',
+    'scott-mathisen':     't1-scott',
+    'mike-mordaunt':      't1-mike',
+    'vince-machado':      'C-0015',
+    'mark-george':        't2-mark-george',
+    'chris-dambrosia':    't2-chris-d',
+    'alex-lagemann':      't2-alex-l',
+    'kate-myers':         't2-kate-m',
+    'david-hiebert':      't2-david-h'
+  };
+  // Reverse: Outreach Tracker ID → Dashboard broker-id
+  const SYNC_MAP_REV = {};
+  Object.entries(SYNC_MAP).forEach(([dashId, tId]) => { SYNC_MAP_REV[tId] = dashId; });
+
+  function getSyncState() {
+    try { return JSON.parse(localStorage.getItem(SBC_SYNC_KEY) || '{}'); }
     catch(e) { return {}; }
   }
-  function setTrackerState(state) {
-    localStorage.setItem(TRACKER_STORAGE_KEY, JSON.stringify(state));
+
+  // Apply a full sync state object to the dashboard — marks cards done + auto-logs
+  function applySync(sync) {
+    const today = new Date().toISOString().slice(0,10);
+    Object.entries(sync).forEach(([trackerId, data]) => {
+      const dashId = SYNC_MAP_REV[trackerId];
+      if (!dashId) return;
+      const card = document.querySelector('[data-broker-id="' + dashId + '"]');
+      if (!card) return;
+      card.classList.add('done');
+      const bdState = getBdCheckedState();
+      bdState[dashId] = true;
+      localStorage.setItem('sbc_bd_checked_v1', JSON.stringify(bdState));
+      // Auto-log a correspondence entry if not already present for this date
+      const dateStr = data.touchedAt ? data.touchedAt.slice(0,10) : today;
+      const entries = getCorr(dashId);
+      const alreadyLogged = entries.some(e => e.date === dateStr && e.text.includes('Outreach Sprint'));
+      if (!alreadyLogged) {
+        entries.push({ date: dateStr, type: 'note', text: '✅ Reached in Outreach Sprint Tracker' });
+        saveCorr(dashId, entries);
+        renderCorr(dashId);
+      }
+    });
   }
+
+  // Real-time listener — fires when Outreach Tracker changes the sync key in another tab
+  window.addEventListener('storage', function(e) {
+    if (e.key !== SBC_SYNC_KEY) return;
+    const newSync = JSON.parse(e.newValue || '{}');
+    const oldSync = JSON.parse(e.oldValue || '{}');
+    // Un-mark any contacts removed from the tracker
+    Object.keys(oldSync).forEach(tId => {
+      if (!newSync[tId]) {
+        const dashId = SYNC_MAP_REV[tId];
+        if (dashId) {
+          const card = document.querySelector('[data-broker-id="' + dashId + '"]');
+          if (card) card.classList.remove('done');
+        }
+      }
+    });
+    applySync(newSync);
+  });
 
   // ── TAB NAVIGATION ──
   function showTab(name) {
@@ -1677,17 +1972,23 @@
     card.classList.toggle('done');
     const isDone = card.classList.contains('done');
     const brokerId = card.dataset.brokerId;
-    // Sync to Weekly Outreach Tracker
-    if (brokerId && TRACKER_MAP[brokerId]) {
-      const state = getTrackerState();
-      state[TRACKER_MAP[brokerId]] = isDone;
-      setTrackerState(state);
-    }
-    // Also persist in BD Dashboard own store
-    if (brokerId) {
-      const bdState = getBdCheckedState();
-      bdState[brokerId] = isDone;
-      localStorage.setItem('sbc_bd_checked_v1', JSON.stringify(bdState));
+    if (!brokerId) return;
+    // Persist in BD Dashboard store
+    const bdState = getBdCheckedState();
+    bdState[brokerId] = isDone;
+    localStorage.setItem('sbc_bd_checked_v1', JSON.stringify(bdState));
+    // Write to shared sync key so Outreach Tracker picks it up
+    const trackerId = SYNC_MAP[brokerId];
+    if (trackerId) {
+      const sync = getSyncState();
+      if (isDone) {
+        const name = (card.querySelector('.contact-name')?.textContent || brokerId).trim();
+        const company = (card.querySelector('.contact-co')?.textContent || '').trim();
+        sync[trackerId] = { name, company, touchedAt: new Date().toISOString(), source: 'bd-dashboard' };
+      } else {
+        delete sync[trackerId];
+      }
+      localStorage.setItem(SBC_SYNC_KEY, JSON.stringify(sync));
     }
   }
 
@@ -1881,18 +2182,12 @@
     renderReferrals();
     renderTIMTable();
 
-    // ── Sync checked state from Outreach Tracker ──
-    const trackerState = getTrackerState();
+    // ── Restore checked state: BD store first, then overlay Outreach Tracker sync ──
     const bdState = getBdCheckedState();
     document.querySelectorAll('.contact-card[data-broker-id]').forEach(card => {
-      const brokerId = card.dataset.brokerId;
-      const trackerId = TRACKER_MAP[brokerId];
-      // Outreach Tracker is source of truth if it has a value; fall back to BD store
-      const isDone = trackerId !== undefined
-        ? !!trackerState[trackerId]
-        : !!bdState[brokerId];
-      card.classList.toggle('done', isDone);
+      card.classList.toggle('done', !!bdState[card.dataset.brokerId]);
     });
+    applySync(getSyncState()); // Outreach Tracker touches are source of truth — overrides BD store
   });
   // --- INTEL NOTES ---
   function toggleIntelNote(id) {
