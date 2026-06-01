@@ -79,9 +79,12 @@
 </head>
 <body>
 <div class="header">
-  <div>
-    <h1>SBC Outreach Sprint</h1>
-    <div class="week">Week of May 20, 2026 &nbsp;·&nbsp; Adam Tafralis &nbsp;·&nbsp; CRM-Powered &nbsp;·&nbsp; 60 contacts/week</div>
+  <div style="display:flex; align-items:center; gap:14px;">
+    <img src="sbc-logo-mark.png" alt="South Bay Construction" style="height:46px; width:auto; background:white; border-radius:8px; padding:5px; flex-shrink:0;">
+    <div>
+      <h1>SBC Outreach Sprint</h1>
+      <div class="week">Week of June 1, 2026 &nbsp;·&nbsp; Adam Tafralis &nbsp;·&nbsp; CRM-Powered &nbsp;·&nbsp; 60 contacts/week</div>
+    </div>
   </div>
   <div class="header-right">
     <div class="sprint-nav">
@@ -2498,6 +2501,23 @@ const SPRINT_KEY_PREFIX = 'sbc-sprint-v2-';
 const TOUCH_PREFIX = 'sbc-touch-';
 const SPRINT_NUM_KEY = 'sbc-sprint-number-w20';
 
+// ── SYNC BRIDGE ── shared key read/written by BD Command Dashboard too
+const SBC_SYNC_KEY = 'sbc_sync_touches_v2';
+function syncWrite(id, name, company) {
+  try {
+    const sync = JSON.parse(localStorage.getItem(SBC_SYNC_KEY) || '{}');
+    sync[id] = { name: (name||'').trim(), company: (company||'').trim(), touchedAt: new Date().toISOString(), source: 'outreach-tracker' };
+    localStorage.setItem(SBC_SYNC_KEY, JSON.stringify(sync));
+  } catch(e) {}
+}
+function syncClear(id) {
+  try {
+    const sync = JSON.parse(localStorage.getItem(SBC_SYNC_KEY) || '{}');
+    delete sync[id];
+    localStorage.setItem(SBC_SYNC_KEY, JSON.stringify(sync));
+  } catch(e) {}
+}
+
 // Pre-seeded contacts already reached out to before this tracker was built
 // These will be marked as touched on first load so Tier 3 skips them
 const PRE_TOUCHED = {
@@ -2626,7 +2646,15 @@ function toggle(card) {
   state[id] = !wasDone;
   saveSprintState(state);
   card.classList.toggle('done', state[id]);
-  if (state[id]) { setTouch(id); } else { clearTouch(id); }
+  if (state[id]) {
+    setTouch(id);
+    syncWrite(id,
+      card.querySelector('.contact-name')?.textContent,
+      card.querySelector('.contact-company')?.textContent);
+  } else {
+    clearTouch(id);
+    syncClear(id);
+  }
   updateCounts();
 }
 
