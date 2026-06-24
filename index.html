@@ -256,7 +256,7 @@
       <div class="lbl">Active Bids (Sub + Bidding)</div>
     </div>
     <div class="hstat">
-      <div class="val blue">49</div>
+      <div class="val blue">59</div>
       <div class="lbl">TIM Leads</div>
     </div>
     <div class="hstat">
@@ -322,13 +322,14 @@
             </div>
           </div>
           <div class="jb-col">
-            <div class="jb-num">49</div>
-            <div class="jb-lbl">TIM Active Requirements (June 2026)</div>
+            <div class="jb-num">59</div>
+            <div class="jb-lbl">TIM Active Requirements (June 2026) · +10 from market update</div>
             <div class="jb-items" style="margin-top:10px;">
-              <div class="jb-item"><span>Total SF in market</span><span class="jv">6.4M – 9.4M SF</span></div>
-              <div class="jb-item"><span>Tier 1 (200k+ SF)</span><span class="jv">12 reqs · $1B+ potential</span></div>
-              <div class="jb-item"><span>Tier 2 (75k–200k SF)</span><span class="jv">30+ reqs</span></div>
-              <div class="jb-item"><span>Key broker focus</span><span class="jv">Tom Taylor, J. Cushman, A. Hueser</span></div>
+              <div class="jb-item"><span>Total SF in market</span><span class="jv">7.4M – 11.4M SF (incl. Quanta 1M+)</span></div>
+              <div class="jb-item"><span>Tier 1 (200k+ SF)</span><span class="jv">14 reqs · $1B+ potential</span></div>
+              <div class="jb-item"><span>Tier 2 (75k–200k SF)</span><span class="jv">35+ reqs</span></div>
+              <div class="jb-item"><span style="color:#e85d04; font-weight:600;">&#x26A1; New 6/24</span><span class="jv" style="color:#e85d04;">Quanta 1M SF · Skydio 250k · Waymo 3901 N 1st (confirmed) · Nooks SCIF 50-60k · Rhoda AI signed · Kodiak · ECL 2175 MCB (former fab)</span></div>
+              <div class="jb-item"><span>Key broker focus</span><span class="jv">Tom Taylor, J. Cushman, A. Hueser, Harvest (Skydio), Brett Taylor (Rhoda AI)</span></div>
             </div>
           </div>
           <div class="jb-col">
@@ -2280,7 +2281,7 @@
     // ═══ TIER 1 — Active Requirements (200k+ SF) ═══
     {id:'amd',         tier:'1', tenant:'AMD',                        sf:'300k–700k',  firm:'CBRE',       broker:'Tom Taylor',                       loc:'MV / NSJ / SC',     type:'Office',     val:'~$210M',         src:'TIM',       notes:'RFPs out, 3 properties shortlisted. Renewal/expansion likely.'},
     {id:'scc',         tier:'1', tenant:'Santa Clara County',         sf:'200k–500k',  firm:'Multiple',   broker:'Multiple Brokers',                 loc:'SC / SJ',           type:'Office',     val:'~$75M',          src:'TIM',       notes:'Owner-user purchase. 12–36 month timeline.'},
-    {id:'archer',      tier:'1', tenant:'Archer Aviation',            sf:'400k–500k',  firm:'C&W',        broker:'Jeff Cushman / Chris D\'Ambrosia', loc:'MTV / SNVL',        type:'Office',     val:'~$150M',         src:'TIM',       notes:'1 building. 5,000 amps @ 480V required. Largest single deal in TIM.'},
+    {id:'archer',      tier:'1', tenant:'Archer Aviation',            sf:'400k–500k',  firm:'C&W',        broker:'Jeff Cushman / Chris D\'Ambrosia', loc:'Morgan Hill / SNVL',type:'Office',     val:'~$150M',         src:'TIM',       notes:'⚡ UPDATE 6/24: IN LEASES w/ Trammell Crow in Morgan Hill on 500k SF — NOT SIGNED YET. Short-term leases active at 190 & 210 Tasman. 5,000 amps @ 480V required. Largest single deal in TIM.'},
     {id:'gm',          tier:'1', tenant:'GM',                         sf:'300k–400k',  firm:'JLL',        broker:'Andy Hueser',                      loc:'SNVL / MV',         type:'Office/Lab', val:'~$105M',         src:'TIM',       notes:'Fortune 100. Needs 100k SF lab component. Andy Hueser email bounced — call (408) 982-8417.'},
     {id:'nvidia',      tier:'1', tenant:'Nvidia',                     sf:'200k–400k',  firm:'Colliers',   broker:'Paul McManus',                     loc:'NSJ / SC',          type:'R&D',        val:'~$90M',          src:'TIM',       notes:'Multiple locations. 5,500 amps min. Rumored buying near Montague/Walsh.'},
     {id:'stryker',     tier:'1', tenant:'Stryker',                    sf:'200k–300k',  firm:'Colliers',   broker:'John McMahon',                     loc:'South San Jose',    type:'R&D',        val:'~$75M',          src:'TIM',       notes:'24 months from lease execution date.'},
@@ -2324,10 +2325,21 @@
     {id:'alpha-omega', tier:'2', tenant:'Alpha Omega Semiconductor',  sf:'80k–100k',   firm:'Newmark',    broker:'Tom Sweeney / Chad Leiker',        loc:'Genesis Point • NSJ', type:'R&D', val:'~$16M–$20M',src:'Portfolio',notes:'Owner user. 4 yrs left on current lease. Pricing likely above target.'},
     {id:'pcb-amal',    tier:'2', tenant:'PCB Amalgamated',            sf:'50k–80k',    firm:'C&W',        broker:'Mike Mordaunt',                    loc:'Genesis Point • NSJ', type:'R&D', val:'~$5M–$8M',  src:'Portfolio',notes:'Purchase proposal $320/SF on 2700 Zanker. Sunnyvale fell through — now Genesis.'},
     {id:'figure-ai',   tier:'2', tenant:'Figure AI',                  sf:'TBD',             firm:'Colliers',   broker:'Romy Zeid',                        loc:'Genesis Point • NSJ', type:'R&D', val:'TBD',            src:'Portfolio',notes:'Robotics R&D. Size/timing TBD. Being tracked.'},
-    {id:'ayar-quad',   tier:'1', tenant:'Ayar Labs (Quad) 🚨',  sf:'100k–150k',firm:'Cresa',   broker:'Mark George',                      loc:'Quad • Santa Clara',  type:'Lab', val:'~$20M–$37M',src:'Portfolio',notes:'SAME TENANT as Genesis near-deal. Board deciding NOW. 128mo, $2.75 NNN, $85 TIA. $200/SF contractor bids.'},
+    {id:'ayar-quad',   tier:'1', tenant:'Ayar Labs (Quad) 🚨',  sf:'100k–150k',firm:'Cresa',   broker:'Mark George',                      loc:'Quad • Santa Clara',  type:'Lab', val:'~$20M–$37M',src:'Portfolio',notes:'⚡ UPDATE 6/24: Asking RAISED to $3.25 NNN. Board deciding NOW. 128mo, $85 TIA. $200/SF contractor bids. Also: 150k SF req at Valley Tech w/ Southbay (separate deal).'},
     {id:'marvell-quad',tier:'2', tenant:'Marvell Semiconductor (Quad)',sf:'100k',           firm:'JLL',        broker:'Andy Heuser',                      loc:'Quad • Santa Clara',  type:'Office/R&D',val:'~$10M–$15M',src:'Portfolio',notes:'HQ move. Touring 3003 Tasman. Class A only. Still no direction from client as of 5/19.'},
     {id:'d-matrix',    tier:'2', tenant:'d-Matrix',                   sf:'50k–100k',   firm:'C&W',        broker:'Chris Errecart / Mike Mordaunt',   loc:'Quad • Santa Clara',  type:'Office/R&D',val:'~$5M–$15M', src:'Portfolio',notes:'In sublease, needs flexibility. 3-yr as-is term on table. 5/14: Draft out for client approval.'},
-    {id:'atr-quad',    tier:'2', tenant:'ATR',                        sf:'6k–8k',      firm:'C&W',        broker:'Kate Myers',                       loc:'Quad • Santa Clara',  type:'Office',val:'~$0.6M–$1.2M',src:'Portfolio',notes:'RFP submitted. 5-yr term. TI at or below market-ready work. Deal in motion 5/11.'}
+    {id:'atr-quad',    tier:'2', tenant:'ATR',                        sf:'6k–8k',      firm:'C&W',        broker:'Kate Myers',                       loc:'Quad • Santa Clara',  type:'Office',val:'~$0.6M–$1.2M',src:'Portfolio',notes:'RFP submitted. 5-yr term. TI at or below market-ready work. Deal in motion 5/11.'},
+    // ═══ NEW — Market Update June 24, 2026 ═══
+    {id:'quanta',      tier:'1', tenant:'Quanta',                     sf:'1M+ SF',     firm:'—',     broker:'—',                           loc:'Bay Area',          type:'R&D/Mfg',    val:'~$200M+',        src:'Market Intel',  notes:'⚡ NEW 6/24: 1M SF demand coming in Bay Area over next few years. Massive requirement — identify reps and get in front of this early.'},
+    {id:'skydio',      tier:'1', tenant:'Skydio',                     sf:'~250k',      firm:'—',     broker:'Harvest (renewal rep)',             loc:'Bay Area',          type:'R&D/Office', val:'~$75M',          src:'Market Intel',  notes:'⚡ NEW 6/24: Working on 250k SF renewal w/ Harvest. Currently short-term through July 2027 on Clearview. Rumor: blown out by Zoox in Hayward. Large TI opportunity on renewal.'},
+    {id:'waymo',       tier:'1', tenant:'Waymo',                      sf:'TBD',        firm:'—',     broker:'—',                           loc:'3901 N 1st, NSJ',   type:'R&D/Office', val:'TBD',            src:'Market Intel',  notes:'⚡ NEW 6/24: CONFIRMED — negotiating lease at 3901 N 1st. Adam confirming this deal directly. Follow up immediately for GC positioning.'},
+    {id:'nooks',       tier:'2', tenant:'Nooks (SCIF)',               sf:'50k–60k',    firm:'—',     broker:'Carrick / Greg Bennette',           loc:'Bay Area',          type:'SCIF/Office', val:'~$15M–$18M',    src:'Market Intel',  notes:'⚡ NEW 6/24: SCIF wework-type user. In market w/ Carrick & Greg Bennette. SCIF buildout = SBC specialty angle.'},
+    {id:'rhoda-ai',    tier:'2', tenant:'Rhoda AI',                   sf:'50k–60k',    firm:'—',     broker:'Brett Taylor',                     loc:'Sunnyvale Bus. Park',type:'Office/R&D', val:'~$15M–$18M',    src:'Market Intel',  notes:'⚡ NEW 6/24: SIGNED deal at Sunnyvale Business Park. Brett Taylor repped. Construction imminent — contact Brett Taylor for GC intro.'},
+    {id:'kodiak',      tier:'2', tenant:'Kodiak Robotics',            sf:'TBD',        firm:'—',     broker:'Miroyan',                          loc:'Bay Area',          type:'R&D',        val:'TBD',            src:'Market Intel',  notes:'⚡ NEW 6/24: Narrowed to 3-4 building options (Miroyan repping). Robotics R&D = specialized TI. Identify buildings and get in front of LL/broker.'},
+    {id:'1000-ent',    tier:'2', tenant:'Undisclosed',                sf:'~320k',      firm:'—',     broker:'—',                           loc:'1000 Enterprise',   type:'Office/R&D', val:'~$96M',          src:'Market Intel',  notes:'⚡ NEW 6/24: 320k SF lease being negotiated at 1000 Enterprise. Tenant unknown. Watch for GC assignment.'},
+    {id:'mv-120k',     tier:'2', tenant:'Undisclosed (Mtn View)',     sf:'~120k',      firm:'—',     broker:'—',                           loc:'Mountain View',     type:'Office/R&D', val:'~$36M',          src:'Market Intel',  notes:'⚡ NEW 6/24: 120k SF tenant touring tomorrow (as of 6/24). Identity unknown. Fast-moving — track who tours and follow up with LL/broker.'},
+    {id:'ecl-2175',    tier:'2', tenant:'ECL',                        sf:'TBD',        firm:'—',     broker:'—',                           loc:'2175 MCB',          type:'Lab/Mfg',    val:'TBD',            src:'Market Intel',  notes:'⚡ NEW 6/24: ECL leasing 2175 MCB — former fab. Former fab = major TI/renovation scope. High SBC relevance. Identify broker and get in front of TI.'},
+    {id:'hillspire',   tier:'2', tenant:'Hillspire',                  sf:'53,591',     firm:'C&W',   broker:'McManus / Tucker',                 loc:'201 Ravendale, BXP',type:'Office',     val:'~$16M',          src:'Market Intel',  notes:'⚡ NEW 6/24: SIGNED lease — 53,591 SF at 201 Ravendale from BXP. McManus/Tucker repped. TI construction imminent — contact Tucker/McManus for GC positioning.'}
   ];
 
   var TIM_FIRM_COLORS = {
