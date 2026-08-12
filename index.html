@@ -2275,6 +2275,17 @@
 
   // ── TIM FILTERABLE TABLE ──
   var TIM_DATA = [
+    // ═══ NEWEST FIRST — most recent market updates at top ═══
+    // ─── Market Update Aug 12, 2026 ───
+    {id:'750-moffett',   tier:'1', tenant:'Full-bldg user (undisclosed)', sf:'Full bldg', firm:'—', broker:'—', loc:'750 Moffett', type:'Office', val:'TBD', src:'Market Intel', notes:'⚡ NEW 8/12: Full-building user, 10-yr term, DIRECT — even with ~5 yrs left on Google\'s lease. Big full-building TI opportunity.'},
+    {id:'google-quad',   tier:'1', tenant:'Full-campus user (undisclosed)', sf:'~800k', firm:'—', broker:'—', loc:'Google Quad (4-bldg)', type:'Office/R&D', val:'~$200M+', src:'Market Intel', notes:'⚡ NEW 8/12: Multiple groups interested in the 4-building piece, but ownership solving for a FULL-CAMPUS user (~800k SF). Massive TI scope — track who lands it.'},
+    {id:'1300-laavenida',tier:'1', tenant:'Full-bldg user (paper)', sf:'233k', firm:'—', broker:'—', loc:'1300 La Avenida', type:'Office/R&D', val:'~$60M', src:'Market Intel', notes:'⚡ NEW 8/12: Trading paper on the full building — 233k SF. Deal in motion.'},
+    {id:'405-industrial',tier:'1', tenant:'Full-bldg user (paper)', sf:'240k', firm:'—', broker:'—', loc:'405 Industrial', type:'Industrial/R&D', val:'~$60M', src:'Market Intel', notes:'⚡ NEW 8/12: Full-building user trading paper — 240k SF. Deal in motion.'},
+    {id:'franklin-930',  tier:'2', tenant:'Reoccupied (undisclosed)', sf:'TBD', firm:'—', broker:'—', loc:'Franklin — Bldg 930', type:'Office', val:'TBD', src:'Market Intel', notes:'⚡ NEW 8/12: Franklin reoccupied building 930 through Jan 2028.'},
+    {id:'3475-deercreek',tier:'2', tenant:'In leases (undisclosed)', sf:'TBD', firm:'—', broker:'—', loc:'3475 Deer Creek', type:'Office/R&D', val:'TBD', src:'Market Intel', notes:'⚡ NEW 8/12: 3475 Deer Creek is in leases.'},
+    {id:'601-fullbldg',  tier:'2', tenant:'Full-bldg credit user', sf:'Full bldg', firm:'—', broker:'—', loc:'601', type:'Office', val:'TBD', src:'Market Intel', notes:'⚡ NEW 8/12: 601 has a full-building CREDIT user. Confirm exact building + broker.'},
+    {id:'1255-pear',     tier:'2', tenant:'Full-bldg user', sf:'160k', firm:'—', broker:'—', loc:'1255 Pear', type:'Office/R&D', val:'~$40M', src:'Market Intel', notes:'⚡ NEW 8/12: 1255 Pear has a full-building user — 160k SF.'},
+    {id:'4400-bohannon', tier:'2', tenant:'Full-bldg lease out', sf:'48k', firm:'—', broker:'—', loc:'4400 Bohannon, Menlo Corp Ctr', type:'Office', val:'~$12M', src:'Market Intel', notes:'⚡ NEW 8/12: Menlo Corporate Center — full-building lease out, 48k SF.'},
     // ═══ TIER 1 — Active Requirements (200k+ SF) ═══
     {id:'amd',         tier:'1', tenant:'AMD',                        sf:'300k–700k',  firm:'CBRE',       broker:'Tom Taylor',                       loc:'MV / NSJ / SC',     type:'Office',     val:'~$210M',         src:'TIM',       notes:'RFPs out, 3 properties shortlisted. Renewal/expansion likely.'},
     {id:'scc',         tier:'1', tenant:'Santa Clara County',         sf:'200k–500k',  firm:'Multiple',   broker:'Multiple Brokers',                 loc:'SC / SJ',           type:'Office',     val:'~$75M',          src:'TIM',       notes:'Owner-user purchase. 12–36 month timeline.'},
@@ -2337,16 +2348,6 @@
     {id:'mv-120k',     tier:'2', tenant:'Undisclosed (Mtn View)',     sf:'~120k',      firm:'—',     broker:'—',                           loc:'Mountain View',     type:'Office/R&D', val:'~$36M',          src:'Market Intel',  notes:'⚡ NEW 6/24: 120k SF tenant touring tomorrow (as of 6/24). Identity unknown. Fast-moving — track who tours and follow up with LL/broker.'},
     {id:'ecl-2175',    tier:'2', tenant:'ECL',                        sf:'TBD',        firm:'—',     broker:'—',                           loc:'2175 MCB',          type:'Lab/Mfg',    val:'TBD',            src:'Market Intel',  notes:'⚡ NEW 6/24: ECL leasing 2175 MCB — former fab. Former fab = major TI/renovation scope. High SBC relevance. Identify broker and get in front of TI.'},
     {id:'hillspire',   tier:'2', tenant:'Hillspire',                  sf:'53,591',     firm:'C&W',   broker:'McManus / Tucker',                 loc:'201 Ravendale, BXP',type:'Office',     val:'~$16M',          src:'Market Intel',  notes:'⚡ NEW 6/24: SIGNED lease — 53,591 SF at 201 Ravendale from BXP. McManus/Tucker repped. TI construction imminent — contact Tucker/McManus for GC positioning.'},
-    // ═══ NEW — Market Update Aug 12, 2026 ═══
-    {id:'750-moffett',   tier:'1', tenant:'Full-bldg user (undisclosed)', sf:'Full bldg', firm:'—', broker:'—', loc:'750 Moffett', type:'Office', val:'TBD', src:'Market Intel', notes:'⚡ NEW 8/12: Full-building user, 10-yr term, DIRECT — even with ~5 yrs left on Google\'s lease. Big full-building TI opportunity.'},
-    {id:'google-quad',   tier:'1', tenant:'Full-campus user (undisclosed)', sf:'~800k', firm:'—', broker:'—', loc:'Google Quad (4-bldg)', type:'Office/R&D', val:'~$200M+', src:'Market Intel', notes:'⚡ NEW 8/12: Multiple groups interested in the 4-building piece, but ownership solving for a FULL-CAMPUS user (~800k SF). Massive TI scope — track who lands it.'},
-    {id:'franklin-930',  tier:'2', tenant:'Reoccupied (undisclosed)', sf:'TBD', firm:'—', broker:'—', loc:'Franklin — Bldg 930', type:'Office', val:'TBD', src:'Market Intel', notes:'⚡ NEW 8/12: Franklin reoccupied building 930 through Jan 2028.'},
-    {id:'3475-deercreek',tier:'2', tenant:'In leases (undisclosed)', sf:'TBD', firm:'—', broker:'—', loc:'3475 Deer Creek', type:'Office/R&D', val:'TBD', src:'Market Intel', notes:'⚡ NEW 8/12: 3475 Deer Creek is in leases.'},
-    {id:'601-fullbldg',  tier:'2', tenant:'Full-bldg credit user', sf:'Full bldg', firm:'—', broker:'—', loc:'601', type:'Office', val:'TBD', src:'Market Intel', notes:'⚡ NEW 8/12: 601 has a full-building CREDIT user. Confirm exact building + broker.'},
-    {id:'1255-pear',     tier:'2', tenant:'Full-bldg user', sf:'160k', firm:'—', broker:'—', loc:'1255 Pear', type:'Office/R&D', val:'~$40M', src:'Market Intel', notes:'⚡ NEW 8/12: 1255 Pear has a full-building user — 160k SF.'},
-    {id:'1300-laavenida',tier:'1', tenant:'Full-bldg user (paper)', sf:'233k', firm:'—', broker:'—', loc:'1300 La Avenida', type:'Office/R&D', val:'~$60M', src:'Market Intel', notes:'⚡ NEW 8/12: Trading paper on the full building — 233k SF. Deal in motion.'},
-    {id:'405-industrial',tier:'1', tenant:'Full-bldg user (paper)', sf:'240k', firm:'—', broker:'—', loc:'405 Industrial', type:'Industrial/R&D', val:'~$60M', src:'Market Intel', notes:'⚡ NEW 8/12: Full-building user trading paper — 240k SF. Deal in motion.'},
-    {id:'4400-bohannon', tier:'2', tenant:'Full-bldg lease out', sf:'48k', firm:'—', broker:'—', loc:'4400 Bohannon, Menlo Corp Ctr', type:'Office', val:'~$12M', src:'Market Intel', notes:'⚡ NEW 8/12: Menlo Corporate Center — full-building lease out, 48k SF.'}
   ];
 
   var TIM_FIRM_COLORS = {
