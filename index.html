@@ -2533,6 +2533,12 @@
 
   // --- LEADS (heard-about projects, not yet on TIM list) ---
   var LEAD_STAGES = { heard:['purple','&#x1F442; Heard About'], chasing:['orange','&#x1F3AF; Chasing'], qualifying:['blue','&#x1F50E; Qualifying'], warm:['green','&#x1F525; Warm / Likely'], passed:['red','&#x2716; Passed'] };
+  var DEFAULT_LEADS = [
+    {id:1, name:"Werqwise — 4015 Miranda", loc:"4015 Miranda, Palo Alto · Office TI", val:"TBD", sf:"TBD", stage:"chasing", source:"Newmark — Colin Kloezeman (650-678-0805) & Mo Spikes (510-356-8492)", date:"2026-09-16", notes:"Lease negotiation with Werqwise. Landlord is giving a TI allowance and the tenant (Werqwise) does the job — SBC targeting that TI work. Devcon is doing the LL whitebox first, before whoever builds Werqwise's space. Position SBC with the Newmark brokers."},
+    {id:2, name:"4005 Miranda — SCIF operator", loc:"4005 Miranda, Palo Alto · SCIF / secure facility", val:"TBD", sf:"TBD", stage:"chasing", source:"Carrick Young — C&W (tenant broker; Adam knows well)", date:"2026-09-16", notes:"Proposal going out by end of week. LL giving a TI allowance and the tenant does the work. SCIF operator — GC selection process still unknown. Get the proposal in, then ask Carrick how they intend to pick a GC. Too early to push the GC conversation."},
+    {id:3, name:"1649 Adrian Rd — Burlingame", loc:"1649 Adrian Rd, Burlingame · Manufacturing", val:"~$6M (Ph1 ~$1M / Ph2 ~$5M)", sf:"150,000 SF", stage:"heard", source:"", date:"2026-09-16", notes:"150k SF manufacturing. Phased build — Phase 1 estimated ~$1M, Phase 2 estimated ~$5M."},
+    {id:4, name:"1260 Birchwood Dr — Sunnyvale", loc:"1260 Birchwood Dr, Sunnyvale", val:"TBD", sf:"TBD", stage:"chasing", source:"", date:"2026-09-16", notes:"Two-phase project. Adam passed it to Chris Beekman (SBC) to run."}
+  ];
   function leadCardHTML(item) {
     var s = LEAD_STAGES[item.stage] || LEAD_STAGES.heard;
     return '<div class="bid-top"><div><div class="bid-name">' + item.name + '</div>' + (item.loc ? '<div style="font-size:11px; color:#666; margin-top:2px;">' + item.loc + '</div>' : '') + '</div><div><div class="bid-value">' + (item.val || 'TBD') + '</div>' + (item.sf ? '<div class="bid-value-sub">' + item.sf + '</div>' : '') + '</div></div>' +
@@ -2551,10 +2557,16 @@
     var empty = document.getElementById('lead-empty'); if (empty) empty.style.display = 'none';
   }
   function deleteLead(id) {
-    var leads = JSON.parse(localStorage.getItem('sbc-leads') || '[]').filter(function(l){ return l.id !== id; });
-    localStorage.setItem('sbc-leads', JSON.stringify(leads));
+    if (DEFAULT_LEADS.some(function(l){ return l.id === id; })) {
+      var hid = JSON.parse(localStorage.getItem('sbc-leads-hidden') || '[]');
+      if (hid.indexOf(id) === -1) { hid.push(id); localStorage.setItem('sbc-leads-hidden', JSON.stringify(hid)); }
+    } else {
+      var leads = JSON.parse(localStorage.getItem('sbc-leads') || '[]').filter(function(l){ return l.id !== id; });
+      localStorage.setItem('sbc-leads', JSON.stringify(leads));
+    }
     var card = document.getElementById('lead-card-' + id); if (card) card.remove();
-    if (leads.length === 0) { var empty = document.getElementById('lead-empty'); if (empty) empty.style.display = 'block'; }
+    var grid = document.getElementById('lead-grid');
+    if (grid && grid.children.length === 0) { var empty = document.getElementById('lead-empty'); if (empty) empty.style.display = 'block'; }
   }
   function showAddLeadModal() {
     var modal = document.getElementById('lead-modal');
@@ -2639,8 +2651,10 @@
         grid.appendChild(card);
       });
     } catch(e) {}
-    // Custom Leads
+    // Leads: seeded defaults (shared) + local additions
     try {
+      var _hidden = JSON.parse(localStorage.getItem('sbc-leads-hidden') || '[]');
+      DEFAULT_LEADS.forEach(function(item) { if (_hidden.indexOf(item.id) === -1) renderLeadCard(item); });
       JSON.parse(localStorage.getItem('sbc-leads') || '[]').forEach(function(item) { renderLeadCard(item); });
     } catch(e) {}
   });
