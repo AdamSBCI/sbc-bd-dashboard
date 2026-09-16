@@ -2547,7 +2547,7 @@
       '<div class="bid-meta"><span class="chip ' + s[0] + '">' + s[1] + '</span></div>' +
       (item.source ? '<div class="bid-broker"><span>Heard from:</span> ' + item.source + (item.date ? '&nbsp;&nbsp;<span>Date:</span> ' + item.date : '') + '</div>' : (item.date ? '<div class="bid-broker"><span>Date:</span> ' + item.date + '</div>' : '')) +
       (item.notes ? '<div class="bid-broker"><span>Notes:</span> ' + item.notes + '</div>' : '') +
-      '<div style="text-align:right; margin-top:6px;"><button onclick="deleteLead(' + item.id + ')" style="font-size:10px; background:none; border:none; color:#c0392b; cursor:pointer;">&#x2716; remove</button></div>';
+      '<div style="text-align:right; margin-top:6px;"><button onclick="editLead(' + item.id + ')" style="font-size:10px; background:none; border:none; color:#4a9eff; cursor:pointer; margin-right:10px;">&#x270E; edit</button><button onclick="deleteLead(' + item.id + ')" style="font-size:10px; background:none; border:none; color:#c0392b; cursor:pointer;">&#x2716; remove</button></div>';
   }
   function renderLeadCard(item) {
     var grid = document.getElementById('lead-grid'); if (!grid) return;
@@ -2558,19 +2558,43 @@
     grid.appendChild(card);
     var empty = document.getElementById('lead-empty'); if (empty) empty.style.display = 'none';
   }
-  function deleteLead(id) {
-    if (DEFAULT_LEADS.some(function(l){ return l.id === id; })) {
-      var hid = JSON.parse(localStorage.getItem('sbc-leads-hidden') || '[]');
-      if (hid.indexOf(id) === -1) { hid.push(id); localStorage.setItem('sbc-leads-hidden', JSON.stringify(hid)); }
-    } else {
-      var leads = JSON.parse(localStorage.getItem('sbc-leads') || '[]').filter(function(l){ return l.id !== id; });
-      localStorage.setItem('sbc-leads', JSON.stringify(leads));
-    }
-    var card = document.getElementById('lead-card-' + id); if (card) card.remove();
-    var grid = document.getElementById('lead-grid');
-    if (grid && grid.children.length === 0) { var empty = document.getElementById('lead-empty'); if (empty) empty.style.display = 'block'; }
+  function getLeadOverrides(){ try { return JSON.parse(localStorage.getItem('sbc-leads-overrides')||'{}'); } catch(e){ return {}; } }
+  function getLocalLeads(){ try { return JSON.parse(localStorage.getItem('sbc-leads')||'[]'); } catch(e){ return []; } }
+  function getLeadHidden(){ try { return JSON.parse(localStorage.getItem('sbc-leads-hidden')||'[]'); } catch(e){ return []; } }
+  function isDefaultLead(id){ return DEFAULT_LEADS.some(function(d){ return d.id === id; }); }
+  function allLeads(){
+    var ov = getLeadOverrides(), hidden = getLeadHidden(), out = [];
+    DEFAULT_LEADS.forEach(function(d){ if (hidden.indexOf(d.id) === -1) out.push(Object.assign({}, d, ov[d.id] || {})); });
+    getLocalLeads().forEach(function(l){ out.push(l); });
+    return out;
   }
-  function showAddLeadModal() {
+  function getLead(id){ var m = allLeads().filter(function(l){ return l.id === id; }); return m[0]; }
+  function renderAllLeads(){
+    var grid = document.getElementById('lead-grid'); if (!grid) return;
+    grid.innerHTML = '';
+    var leads = allLeads();
+    leads.forEach(function(item){
+      var card = document.createElement('div');
+      card.className = 'bid-card ' + item.stage;
+      card.id = 'lead-card-' + item.id;
+      card.innerHTML = leadCardHTML(item);
+      grid.appendChild(card);
+    });
+    var empty = document.getElementById('lead-empty'); if (empty) empty.style.display = leads.length ? 'none' : 'block';
+  }
+  function deleteLead(id){
+    if (isDefaultLead(id)) {
+      var hid = getLeadHidden(); if (hid.indexOf(id) === -1) { hid.push(id); localStorage.setItem('sbc-leads-hidden', JSON.stringify(hid)); }
+    } else {
+      localStorage.setItem('sbc-leads', JSON.stringify(getLocalLeads().filter(function(l){ return l.id !== id; })));
+    }
+    renderAllLeads();
+  }
+  var _editingLeadId = null;
+  function editLead(id){ openLeadModal(getLead(id), id); }
+  function showAddLeadModal(){ openLeadModal(null, null); }
+  function openLeadModal(pref, editId){
+    _editingLeadId = (editId === undefined ? null : editId);
     var modal = document.getElementById('lead-modal');
     var lbl = 'font-size:10px; color:#888; font-weight:600; text-transform:uppercase; display:block; margin-bottom:3px;';
     var inp = 'width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; box-sizing:border-box;';
@@ -2579,7 +2603,7 @@
       modal.id = 'lead-modal';
       modal.style.cssText = 'position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:9999; display:flex; align-items:center; justify-content:center;';
       modal.innerHTML = '<div style="background:white; border-radius:12px; padding:24px; width:480px; max-width:95vw; box-shadow:0 8px 32px rgba(0,0,0,0.2);">' +
-        '<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;"><div style="font-size:15px; font-weight:700; color:#1a2744;">&#x1F4E1; Add Lead &mdash; heard-about project</div>' +
+        '<div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;"><div id="lead-modal-title" style="font-size:15px; font-weight:700; color:#1a2744;">&#x1F4E1; Add Lead</div>' +
         '<button onclick="document.getElementById(\'lead-modal\').style.display=\'none\'" style="background:none; border:none; font-size:20px; cursor:pointer; color:#888;">&times;</button></div>' +
         '<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">' +
           '<div style="grid-column:1/-1;"><label style="' + lbl + '">Project / Rumor *</label><input id="lead-name" type="text" placeholder="e.g. 200k SF campus user circling North SJ" style="width:100%; font-size:13px; border:1px solid #ddd; border-radius:7px; padding:7px 10px; box-sizing:border-box;"></div>' +
@@ -2588,35 +2612,45 @@
           '<div><label style="' + lbl + '">Est. SF</label><input id="lead-sf" type="text" placeholder="150,000 SF" style="' + inp + '"></div>' +
           '<div><label style="' + lbl + '">Stage</label><select id="lead-stage" style="' + inp + ' background:white;"><option value="heard">Heard About</option><option value="chasing">Chasing</option><option value="qualifying">Qualifying</option><option value="warm">Warm / Likely</option><option value="passed">Passed</option></select></div>' +
           '<div><label style="' + lbl + '">Heard From (source)</label><input id="lead-source" type="text" placeholder="Broker, contact, rumor..." style="' + inp + '"></div>' +
-          '<div><label style="' + lbl + '">Date Heard</label><input id="lead-date" type="date" style="' + inp + '"></div>' +
+          '<div><label style="' + lbl + '">Date</label><input id="lead-date" type="date" style="' + inp + '"></div>' +
           '<div style="grid-column:1/-1;"><label style="' + lbl + '">Notes</label><textarea id="lead-notes" placeholder="What you know so far, who reps it, next step..." style="width:100%; font-size:12px; border:1px solid #ddd; border-radius:7px; padding:6px 10px; min-height:56px; resize:vertical; font-family:inherit; box-sizing:border-box;"></textarea></div>' +
         '</div>' +
-        '<div style="display:flex; gap:8px; justify-content:flex-end; margin-top:16px;"><button onclick="document.getElementById(\'lead-modal\').style.display=\'none\'" style="font-size:12px; background:#f0f2f5; border:none; border-radius:7px; padding:8px 16px; cursor:pointer; color:#555;">Cancel</button><button onclick="saveLead()" style="font-size:12px; background:#4a9eff; color:white; border:none; border-radius:7px; padding:8px 18px; cursor:pointer; font-weight:700;">Save Lead</button></div>' +
+        '<div style="display:flex; gap:8px; justify-content:flex-end; margin-top:16px;"><button onclick="document.getElementById(\'lead-modal\').style.display=\'none\'" style="font-size:12px; background:#f0f2f5; border:none; border-radius:7px; padding:8px 16px; cursor:pointer; color:#555;">Cancel</button><button id="lead-save-btn" onclick="saveLead()" style="font-size:12px; background:#4a9eff; color:white; border:none; border-radius:7px; padding:8px 18px; cursor:pointer; font-weight:700;">Save Lead</button></div>' +
         '</div>';
       document.body.appendChild(modal);
-      document.getElementById('lead-date').value = new Date().toISOString().slice(0,10);
     } else {
       modal.style.display = 'flex';
-      document.getElementById('lead-date').value = new Date().toISOString().slice(0,10);
     }
+    var g = function(id){ return document.getElementById(id); };
+    g('lead-name').value = pref ? (pref.name||'') : '';
+    g('lead-loc').value = pref ? (pref.loc||'') : '';
+    g('lead-val').value = pref ? (pref.val||'') : '';
+    g('lead-sf').value = pref ? (pref.sf||'') : '';
+    g('lead-stage').value = pref ? (pref.stage||'heard') : 'heard';
+    g('lead-source').value = pref ? (pref.source||'') : '';
+    g('lead-date').value = (pref && pref.date) ? pref.date : new Date().toISOString().slice(0,10);
+    g('lead-notes').value = pref ? (pref.notes||'') : '';
+    g('lead-modal-title').innerHTML = _editingLeadId !== null ? '&#x270E; Edit Lead' : '&#x1F4E1; Add Lead';
+    g('lead-save-btn').textContent = _editingLeadId !== null ? 'Update Lead' : 'Save Lead';
   }
-  function saveLead() {
-    var name = (document.getElementById('lead-name').value || '').trim();
+  function saveLead(){
+    var g = function(id){ return (document.getElementById(id).value||'').trim(); };
+    var name = g('lead-name');
     if (!name) { document.getElementById('lead-name').focus(); return; }
-    var item = { id: Date.now(), name:name,
-      loc:(document.getElementById('lead-loc').value||'').trim(),
-      val:(document.getElementById('lead-val').value||'').trim(),
-      sf:(document.getElementById('lead-sf').value||'').trim(),
-      stage:document.getElementById('lead-stage').value,
-      source:(document.getElementById('lead-source').value||'').trim(),
-      date:(document.getElementById('lead-date').value||'').trim(),
-      notes:(document.getElementById('lead-notes').value||'').trim() };
-    renderLeadCard(item);
-    var leads = JSON.parse(localStorage.getItem('sbc-leads') || '[]');
-    leads.push(item);
-    localStorage.setItem('sbc-leads', JSON.stringify(leads));
+    var data = { name:name, loc:g('lead-loc'), val:g('lead-val'), sf:g('lead-sf'), stage:document.getElementById('lead-stage').value, source:g('lead-source'), date:g('lead-date'), notes:g('lead-notes') };
+    if (_editingLeadId !== null) {
+      if (isDefaultLead(_editingLeadId)) {
+        var ov = getLeadOverrides(); ov[_editingLeadId] = data; localStorage.setItem('sbc-leads-overrides', JSON.stringify(ov));
+      } else {
+        localStorage.setItem('sbc-leads', JSON.stringify(getLocalLeads().map(function(l){ return l.id === _editingLeadId ? Object.assign({}, l, data, {id:l.id}) : l; })));
+      }
+    } else {
+      data.id = Date.now();
+      var leads = getLocalLeads(); leads.push(data); localStorage.setItem('sbc-leads', JSON.stringify(leads));
+    }
     document.getElementById('lead-modal').style.display = 'none';
-    ['lead-name','lead-loc','lead-val','lead-sf','lead-source','lead-notes'].forEach(function(f){ var el=document.getElementById(f); if(el) el.value=''; });
+    _editingLeadId = null;
+    renderAllLeads();
   }
 
   // --- RESTORE SAVED NOTES & CUSTOM CARDS ON LOAD ---
@@ -2653,12 +2687,8 @@
         grid.appendChild(card);
       });
     } catch(e) {}
-    // Leads: seeded defaults (shared) + local additions
-    try {
-      var _hidden = JSON.parse(localStorage.getItem('sbc-leads-hidden') || '[]');
-      DEFAULT_LEADS.forEach(function(item) { if (_hidden.indexOf(item.id) === -1) renderLeadCard(item); });
-      JSON.parse(localStorage.getItem('sbc-leads') || '[]').forEach(function(item) { renderLeadCard(item); });
-    } catch(e) {}
+    // Leads: render seeded defaults (with edits) + local additions
+    try { renderAllLeads(); } catch(e) {}
   });
 
 </script>
